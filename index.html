@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0D0D0D">
+<title>TeraNeT</title>
+<link rel="manifest" href="manifest.json">
+<link rel="canonical" href="https://tezkgiraldo-wq.github.io/teranet-app/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--bg1:#111;--bg2:#161616;--bg3:#1A1A1A;
+  --border:#1E1E1E;--border2:#2A2A2A;
+  --text:#E8E4DC;--text2:#999;--text3:#666;
+  --blue:#4B9EFF;--green:#4CAF75;--red:#E05555;
+  --gold:#E8A838;--teal:#14B8A6;--purple:#A855F7;--orange:#F97316;
+  --mono:'DM Mono','Consolas',monospace;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;overflow:hidden}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+button{cursor:pointer;border:none;font-family:inherit;font-size:inherit}
+input{font-family:inherit;font-size:inherit}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  z-index:999;transition:opacity .4s;
+}
+#loader.out{opacity:0;pointer-events:none}
+.ld-logo{font-family:var(--mono);font-size:52px;font-weight:700;letter-spacing:0.08em}
+.ld-logo span{color:var(--blue)}
+.ld-sub{font-size:11px;color:var(--text3);letter-spacing:0.25em;text-transform:uppercase}
+.ld-bar{width:160px;height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.ld-fill{height:100%;width:0;background:var(--blue);border-radius:2px;animation:lda 1.4s ease-in-out infinite}
+@keyframes lda{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
+
+/* ── LAYOUT ── */
+#app{display:flex;flex-direction:column;height:100vh}
+
+/* ── TOP BAR ── */
+#topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;height:52px;flex-shrink:0;
+  background:var(--bg1);border-bottom:1px solid var(--border);
+}
+.tb-logo{font-family:var(--mono);font-size:16px;font-weight:700;letter-spacing:0.08em}
+.tb-logo span{color:var(--blue)}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-period{font-family:var(--mono);font-size:12px;color:var(--text2)}
+.tb-sync-dot{width:8px;height:8px;border-radius:50%;background:var(--text3)}
+.tb-sync-dot.ok{background:var(--green)}
+.tb-sync-dot.syncing{background:var(--gold);animation:pulse 1s infinite}
+.tb-sync-dot.err{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tb-btn{
+  width:32px;height:32px;border-radius:6px;
+  background:var(--bg3);color:var(--text2);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+
+/* ── NAV TABS ── */
+#nav{
+  display:flex;background:var(--bg2);
+  border-bottom:1px solid var(--border);flex-shrink:0;
+  overflow-x:auto;
+}
+#nav::-webkit-scrollbar{height:0}
+.nav-btn{
+  flex:1;min-width:64px;padding:10px 4px;
+  font-size:9px;font-weight:600;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--text3);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  border-bottom:2px solid transparent;transition:color .12s,border-color .12s;
+}
+.nav-btn .icon{font-size:18px}
+.nav-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* ── CONTENT ── */
+#content{flex:1;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px}
+.kpi-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.kpi-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:3px}
+.kpi-val{font-family:var(--mono);font-size:20px;font-weight:500}
+
+/* ── TABLA CONTROL ── */
+.table-wrap{flex:1;overflow-y:auto;padding:0 10px 12px}
+.ctrl-table{width:100%;border-collapse:collapse}
+.ctrl-table th{font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:6px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:400;position:sticky;top:0;background:var(--bg);z-index:1}
+.ctrl-table th:first-child{text-align:center;width:36px}
+.ctrl-table td{font-family:var(--mono);font-size:12px;padding:6px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--text3)}
+.ctrl-table td:first-child{text-align:center}
+.ctrl-table tr:hover td{background:var(--bg1)}
+.ctrl-table tr.total-row td{color:var(--text);border-top:1px solid var(--border2);background:var(--bg1)}
+.v-ing{color:var(--green)}.v-egr{color:var(--red)}.v-pos{color:var(--blue)}.v-neg{color:var(--red)}
+.day-btn{cursor:pointer}.day-btn.has-d{color:var(--green)}
+
+/* ── DIA VIEW ── */
+#dia-view{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.dia-hdr{padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0}
+.dia-date{font-family:var(--mono);font-size:12px;color:var(--text2)}
+.dia-summary{display:flex;gap:12px;font-family:var(--mono);font-size:12px;margin-top:2px}
+.dia-cats{display:flex;overflow-x:auto;gap:1px;background:var(--border);flex-shrink:0}
+.dia-cats::-webkit-scrollbar{height:0}
+.cat-tab{
+  min-width:80px;padding:8px 10px;background:var(--bg1);
+  font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+  text-align:center;cursor:pointer;border-bottom:2px solid transparent;
+  white-space:nowrap;flex-shrink:0;color:var(--text3);
+}
+.cat-tab.active{color:inherit;border-bottom-color:currentColor}
+.dia-entries{flex:1;overflow-y:auto;padding:6px 10px;display:flex;flex-direction:column;gap:4px}
+.entry-row{display:grid;grid-template-columns:1fr 90px;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.entry-inp{
+  background:transparent;border:none;outline:none;
+  padding:8px 10px;color:var(--text2);font-family:var(--mono);font-size:12px;
+}
+.entry-inp.val{text-align:right;border-left:1px solid var(--border)}
+.entry-inp:focus{background:#151515;color:var(--text)}
+.dia-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0;
+}
+.dia-total{font-family:var(--mono);font-size:11px}
+.saved-flash{font-size:10px;color:var(--green);opacity:0;transition:opacity .2s}
+.saved-flash.show{opacity:1}
+
+/* ── GASTOS FIJOS ── */
+#fijos-view{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.fijos-hdr{padding:10px 12px;border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0}
+.fijos-stats{display:flex;gap:16px;margin-top:6px}
+.fijos-stat-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em}
+.fijos-stat-val{font-family:var(--mono);font-size:16px;font-weight:500}
+.fijos-list{flex:1;overflow-y:auto}
+.fijo-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.fijo-chk{width:18px;height:18px;border-radius:4px;border:1px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent}
+.fijo-chk.paid{background:#1A2D1A;border-color:#2D4A2D;color:var(--green)}
+.fijo-name{flex:1;font-size:13px}
+.fijo-name.paid{color:var(--green)}
+.fijo-val{font-family:var(--mono);font-size:12px;color:var(--text2)}
+.fijo-val.paid{color:var(--green)}
+
+/* ── AÑO ── */
+#año-view{display:flex;flex-direction:column;height:100%;overflow:hidden}
+
+/* ── DRIVE MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:flex-end;z-index:100}
+.modal-overlay.hidden{display:none}
+.modal{background:var(--bg1);border-radius:16px 16px 0 0;width:100%;padding:20px;display:flex;flex-direction:column;gap:12px;max-height:80vh;overflow-y:auto}
+.modal-title{font-size:14px;font-weight:500;margin-bottom:4px}
+.modal-close{position:absolute;top:16px;right:16px;color:var(--text2);font-size:20px;background:none;border:none}
+.drive-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px}
+.drive-btn{flex:1;padding:10px;border-radius:8px;font-size:12px;font-weight:500;text-align:center}
+.drive-btn.up{background:#1A2D1A;border:1px solid var(--green);color:var(--green)}
+.drive-btn.dn{background:#1A1A2D;border:1px solid var(--blue);color:var(--blue)}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+  padding:10px 16px;font-size:12px;color:var(--text2);
+  opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;z-index:200;
+}
+#toast.show{opacity:1}
+
+/* ── AUTH SCREEN ── */
+#auth-screen{
+  display:none;position:fixed;inset:0;background:var(--bg);
+  flex-direction:column;align-items:center;justify-content:center;gap:24px;z-index:50;
+}
+#auth-screen.show{display:flex}
+.auth-logo{font-family:var(--mono);font-size:48px;font-weight:700;letter-spacing:0.08em}
+.auth-logo span{color:var(--blue)}
+.auth-sub{font-size:12px;color:var(--text3);letter-spacing:0.2em;text-transform:uppercase}
+.auth-desc{font-size:13px;color:var(--text2);text-align:center;max-width:280px;line-height:1.6}
+.auth-btn{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:10px;padding:14px 24px;font-size:14px;color:var(--text);
+}
+.auth-btn svg{width:20px;height:20px;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ld-logo">TERA<span>NET</span></div>
+  <div class="ld-sub">Computadores</div>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+</div>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-logo">TERA<span>NET</span></div>
+  <div class="auth-sub">Control Financiero</div>
+  <div class="auth-desc">Conecta tu cuenta Google para sincronizar con Drive y acceder a tus datos desde cualquier lugar.</div>
+  <button class="auth-btn" onclick="startAuth()">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+    Continuar con Google
+  </button>
+</div>
+
+<!-- APP PRINCIPAL -->
+<div id="app" style="display:none">
+  <div id="topbar">
+    <div class="tb-logo">TERA<span>NET</span></div>
+    <div class="tb-right">
+      <div class="tb-period" id="tb-period">—</div>
+      <div class="tb-sync-dot" id="sync-dot" title="Estado sync Drive"></div>
+      <button class="tb-btn" onclick="openDriveModal()" title="Drive sync">☁</button>
+    </div>
+  </div>
+
+  <div id="nav">
+    <button class="nav-btn active" data-view="control" onclick="showView('control')">
+      <span class="icon">📊</span>CONTROL
+    </button>
+    <button class="nav-btn" data-view="dia" onclick="showView('dia')">
+      <span class="icon">📝</span>DÍA
+    </button>
+    <button class="nav-btn" data-view="fijos" onclick="showView('fijos')">
+      <span class="icon">💳</span>FIJOS
+    </button>
+    <button class="nav-btn" data-view="año" onclick="showView('año')">
+      <span class="icon">📅</span>AÑO
+    </button>
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<!-- DRIVE MODAL -->
+<div class="modal-overlay hidden" id="drive-modal" onclick="if(event.target===this)closeDriveModal()">
+  <div class="modal" style="position:relative">
+    <button class="modal-close" onclick="closeDriveModal()">✕</button>
+    <div class="modal-title">Google Drive</div>
+    <div class="drive-row" id="drive-status-row">
+      <div id="drive-dot" style="width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0"></div>
+      <span id="drive-status-txt" style="flex:1;font-size:12px;color:var(--text2)">Verificando...</span>
+    </div>
+    <div id="drive-last-sync" style="font-size:11px;color:var(--text3);padding:0 2px">—</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="drive-btn up" onclick="drivePush()">⬆ Subir a Drive</button>
+      <button class="drive-btn dn" onclick="drivePull()">⬇ Bajar de Drive</button>
+    </div>
+    <button onclick="signOut()" style="background:none;border:none;color:var(--text3);font-size:12px;text-align:left;padding:4px 0">Cerrar sesión</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- SQL.js para manejar SQLite en el navegador -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════════════════
+const CLIENT_ID   = '172238719491-6h4bjo6s5r3dd0batguf4fsl19t90q1p.apps.googleusercontent.com';
+const SCOPES      = 'https://www.googleapis.com/auth/drive.file';
+const FOLDER_NAME = 'TeraNeT Backups';
+const MESES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio',
+               'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const CATS  = ['Formatos','Mantenimientos','Partes/Compus','Programas','Otros','Egresos'];
+const CAT_COLOR = {
+  'Formatos':'#4B9EFF','Mantenimientos':'#A855F7','Partes/Compus':'#14B8A6',
+  'Programas':'#F97316','Otros':'#4CAF75','Egresos':'#E05555'
+};
+
+// ══════════════════════════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════════════════════════
+let state = {
+  año: new Date().getFullYear(),
+  mes: new Date().getMonth() + 1,
+  dia: new Date().getDate(),
+  activeCat: CATS[0],
+  activeView: 'control',
+  accessToken: null,
+  folderId: null,
+  fileId: null,
+  SQL: null,
+  db: null,
+  dirty: false,
+  lastSync: null,
+};
+
+// ══════════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const cop = (v, z=false) => {
+  if (!v && !z) return '—';
+  if (!v) return '$0';
+  const fmt = Math.abs(v).toLocaleString('es-CO',{maximumFractionDigits:0});
+  return v < 0 ? `-$${fmt}` : `$${fmt}`;
+};
+const parseNum = s => {
+  if (!s) return 0;
+  s = String(s).replace(/\$/g,'').replace(/\s/g,'').trim();
+  if (s.includes('.') && !s.includes(',')) s = s.replace(/\./g,'');
+  else if (s.includes(',')) s = s.replace(/\./g,'').replace(',','.');
+  return parseFloat(s) || 0;
+};
+
+let toastTimer;
+function showToast(msg, dur=2500) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function setSyncDot(status) {
+  const d = $('sync-dot');
+  d.className = 'tb-sync-dot' + (status ? ' '+status : '');
+}
+
+// ══════════════════════════════════════════════════════════════
+// GOOGLE AUTH (GSI)
+// ══════════════════════════════════════════════════════════════
+function startAuth() {
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: async (resp) => {
+      if (resp.error) { showToast('Error al autenticar'); return; }
+      state.accessToken = resp.access_token;
+      localStorage.setItem('tn_token', resp.access_token);
+      localStorage.setItem('tn_token_exp', Date.now() + (resp.expires_in * 1000));
+      $('auth-screen').classList.remove('show');
+      await loadApp();
+    }
+  });
+  client.requestAccessToken();
+}
+
+function signOut() {
+  localStorage.removeItem('tn_token');
+  localStorage.removeItem('tn_token_exp');
+  state.accessToken = null;
+  state.db = null;
+  $('drive-modal').classList.add('hidden');
+  $('app').style.display = 'none';
+  $('auth-screen').classList.add('show');
+}
+
+function checkStoredToken() {
+  const token = localStorage.getItem('tn_token');
+  const exp   = parseInt(localStorage.getItem('tn_token_exp') || '0');
+  if (token && Date.now() < exp - 60000) {
+    state.accessToken = token;
+    return true;
+  }
+  return false;
+}
+
+// ══════════════════════════════════════════════════════════════
+// GOOGLE DRIVE API
+// ══════════════════════════════════════════════════════════════
+async function driveReq(url, opts={}) {
+  const r = await fetch(url, {
+    ...opts,
+    headers: {
+      'Authorization': `Bearer ${state.accessToken}`,
+      ...(opts.headers || {})
+    }
+  });
+  if (r.status === 401) { signOut(); throw new Error('Token expirado'); }
+  return r;
+}
+
+async function getOrCreateFolder() {
+  if (state.folderId) return state.folderId;
+  const q = encodeURIComponent(
+    `name='${FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`
+  );
+  const r = await driveReq(
+    `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)`
+  );
+  const d = await r.json();
+  if (d.files && d.files.length > 0) {
+    state.folderId = d.files[0].id;
+    return state.folderId;
+  }
+  // Crear carpeta
+  const cr = await driveReq('https://www.googleapis.com/drive/v3/files', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      name: FOLDER_NAME,
+      mimeType: 'application/vnd.google-apps.folder'
+    })
+  });
+  const cd = await cr.json();
+  state.folderId = cd.id;
+  return state.folderId;
+}
+
+async function findDbFile(fileName) {
+  const folderId = await getOrCreateFolder();
+  const q = encodeURIComponent(
+    `name='${fileName}' and '${folderId}' in parents and trashed=false`
+  );
+  const r = await driveReq(
+    `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,modifiedTime,size)`
+  );
+  const d = await r.json();
+  return d.files && d.files.length > 0 ? d.files[0] : null;
+}
+
+async function downloadDb(fileId) {
+  const r = await driveReq(
+    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
+  );
+  return new Uint8Array(await r.arrayBuffer());
+}
+
+async function uploadDb(fileName, data) {
+  const folderId = await getOrCreateFolder();
+  const existing = await findDbFile(fileName);
+  const blob = new Blob([data], {type:'application/octet-stream'});
+
+  if (existing) {
+    // Actualizar
+    const form = new FormData();
+    form.append('file', blob, fileName);
+    await driveReq(
+      `https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=multipart`,
+      {method:'PATCH', body: form}
+    );
+    state.fileId = existing.id;
+  } else {
+    // Crear
+    const meta = JSON.stringify({name: fileName, parents: [folderId]});
+    const form = new FormData();
+    form.append('metadata', new Blob([meta], {type:'application/json'}));
+    form.append('file', blob, fileName);
+    const r = await driveReq(
+      'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',
+      {method:'POST', body: form}
+    );
+    const d = await r.json();
+    state.fileId = d.id;
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// SQLITE EN NAVEGADOR (sql.js)
+// ══════════════════════════════════════════════════════════════
+async function initSQL() {
+  state.SQL = await initSqlJs({
+    locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`
+  });
+}
+
+function dbFileName() {
+  return `teranet_${state.año}.db`;
+}
+
+async function loadDbFromDrive() {
+  const fileName = dbFileName();
+  const file = await findDbFile(fileName);
+  if (file) {
+    const data = await downloadDb(file.id);
+    state.db = new state.SQL.Database(data);
+    state.fileId = file.id;
+    showToast(`✓ DB cargada de Drive`);
+  } else {
+    // DB nueva
+    state.db = new state.SQL.Database();
+    initDbSchema();
+    showToast('Nueva DB creada');
+  }
+}
+
+function initDbSchema() {
+  state.db.run(`
+    CREATE TABLE IF NOT EXISTS entradas (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      año INTEGER NOT NULL, mes INTEGER NOT NULL, dia INTEGER NOT NULL,
+      categoria TEXT NOT NULL, descripcion TEXT DEFAULT '', valor REAL DEFAULT 0, orden INTEGER DEFAULT 0
+    );
+    CREATE TABLE IF NOT EXISTS gastos_fijos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      descripcion TEXT NOT NULL, valor REAL NOT NULL, activo INTEGER DEFAULT 1
+    );
+    CREATE TABLE IF NOT EXISTS pagos_fijos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      gasto_id INTEGER NOT NULL, año INTEGER NOT NULL, mes INTEGER NOT NULL,
+      pagado INTEGER DEFAULT 0, valor_real REAL,
+      UNIQUE(gasto_id, año, mes)
+    );
+    CREATE TABLE IF NOT EXISTS config (clave TEXT PRIMARY KEY, valor TEXT);
+  `);
+  // Defaults gastos fijos
+  const count = state.db.exec("SELECT COUNT(*) FROM gastos_fijos")[0].values[0][0];
+  if (count === 0) {
+    const defaults = [
+      ['Movistar',133000],['Celular',45000],['Arriendo',500000],
+      ['Energía',140000],['Gas',20000],['Gym',75000],['Funeraria',17000],
+      ['Agua',70000],['Tarjeta NU',300000],['Sansita',100000],['Seguro moto',120000]
+    ];
+    defaults.forEach(([d,v]) =>
+      state.db.run("INSERT INTO gastos_fijos (descripcion,valor) VALUES (?,?)", [d,v])
+    );
+  }
+}
+
+function dbExport() {
+  return state.db.export();
+}
+
+// ══════════════════════════════════════════════════════════════
+// SYNC DRIVE
+// ══════════════════════════════════════════════════════════════
+async function drivePush() {
+  setSyncDot('syncing');
+  try {
+    const data = dbExport();
+    await uploadDb(dbFileName(), data);
+    state.dirty = false;
+    state.lastSync = new Date();
+    setSyncDot('ok');
+    $('drive-last-sync').textContent = `Última sync: ${state.lastSync.toLocaleTimeString('es-CO')}`;
+    showToast('✓ Subido a Drive');
+  } catch(e) {
+    setSyncDot('err');
+    showToast('Error al subir: ' + e.message);
+  }
+}
+
+async function drivePull() {
+  if (state.dirty) {
+    if (!confirm('Tienes cambios sin subir. ¿Bajar de Drive y perder los cambios locales?')) return;
+  }
+  setSyncDot('syncing');
+  try {
+    await loadDbFromDrive();
+    state.dirty = false;
+    state.lastSync = new Date();
+    setSyncDot('ok');
+    showView(state.activeView);
+    showToast('✓ Bajado de Drive');
+  } catch(e) {
+    setSyncDot('err');
+    showToast('Error al bajar: ' + e.message);
+  }
+}
+
+// Auto-sync cada 15 minutos si hay cambios
+setInterval(() => {
+  if (state.dirty && state.accessToken && state.db) {
+    drivePush();
+  }
+}, 15 * 60 * 1000);
+
+// ══════════════════════════════════════════════════════════════
+// CONSULTAS DB
+// ══════════════════════════════════════════════════════════════
+function dbQuery(sql, params=[]) {
+  try {
+    const res = state.db.exec(sql, params);
+    if (!res.length) return [];
+    const {columns, values} = res[0];
+    return values.map(row => {
+      const obj = {};
+      columns.forEach((c,i) => obj[c] = row[i]);
+      return obj;
+    });
+  } catch { return []; }
+}
+
+function getResumenMes() {
+  const r = dbQuery(`
+    SELECT
+      COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ingresos,
+      COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egresos
+    FROM entradas WHERE año=? AND mes=?`, [state.año, state.mes]);
+  return r[0] || {ingresos:0, egresos:0};
+}
+
+function getTotalesPorDia() {
+  const rows = dbQuery(`
+    SELECT dia,
+      COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ingresos,
+      COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egresos
+    FROM entradas WHERE año=? AND mes=? GROUP BY dia`, [state.año, state.mes]);
+  const map = {};
+  rows.forEach(r => map[r.dia] = r);
+  return map;
+}
+
+function getDiaEntradas(cat) {
+  const rows = dbQuery(
+    `SELECT id,descripcion,valor,orden FROM entradas
+     WHERE año=? AND mes=? AND dia=? AND categoria=? ORDER BY orden`,
+    [state.año, state.mes, state.dia, cat]
+  );
+  while (rows.length < 15) rows.push({id:null,descripcion:'',valor:0,orden:rows.length});
+  return rows;
+}
+
+function upsertEntrada(cat, orden, desc, valor) {
+  const ex = dbQuery(
+    `SELECT id FROM entradas WHERE año=? AND mes=? AND dia=? AND categoria=? AND orden=?`,
+    [state.año, state.mes, state.dia, cat, orden]
+  );
+  if (!desc.trim() && !valor) {
+    if (ex.length) state.db.run(`DELETE FROM entradas WHERE id=?`, [ex[0].id]);
+  } else if (ex.length) {
+    state.db.run(`UPDATE entradas SET descripcion=?,valor=? WHERE id=?`,
+      [desc, valor||0, ex[0].id]);
+  } else {
+    state.db.run(
+      `INSERT INTO entradas (año,mes,dia,categoria,descripcion,valor,orden) VALUES (?,?,?,?,?,?,?)`,
+      [state.año, state.mes, state.dia, cat, desc, valor||0, orden]
+    );
+  }
+  state.dirty = true;
+}
+
+function getGastosFijos() {
+  return dbQuery(`SELECT * FROM gastos_fijos WHERE activo=1 ORDER BY id`);
+}
+
+function getPagosMes() {
+  return dbQuery(`
+    SELECT gf.id, gf.descripcion, gf.valor,
+           COALESCE(pf.pagado,0) as pagado
+    FROM gastos_fijos gf
+    LEFT JOIN pagos_fijos pf ON gf.id=pf.gasto_id AND pf.año=? AND pf.mes=?
+    WHERE gf.activo=1 ORDER BY gf.id`, [state.año, state.mes]);
+}
+
+function togglePago(gid, pagado) {
+  state.db.run(`
+    INSERT INTO pagos_fijos (gasto_id,año,mes,pagado) VALUES (?,?,?,?)
+    ON CONFLICT(gasto_id,año,mes) DO UPDATE SET pagado=excluded.pagado`,
+    [gid, state.año, state.mes, pagado]);
+  state.dirty = true;
+}
+
+function getResumenAnual() {
+  return dbQuery(`
+    SELECT mes,
+      COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ingresos,
+      COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egresos
+    FROM entradas WHERE año=? GROUP BY mes ORDER BY mes`, [state.año]);
+}
+
+// ══════════════════════════════════════════════════════════════
+// VISTAS
+// ══════════════════════════════════════════════════════════════
+function showView(v) {
+  state.activeView = v;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  const ct = $('content');
+  ct.innerHTML = '';
+  updatePeriodLabel();
+  if (v === 'control') renderControl(ct);
+  else if (v === 'dia') renderDia(ct);
+  else if (v === 'fijos') renderFijos(ct);
+  else if (v === 'año') renderAño(ct);
+}
+
+function updatePeriodLabel() {
+  $('tb-period').textContent = `${MESES[state.mes].slice(0,3)} ${state.año}`;
+}
+
+// ── CONTROL MENSUAL ──
+function renderControl(ct) {
+  const res  = getResumenMes();
+  const dias = getTotalesPorDia();
+  const bal  = res.ingresos - res.egresos;
+  const daysInMonth = new Date(state.año, state.mes, 0).getDate();
+
+  ct.innerHTML = `
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-lbl">ingresos</div><div class="kpi-val" style="color:var(--green)">${cop(res.ingresos,true)}</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">egresos</div><div class="kpi-val" style="color:var(--red)">${cop(res.egresos,true)}</div></div>
+      <div class="kpi-card" style="grid-column:1/-1"><div class="kpi-lbl">balance</div><div class="kpi-val" style="color:${bal>=0?'var(--blue)':'var(--red)'}">${cop(bal,true)}</div></div>
+    </div>
+    <div class="table-wrap">
+      <table class="ctrl-table">
+        <thead><tr>
+          <th>Día</th>
+          <th style="color:var(--green)">Ingresos</th>
+          <th style="color:var(--red)">Egresos</th>
+          <th style="color:var(--blue)">Balance</th>
+        </tr></thead>
+        <tbody>
+          ${Array.from({length:daysInMonth},(_,i)=>{
+            const d = i+1;
+            const t = dias[d] || {};
+            const dIng = t.ingresos||0, dEgr = t.egresos||0, dBal = dIng-dEgr;
+            const has = dIng>0||dEgr>0;
+            return `<tr>
+              <td class="day-btn${has?' has-d':''}" onclick="openDia(${d})" style="cursor:pointer">${d}</td>
+              <td class="${dIng?'v-ing':''}">${dIng?cop(dIng):'—'}</td>
+              <td class="${dEgr?'v-egr':''}">${dEgr?cop(dEgr):'—'}</td>
+              <td class="${has?(dBal>=0?'v-pos':'v-neg'):''}">${has?cop(dBal):'—'}</td>
+            </tr>`;
+          }).join('')}
+          <tr class="total-row">
+            <td>Total</td>
+            <td class="v-ing">${cop(res.ingresos,true)}</td>
+            <td class="v-egr">${cop(res.egresos,true)}</td>
+            <td class="${bal>=0?'v-pos':'v-neg'}">${cop(bal,true)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function openDia(d) {
+  state.dia = d;
+  showView('dia');
+}
+
+// ── DÍA ──
+function renderDia(ct) {
+  const div = document.createElement('div');
+  div.id = 'dia-view';
+
+  const rows = getDiaEntradas(state.activeCat);
+  const totIng = CATS.filter(c=>c!=='Egresos').reduce((a,c)=>{
+    return a + getDiaEntradas(c).reduce((s,r)=>s+(r.valor||0),0);
+  },0);
+  const totEgr = getDiaEntradas('Egresos').reduce((a,r)=>a+(r.valor||0),0);
+
+  div.innerHTML = `
+    <div class="dia-hdr">
+      <div class="dia-date">${MESES[state.mes].toLowerCase()} ${state.dia}, ${state.año}</div>
+      <div class="dia-summary">
+        <span style="color:var(--green)">+${cop(totIng,true)}</span>
+        <span style="color:var(--text3)">·</span>
+        <span style="color:var(--red)">${totEgr?'-'+cop(totEgr,true):'$0'}</span>
+        <span style="color:var(--text3)">·</span>
+        <span style="color:var(--blue);font-weight:500">${cop(totIng-totEgr,true)}</span>
+        <span class="saved-flash" id="saved-flash">✓</span>
+      </div>
+    </div>
+    <div class="dia-cats">
+      ${CATS.map(c=>`
+        <div class="cat-tab${c===state.activeCat?' active':''}"
+             style="color:${c===state.activeCat?CAT_COLOR[c]:'var(--text3)'};${c===state.activeCat?'border-bottom-color:'+CAT_COLOR[c]:''}"
+             onclick="switchCat('${c}')">
+          ${c}
+        </div>`).join('')}
+    </div>
+    <div class="dia-entries" id="dia-entries"></div>
+    <div class="dia-footer">
+      <div class="dia-total" style="color:${CAT_COLOR[state.activeCat]}">
+        Total: ${cop(rows.reduce((a,r)=>a+(r.valor||0),0),true)||'—'}
+      </div>
+      <div style="font-size:10px;color:var(--text3)">↑↓ navegar · ↔ desc/valor</div>
+    </div>`;
+
+  ct.appendChild(div);
+  buildEntries(rows);
+}
+
+function buildEntries(rows) {
+  const container = $('dia-entries');
+  if (!container) return;
+  container.innerHTML = '';
+  const clr = CAT_COLOR[state.activeCat];
+  rows.forEach((r, i) => {
+    const row = document.createElement('div');
+    row.className = 'entry-row';
+    const dInp = document.createElement('input');
+    dInp.className = 'entry-inp';
+    dInp.type = 'text';
+    dInp.placeholder = '—';
+    dInp.value = r.descripcion || '';
+    dInp.inputMode = 'text';
+
+    const vInp = document.createElement('input');
+    vInp.className = 'entry-inp val';
+    vInp.type = 'text';
+    vInp.inputMode = 'numeric';
+    vInp.placeholder = '0';
+    vInp.value = r.valor ? Math.round(r.valor).toLocaleString('es-CO') : '';
+    vInp.style.color = r.valor ? clr : '';
+
+    let saveTimer;
+    const schedSave = () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        const val = parseNum(vInp.value);
+        upsertEntrada(state.activeCat, i, dInp.value, val);
+        flashSaved();
+      }, 800);
+    };
+
+    dInp.addEventListener('input', schedSave);
+    vInp.addEventListener('input', schedSave);
+    vInp.addEventListener('focus', () => {
+      const raw = parseNum(vInp.value);
+      vInp.value = raw ? String(Math.round(raw)) : '';
+      vInp.style.color = clr;
+    });
+    vInp.addEventListener('blur', () => {
+      const raw = parseNum(vInp.value);
+      vInp.value = raw ? Math.round(raw).toLocaleString('es-CO') : '';
+      vInp.style.color = raw ? clr : '';
+    });
+
+    row.appendChild(dInp);
+    row.appendChild(vInp);
+    container.appendChild(row);
+  });
+}
+
+function switchCat(cat) {
+  state.activeCat = cat;
+  renderDia($('content'));
+}
+
+function flashSaved() {
+  const el = $('saved-flash');
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+// ── GASTOS FIJOS ──
+function renderFijos(ct) {
+  const pagos  = getPagosMes();
+  const total  = pagos.reduce((a,p)=>a+p.valor,0);
+  const pagado = pagos.filter(p=>p.pagado).reduce((a,p)=>a+p.valor,0);
+  const pend   = total - pagado;
+
+  const div = document.createElement('div');
+  div.id = 'fijos-view';
+  div.innerHTML = `
+    <div class="fijos-hdr">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2)">
+        Pagos — ${MESES[state.mes].toLowerCase()} ${state.año}
+      </div>
+      <div class="fijos-stats">
+        <div>
+          <div class="fijos-stat-lbl">Pagado</div>
+          <div class="fijos-stat-val" style="color:var(--green)">${cop(pagado,true)}</div>
+        </div>
+        <div>
+          <div class="fijos-stat-lbl">Pendiente</div>
+          <div class="fijos-stat-val" style="color:var(--red)">${cop(pend,true)}</div>
+        </div>
+        <div>
+          <div class="fijos-stat-lbl">Total</div>
+          <div class="fijos-stat-val" style="color:var(--text2)">${cop(total,true)}</div>
+        </div>
+      </div>
+    </div>
+    <div class="fijos-list" id="fijos-list"></div>`;
+
+  ct.appendChild(div);
+
+  const list = div.querySelector('#fijos-list');
+  pagos.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'fijo-row';
+    row.style.cursor = 'pointer';
+    row.innerHTML = `
+      <div class="fijo-chk${p.pagado?' paid':''}">✓</div>
+      <div class="fijo-name${p.pagado?' paid':''}">${p.descripcion}</div>
+      <div class="fijo-val${p.pagado?' paid':''}">${cop(p.valor,true)}</div>`;
+    row.onclick = () => {
+      togglePago(p.id, p.pagado ? 0 : 1);
+      renderFijos(ct);
+    };
+    list.appendChild(row);
+  });
+}
+
+// ── AÑO ──
+function renderAño(ct) {
+  const rows  = getResumenAnual();
+  const map   = {};
+  rows.forEach(r => map[r.mes] = r);
+  const tIng  = rows.reduce((a,r)=>a+r.ingresos,0);
+  const tEgr  = rows.reduce((a,r)=>a+r.egresos,0);
+  const tBal  = tIng - tEgr;
+
+  const div = document.createElement('div');
+  div.id = 'año-view';
+  div.innerHTML = `
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-lbl">ingresos</div><div class="kpi-val" style="color:var(--green)">${cop(tIng,true)}</div></div>
+      <div class="kpi-card"><div class="kpi-lbl">egresos</div><div class="kpi-val" style="color:var(--red)">${cop(tEgr,true)}</div></div>
+      <div class="kpi-card" style="grid-column:1/-1"><div class="kpi-lbl">balance anual</div><div class="kpi-val" style="color:${tBal>=0?'var(--blue)':'var(--red)'}">${cop(tBal,true)}</div></div>
+    </div>
+    <div class="table-wrap">
+      <table class="ctrl-table">
+        <thead><tr>
+          <th style="text-align:left">Mes</th>
+          <th style="color:var(--green)">Ingresos</th>
+          <th style="color:var(--red)">Egresos</th>
+          <th style="color:var(--blue)">Balance</th>
+        </tr></thead>
+        <tbody>
+          ${MESES.slice(1).map((m,i)=>{
+            const mes = i+1;
+            const d   = map[mes];
+            const bal = d ? d.ingresos - d.egresos : 0;
+            return `<tr class="${d?'':''}">
+              <td style="text-align:left;font-family:var(--sans);font-size:12px;color:${d?'var(--text)':'var(--text3)'}">${m}</td>
+              <td class="${d?'v-ing':''}">${d?cop(d.ingresos):'—'}</td>
+              <td class="${d?'v-egr':''}">${d?cop(d.egresos):'—'}</td>
+              <td class="${d?(bal>=0?'v-pos':'v-neg'):''}">${d?cop(bal):'—'}</td>
+            </tr>`;
+          }).join('')}
+          <tr class="total-row">
+            <td style="text-align:left">Total</td>
+            <td class="v-ing">${cop(tIng,true)}</td>
+            <td class="v-egr">${cop(tEgr,true)}</td>
+            <td class="${tBal>=0?'v-pos':'v-neg'}">${cop(tBal,true)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>`;
+  ct.appendChild(div);
+}
+
+// ══════════════════════════════════════════════════════════════
+// DRIVE MODAL
+// ══════════════════════════════════════════════════════════════
+function openDriveModal() {
+  $('drive-modal').classList.remove('hidden');
+  updateDriveModalStatus();
+}
+function closeDriveModal() {
+  $('drive-modal').classList.add('hidden');
+}
+function updateDriveModalStatus() {
+  const dot = $('drive-dot');
+  const txt = $('drive-status-txt');
+  const ls  = $('drive-last-sync');
+  if (state.accessToken) {
+    dot.style.background = 'var(--green)';
+    txt.textContent = 'Conectado a Google Drive';
+    ls.textContent = state.lastSync
+      ? `Última sync: ${state.lastSync.toLocaleTimeString('es-CO')}`
+      : 'Sin sync aún en esta sesión';
+  } else {
+    dot.style.background = 'var(--red)';
+    txt.textContent = 'No autenticado';
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ARRANQUE
+// ══════════════════════════════════════════════════════════════
+async function loadApp() {
+  $('app').style.display = 'flex';
+  setSyncDot('syncing');
+  try {
+    await loadDbFromDrive();
+    state.dirty = false;
+    setSyncDot('ok');
+  } catch(e) {
+    setSyncDot('err');
+    showToast('Error cargando DB: ' + e.message);
+  }
+  showView('control');
+  // Ocultar loader
+  const ld = $('loader');
+  ld.classList.add('out');
+  setTimeout(() => ld.style.display='none', 500);
+}
+
+async function init() {
+  // Registrar service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }
+  // Inicializar SQL.js
+  await initSQL();
+  // Cargar Google Identity Services
+  await new Promise(resolve => {
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.onload = resolve;
+    document.head.appendChild(s);
+  });
+  // Verificar token guardado
+  if (checkStoredToken()) {
+    await loadApp();
+  } else {
+    $('loader').classList.add('out');
+    setTimeout(() => {
+      $('loader').style.display = 'none';
+      $('auth-screen').classList.add('show');
+    }, 500);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
