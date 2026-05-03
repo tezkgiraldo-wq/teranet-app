@@ -28,7 +28,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 button{cursor:pointer;border:none;font-family:inherit;font-size:inherit;color:inherit;background:none}
 input,select{font-family:inherit;font-size:inherit;color:inherit}
 
-/* ── LOADER ── */
+/* LOADER */
 #loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:999;transition:opacity .4s}
 #loader.out{opacity:0;pointer-events:none}
 .ld-logo{font-family:var(--mono);font-size:48px;font-weight:700;letter-spacing:0.08em;line-height:1}
@@ -36,76 +36,123 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .ld-company{font-size:11px;color:var(--text3);letter-spacing:0.28em;text-transform:uppercase;margin-top:-4px}
 .ld-contab{font-size:10px;color:var(--text3);letter-spacing:0.22em;text-transform:uppercase;opacity:.6}
 .ld-bar{width:140px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
-.ld-fill{height:100%;width:0;background:var(--blue);border-radius:2px;animation:lda 1.4s ease-in-out infinite}
+.ld-fill{height:100%;background:var(--blue);border-radius:2px;animation:lda 1.4s ease-in-out infinite}
 @keyframes lda{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
 
-/* ── AUTH ── */
+/* AUTH */
 #auth-screen{display:none;position:fixed;inset:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:50;padding:24px}
 #auth-screen.show{display:flex}
 .auth-logo{font-family:var(--mono);font-size:40px;font-weight:700;letter-spacing:0.08em;text-align:center;line-height:1}
 .auth-logo span{color:var(--blue)}
-.auth-company{font-size:11px;color:var(--text3);letter-spacing:0.28em;text-transform:uppercase}
-.auth-contab{font-size:10px;color:var(--text3);letter-spacing:0.22em;text-transform:uppercase;opacity:.6}
+.auth-sub{font-size:11px;color:var(--text3);letter-spacing:0.28em;text-transform:uppercase}
 .auth-desc{font-size:13px;color:var(--text2);text-align:center;line-height:1.6;max-width:260px;margin-top:8px}
 .auth-btn{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:13px 22px;font-size:14px;color:var(--text);cursor:pointer}
 .auth-btn svg{width:20px;height:20px;flex-shrink:0}
 
-/* ── LAYOUT ── */
-#app{display:flex;flex-direction:column;height:100vh}
+/* LAYOUT */
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;max-height:-webkit-fill-available}
 
-/* ── TOP BAR ── */
-#topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:58px;flex-shrink:0;background:var(--bg1);border-bottom:1px solid var(--border)}
-.tb-brand{display:flex;flex-direction:column;gap:0}
-.tb-logo{font-family:var(--mono);font-size:16px;font-weight:700;letter-spacing:0.08em;line-height:1}
-.tb-logo span{color:var(--blue)}
-.tb-company{font-size:8px;color:var(--text3);letter-spacing:0.2em;text-transform:uppercase}
-.tb-contab{font-size:7px;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;opacity:.6}
-.tb-right{display:flex;align-items:center;gap:6px}
-
-/* Selector período */
-.period-sel{
-  display:flex;align-items:center;gap:4px;
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:6px;padding:4px 8px;cursor:pointer;
-}
-.period-sel select{
-  background:transparent;border:none;outline:none;
-  font-family:var(--mono);font-size:11px;color:var(--text2);
-  cursor:pointer;-webkit-appearance:none;appearance:none;
-  padding:0;
-}
-.period-arrow{font-size:9px;color:var(--text3)}
-
-.tb-sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3)}
-.tb-sync-dot.ok{background:var(--green)}
-.tb-sync-dot.syncing{background:var(--gold);animation:pulse 1s infinite}
-.tb-sync-dot.err{background:var(--red)}
+/* TOP BAR */
+#topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:56px;flex-shrink:0;background:var(--bg1);border-bottom:1px solid var(--border)}
+.tb-brand .tb-logo{font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:0.08em;line-height:1}
+.tb-brand .tb-logo span{color:var(--blue)}
+.tb-brand .tb-company{font-size:7px;color:var(--text3);letter-spacing:0.2em;text-transform:uppercase}
+.tb-brand .tb-contab{font-size:6px;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;opacity:.6}
+.tb-right{display:flex;align-items:center;gap:5px}
+.psel-wrap{display:flex;align-items:center;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:3px 7px}
+.psel-wrap select{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:10px;color:var(--text2);cursor:pointer;-webkit-appearance:none;appearance:none}
+.tb-sync{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.tb-sync.ok{background:var(--green)}
+.tb-sync.syncing{background:var(--gold);animation:pulse 1s infinite}
+.tb-sync.err{background:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.tb-btn{width:30px;height:30px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:14px;display:flex;align-items:center;justify-content:center}
+.tb-btn{width:30px;height:30px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center}
 
-/* ── CONTENT ── */
+/* CONTENT */
 #content{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .view{display:none;flex-direction:column;height:100%;overflow:hidden}
 .view.active{display:flex}
-.scroll{overflow-y:auto;flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:7px}
+.scroll{overflow-y:auto;flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
 
-/* ── CARDS ── */
+/* CARDS */
 .card{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
 .lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:3px}
 .val{font-family:var(--mono);font-size:17px;font-weight:500}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.sec-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)}
 
 /* ── INICIO ── */
-.hero-card{background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.hero-val{font-family:var(--mono);font-size:26px;font-weight:500}
-.sec-title{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)}
-.day-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:8px;cursor:pointer}
-.day-num{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--blue);width:26px;text-align:center;flex-shrink:0}
-.day-info{flex:1}
-.day-cats{font-size:10px;color:var(--text3);margin-top:1px}
-.day-amt{font-family:var(--mono);font-size:13px;font-weight:500}
+/* Hoy card */
+.hoy-card{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.hoy-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 8px}
+.hoy-fecha{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--blue)}
+.hoy-sub{font-size:9px;color:var(--text3);margin-top:1px}
+.hoy-total{font-family:var(--mono);font-size:13px;font-weight:500}
 
-/* ── CONTROL MENSUAL ── */
+/* Registro en inicio */
+.reg-item{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 12px;border-bottom:1px solid #161616;
+  position:relative;overflow:hidden;
+  transition:transform .2s;
+  background:var(--bg1);
+}
+.reg-item:last-child{border-bottom:none}
+.reg-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.reg-info{flex:1;min-width:0}
+.reg-desc{font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reg-cat{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-top:1px}
+.reg-val{font-family:var(--mono);font-size:11px;font-weight:500;flex-shrink:0}
+.reg-del{
+  position:absolute;right:0;top:0;bottom:0;width:64px;
+  background:var(--red);display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#fff;transform:translateX(64px);transition:transform .2s;
+  cursor:pointer;
+}
+.reg-item.swiped{transform:translateX(-64px)}
+.reg-item.swiped .reg-del{transform:translateX(0)}
+
+/* Edición inline */
+.reg-editing{background:#151515 !important}
+.reg-edit-inp{
+  background:transparent;border:none;outline:none;
+  font-family:var(--mono);font-size:11px;color:var(--text);
+  width:100%;
+}
+.reg-edit-val{
+  background:transparent;border:none;outline:none;
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  text-align:right;width:80px;
+}
+
+.add-hoy{display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;border-top:1px solid var(--border);color:var(--blue);font-size:11px;cursor:pointer}
+
+/* ── MINI CALENDARIO ── */
+.cal-wrap{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border)}
+.cal-title{font-family:var(--mono);font-size:11px;color:var(--text2)}
+.cal-sel-lbl{font-size:10px;color:var(--text3)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:6px 8px}
+.cal-dow{font-size:8px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);text-align:center;padding:2px 0}
+.cal-day{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:3px 0;border-radius:5px;cursor:pointer;
+  font-family:var(--mono);font-size:11px;color:var(--text3);
+  min-height:28px;position:relative;
+}
+.cal-day:hover{background:var(--bg3)}
+.cal-day.has{color:var(--text2)}
+.cal-day.has::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);position:absolute;bottom:2px}
+.cal-day.selected{background:var(--blue);color:#fff;font-weight:500}
+.cal-day.selected::after{background:#fff}
+.cal-day.today{color:var(--blue);font-weight:500}
+.cal-day.today.selected{color:#fff}
+.cal-day.empty{pointer-events:none}
+.cal-day.egr::after{background:var(--red)}
+.cal-sel-entries{border-top:1px solid var(--border)}
+
+/* ── CONTROL ── */
 .ctrl-kpis-bar{padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 .ctrl-kpi{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 8px;text-align:center}
 .ctrl-kpi .lbl{font-size:8px;margin-bottom:2px}
@@ -115,14 +162,14 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .ctrl-table th{font-size:8px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:5px 8px;text-align:right;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:1;font-weight:400}
 .ctrl-table th:first-child{text-align:center;width:32px}
 .ctrl-table td{font-family:var(--mono);padding:5px 8px;text-align:right;border-bottom:1px solid #161616;color:var(--text3);font-size:11px}
-.ctrl-table td:first-child{text-align:center;font-size:11px}
+.ctrl-table td:first-child{text-align:center}
 .ctrl-table tr:hover td{background:var(--bg1)}
 .ctrl-table .ing{color:var(--green)}.ctrl-table .egr{color:var(--red)}
 .ctrl-table .pos{color:var(--blue)}.ctrl-table .neg{color:var(--red)}
 .ctrl-table .has-d{color:var(--green);cursor:pointer}
 .ctrl-table tr.tot-row td{color:var(--text);border-top:1px solid var(--border2);background:var(--bg1)}
 
-/* ── GASTOS FIJOS ── */
+/* ── FIJOS ── */
 .fijos-stats{padding:8px 12px;flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .fijo-list{overflow-y:auto;flex:1;padding:6px 12px;display:flex;flex-direction:column;gap:5px}
 .fijo-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg1);border:1px solid var(--border);border-radius:8px;cursor:pointer}
@@ -142,18 +189,17 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .fx-row{display:flex;align-items:center;padding:7px 10px;border-bottom:1px solid #161616;font-family:var(--mono);font-size:10px}
 .fx-row:last-child{border-bottom:none}
 .fx-hdr{background:var(--bg);font-size:8px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3)}
-.readonly-note{font-size:10px;color:var(--text3);text-align:center;padding:4px 0;opacity:.7}
 
 /* ── FAB ── */
-.fab{position:fixed;bottom:70px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;z-index:10;box-shadow:0 4px 16px #4B9EFF44}
+.fab{position:fixed;bottom:66px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;z-index:10}
 
-/* ── BOTTOM NAV ── */
-#nav{display:flex;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0;height:58px}
+/* ── NAV ── */
+#nav{display:flex;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0;height:56px}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:7px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);border-top:2px solid transparent}
 .nav-btn.active{color:var(--blue);border-top-color:var(--blue)}
-.nav-ic{font-size:17px}
+.nav-ic{font-size:16px}
 
-/* ── REGISTRO SHEET ── */
+/* ── SHEET ── */
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:flex-end;z-index:20}
 .sheet-overlay.hidden{display:none}
 .sheet{width:100%;background:var(--bg1);border-radius:16px 16px 0 0;padding:14px 16px;border-top:1px solid var(--border2);display:flex;flex-direction:column;gap:10px}
@@ -173,15 +219,14 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .modal-overlay.hidden{display:none}
 .modal{width:100%;background:var(--bg1);border-radius:16px 16px 0 0;padding:18px 16px;border-top:1px solid var(--border2);display:flex;flex-direction:column;gap:10px}
 .modal-title{font-size:14px;font-weight:500}
-.drive-status-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:12px}
+.d-status{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:12px}
 .drive-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .drive-btn{padding:10px;border-radius:8px;font-size:12px;font-weight:500;text-align:center;cursor:pointer}
 .drive-btn.up{background:#1A2D1A;border:1px solid var(--green);color:var(--green)}
 .drive-btn.dn{background:#1A1A2D;border:1px solid var(--blue);color:var(--blue)}
-.signout-btn{font-size:11px;color:var(--text3);text-align:left;padding:2px 0;background:none;border:none;cursor:pointer}
 
 /* ── TOAST ── */
-#toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:9px 16px;font-size:12px;color:var(--text2);opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;z-index:100}
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:9px 16px;font-size:12px;color:var(--text2);opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;z-index:100}
 #toast.show{opacity:1}
 </style>
 </head>
@@ -196,8 +241,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 
 <div id="auth-screen">
   <div class="auth-logo">TERA<span>NET</span></div>
-  <div class="auth-company">Computadores</div>
-  <div class="auth-contab">Contabilidad</div>
+  <div class="auth-sub">Computadores</div>
   <div class="auth-desc">Conecta tu cuenta Google para sincronizar tu contabilidad con Drive.</div>
   <button class="auth-btn" onclick="startAuth()">
     <svg viewBox="0 0 24 24" fill="none">
@@ -211,8 +255,6 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 </div>
 
 <div id="app" style="display:none">
-
-  <!-- TOP BAR -->
   <div id="topbar">
     <div class="tb-brand">
       <div class="tb-logo">TERA<span>NET</span></div>
@@ -220,58 +262,71 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
       <div class="tb-contab">Contabilidad</div>
     </div>
     <div class="tb-right">
-      <div class="period-sel">
-        <select id="sel-mes" onchange="onPeriodChange()" style="width:72px"></select>
-        <span class="period-arrow">▾</span>
+      <div class="psel-wrap">
+        <select id="sel-mes" onchange="onPeriodChange()" style="width:68px"></select>
       </div>
-      <div class="period-sel">
-        <select id="sel-año" onchange="onPeriodChange()" style="width:52px"></select>
-        <span class="period-arrow">▾</span>
+      <div class="psel-wrap">
+        <select id="sel-año" onchange="onPeriodChange()" style="width:50px"></select>
       </div>
-      <div class="tb-sync-dot ok" id="sync-dot"></div>
+      <div class="tb-sync ok" id="sync-dot"></div>
       <button class="tb-btn" onclick="openDriveModal()">☁</button>
     </div>
   </div>
 
   <div id="content">
-
     <!-- INICIO -->
     <div class="view active" id="v-inicio">
-      <div class="scroll" id="inicio-scroll">
-        <div class="hero-card">
-          <div class="lbl">Balance del mes</div>
-          <div class="hero-val" id="h-balance" style="color:var(--blue)">$0</div>
+      <div class="scroll">
+        <div class="hoy-card">
+          <div class="hoy-hdr">
+            <div>
+              <div class="hoy-fecha" id="hoy-fecha">Hoy</div>
+              <div class="hoy-sub" id="hoy-sub">cargando...</div>
+            </div>
+            <div class="hoy-total" id="hoy-total">$0</div>
+          </div>
+          <div id="hoy-entries"></div>
+          <div class="add-hoy" onclick="openSheet(true)">+ agregar registro de hoy</div>
         </div>
-        <div class="grid2">
-          <div class="card"><div class="lbl">Ingresos</div><div class="val" id="h-ing" style="color:var(--green)">$0</div></div>
-          <div class="card"><div class="lbl">Egresos</div><div class="val" id="h-egr" style="color:var(--red)">$0</div></div>
+
+        <div class="sec-lbl">resumen del mes</div>
+        <div class="grid3">
+          <div class="card"><div class="lbl">Ingresos</div><div class="val" id="m-ing" style="color:var(--green);font-size:14px">$0</div></div>
+          <div class="card"><div class="lbl">Egresos</div><div class="val" id="m-egr" style="color:var(--red);font-size:14px">$0</div></div>
+          <div class="card"><div class="lbl">Balance</div><div class="val" id="m-bal" style="font-size:14px">$0</div></div>
         </div>
-        <div class="sec-title">días con actividad</div>
-        <div id="dias-list"></div>
+
+        <div class="sec-lbl">ver otro día</div>
+        <div class="cal-wrap">
+          <div class="cal-hdr">
+            <div class="cal-title" id="cal-title">Mayo 2026</div>
+            <div class="cal-sel-lbl" id="cal-sel-lbl"></div>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-sel-entries" id="cal-sel-entries" style="display:none"></div>
+        </div>
       </div>
     </div>
 
-    <!-- CONTROL MENSUAL -->
+    <!-- CONTROL -->
     <div class="view" id="v-control">
       <div class="ctrl-kpis-bar">
         <div class="ctrl-kpi"><div class="lbl">Ingresos</div><div class="val" id="c-ing" style="color:var(--green)">$0</div></div>
         <div class="ctrl-kpi"><div class="lbl">Egresos</div><div class="val" id="c-egr" style="color:var(--red)">$0</div></div>
-        <div class="ctrl-kpi"><div class="lbl">Balance</div><div class="val" id="c-bal" style="color:var(--blue)">$0</div></div>
+        <div class="ctrl-kpi"><div class="lbl">Balance</div><div class="val" id="c-bal">$0</div></div>
       </div>
       <div class="ctrl-table-wrap">
         <table class="ctrl-table">
           <thead><tr>
-            <th>día</th>
-            <th style="color:var(--green)88">ing.</th>
-            <th style="color:var(--red)88">egr.</th>
-            <th style="color:var(--blue)88">bal.</th>
+            <th>día</th><th style="color:var(--green)88">ing.</th>
+            <th style="color:var(--red)88">egr.</th><th style="color:var(--blue)88">bal.</th>
           </tr></thead>
           <tbody id="ctrl-tbody"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- GASTOS FIJOS -->
+    <!-- FIJOS -->
     <div class="view" id="v-fijos">
       <div class="fijos-stats">
         <div class="card"><div class="lbl">Pagado</div><div class="val" id="f-pagado" style="color:var(--green)">$0</div></div>
@@ -295,7 +350,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
       </div>
     </div>
 
-    <!-- INVERSIONES (solo lectura) -->
+    <!-- INVERSIONES -->
     <div class="view" id="v-fx">
       <div class="scroll">
         <div class="card fx-accent">
@@ -304,26 +359,21 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
           <div id="fx-cop-eq" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px">—</div>
         </div>
         <div class="grid2" id="fx-stats"></div>
-        <div class="sec-title">historial de operaciones</div>
+        <div class="sec-lbl">historial</div>
         <div class="fx-hist-wrap">
           <div class="fx-row fx-hdr">
-            <span style="width:52px">fecha</span>
-            <span style="width:48px">tipo</span>
-            <span style="flex:1;text-align:right">COP</span>
-            <span style="width:54px;text-align:right">USD</span>
+            <span style="width:52px">fecha</span><span style="width:48px">tipo</span>
+            <span style="flex:1;text-align:right">COP</span><span style="width:54px;text-align:right">USD</span>
           </div>
           <div id="fx-hist-list"></div>
         </div>
-        <div class="readonly-note">solo lectura · gestiona desde el escritorio</div>
+        <div style="font-size:10px;color:var(--text3);text-align:center;padding:4px 0;opacity:.7">solo lectura · gestiona desde el escritorio</div>
       </div>
     </div>
-
   </div>
 
-  <!-- FAB -->
-  <button class="fab" id="fab" onclick="openSheet()">+</button>
+  <button class="fab" id="fab" onclick="openSheet(false)">+</button>
 
-  <!-- BOTTOM NAV -->
   <div id="nav">
     <button class="nav-btn active" data-v="inicio"   onclick="go('inicio')"><div class="nav-ic">⊡</div><div>inicio</div></button>
     <button class="nav-btn"        data-v="control"  onclick="go('control')"><div class="nav-ic">⊞</div><div>control</div></button>
@@ -333,11 +383,11 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
   </div>
 </div>
 
-<!-- REGISTRO SHEET -->
+<!-- SHEET -->
 <div class="sheet-overlay hidden" id="sheet" onclick="if(event.target===this)closeSheet()">
   <div class="sheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title">Registro rápido</div>
+    <div class="sheet-title" id="sheet-title">Registro rápido</div>
     <div>
       <div class="s-lbl">Categoría</div>
       <div class="cats-wrap" id="cat-pills"></div>
@@ -350,7 +400,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
       <div class="s-lbl">Valor</div>
       <input class="s-inp" id="s-val" type="text" inputmode="numeric" placeholder="0">
     </div>
-    <button class="s-btn" onclick="guardarEntrada()">Guardar registro</button>
+    <button class="s-btn" id="s-save-btn" onclick="guardarEntrada()">Guardar registro</button>
   </div>
 </div>
 
@@ -358,16 +408,16 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 <div class="modal-overlay hidden" id="drive-modal" onclick="if(event.target===this)closeDriveModal()">
   <div class="modal">
     <div class="modal-title">Google Drive</div>
-    <div class="drive-status-row">
+    <div class="d-status">
       <div id="d-dot" style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
       <span id="d-txt" style="flex:1;color:var(--text2)">Conectado</span>
     </div>
     <div id="d-lastsync" style="font-size:11px;color:var(--text3)">—</div>
     <div class="drive-btns">
-      <button class="drive-btn up" onclick="drivePush()">⬆ Subir a Drive</button>
-      <button class="drive-btn dn" onclick="drivePull()">⬇ Bajar de Drive</button>
+      <button class="drive-btn up" onclick="drivePush()">⬆ Subir</button>
+      <button class="drive-btn dn" onclick="drivePull()">⬇ Bajar</button>
     </div>
-    <button class="signout-btn" onclick="signOut()">Cerrar sesión</button>
+    <button onclick="signOut()" style="font-size:11px;color:var(--text3);text-align:left;padding:2px 0">Cerrar sesión</button>
   </div>
 </div>
 
@@ -375,420 +425,495 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
 <script>
-// ══════════════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════════════
-const CLIENT_ID   = '172238719491-6h4bjo6s5r3dd0batguf4fsl19t90q1p.apps.googleusercontent.com';
-const SCOPES      = 'https://www.googleapis.com/auth/drive.file';
-const FOLDER_NAME = 'TeraNeT Backups';
-const MESES = ['','Enero','Febrero','Marzo','Abril','Mayo','Junio',
-               'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-const CATS  = ['Formatos','Mantenimientos','Partes/Compus','Programas','Otros','Egresos'];
-const CAT_COLOR = {
-  'Formatos':'#4B9EFF','Mantenimientos':'#A855F7','Partes/Compus':'#14B8A6',
-  'Programas':'#F97316','Otros':'#4CAF75','Egresos':'#E05555'
-};
+const CLIENT_ID='172238719491-6h4bjo6s5r3dd0batguf4fsl19t90q1p.apps.googleusercontent.com';
+const SCOPES='https://www.googleapis.com/auth/drive.file';
+const FOLDER_NAME='TeraNeT Backups';
+const MESES=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const CATS=['Formatos','Mantenimientos','Partes/Compus','Programas','Otros','Egresos'];
+const CAT_COLOR={'Formatos':'#4B9EFF','Mantenimientos':'#A855F7','Partes/Compus':'#14B8A6','Programas':'#F97316','Otros':'#4CAF75','Egresos':'#E05555'};
+const now=new Date();
+let S={año:now.getFullYear(),mes:now.getMonth()+1,activeView:'inicio',activeCat:'Formatos',
+       accessToken:null,folderId:null,SQL:null,db:null,dirty:false,lastSync:null,
+       calSelectedDay:null,editingEntry:null};
 
-// ══════════════════════════════════════════════════
-// ESTADO
-// ══════════════════════════════════════════════════
-const now = new Date();
-let S = {
-  año: now.getFullYear(), mes: now.getMonth()+1,
-  activeCat: 'Formatos', activeView: 'inicio',
-  accessToken: null, folderId: null, SQL: null, db: null,
-  dirty: false, lastSync: null,
+const $=id=>document.getElementById(id);
+const cop=(v,z=false)=>{
+  if(!v&&!z)return'—';if(!v)return'$0';
+  const fmt=Math.abs(v).toLocaleString('es-CO',{maximumFractionDigits:0});
+  return v<0?`-$${fmt}`:`$${fmt}`;
 };
-
-// ══════════════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════════════
-const $  = id => document.getElementById(id);
-const cop = (v, z=false) => {
-  if (!v && !z) return '—';
-  if (!v) return '$0';
-  const fmt = Math.abs(v).toLocaleString('es-CO',{maximumFractionDigits:0});
-  return v < 0 ? `-$${fmt}` : `$${fmt}`;
-};
-const parseNum = s => {
-  if (!s) return 0;
-  s = String(s).replace(/\$/g,'').replace(/\s/g,'').trim();
-  if (s.includes('.') && !s.includes(',')) s = s.replace(/\./g,'');
-  else if (s.includes(',')) s = s.replace(/\./g,'').replace(',','.');
+const parseNum=s=>{
+  if(!s)return 0;
+  s=String(s).replace(/\$/g,'').replace(/\s/g,'').trim();
+  if(s.includes('.')&&!s.includes(','))s=s.replace(/\./g,'');
+  else if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');
   return parseFloat(s)||0;
 };
-let _toastTimer;
-function toast(msg, dur=2500) {
-  const t=$('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(_toastTimer);
-  _toastTimer=setTimeout(()=>t.classList.remove('show'),dur);
-}
-function setSyncDot(s){const d=$('sync-dot');d.className='tb-sync-dot'+(s?' '+s:'');}
+let _tt;
+function toast(msg,dur=2500){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),dur);}
+function setSyncDot(s){$('sync-dot').className='tb-sync'+(s?' '+s:'');}
 
-// ══════════════════════════════════════════════════
-// SELECTOR PERÍODO
-// ══════════════════════════════════════════════════
-function buildPeriodSelectors() {
-  const ms = $('sel-mes');
-  ms.innerHTML = MESES.slice(1).map((m,i)=>
-    `<option value="${i+1}" ${i+1===S.mes?'selected':''}>${m.slice(0,3)}</option>`
-  ).join('');
-  const ys = $('sel-año');
-  const cur = S.año;
-  ys.innerHTML = '';
-  for (let y = cur+1; y >= 2020; y--) {
-    const opt = document.createElement('option');
-    opt.value = y; opt.textContent = y;
-    if (y === cur) opt.selected = true;
-    ys.appendChild(opt);
+// PERIOD SELECTORS
+function buildPeriodSelectors(){
+  const ms=$('sel-mes');
+  ms.innerHTML=MESES.slice(1).map((m,i)=>`<option value="${i+1}"${i+1===S.mes?' selected':''}>${m.slice(0,3)}</option>`).join('');
+  const ys=$('sel-año');ys.innerHTML='';
+  for(let y=S.año+1;y>=2020;y--){
+    const o=document.createElement('option');
+    o.value=y;o.textContent=y;if(y===S.año)o.selected=true;
+    ys.appendChild(o);
   }
 }
-
-function onPeriodChange() {
-  S.mes = parseInt($('sel-mes').value);
-  S.año = parseInt($('sel-año').value);
-  refreshView();
+function onPeriodChange(){
+  S.mes=parseInt($('sel-mes').value);
+  S.año=parseInt($('sel-año').value);
+  S.calSelectedDay=null;
+  // Si cambia el año, cargar esa DB de Drive
+  loadDbFromDrive().then(()=>{S.dirty=false;setSyncDot('ok');refreshView();}).catch(()=>refreshView());
 }
 
-// ══════════════════════════════════════════════════
 // AUTH
-// ══════════════════════════════════════════════════
-function startAuth() {
-  const client = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID, scope: SCOPES,
-    callback: async resp => {
-      if (resp.error) { toast('Error al autenticar'); return; }
-      S.accessToken = resp.access_token;
-      localStorage.setItem('tn_token', resp.access_token);
-      localStorage.setItem('tn_token_exp', Date.now()+(resp.expires_in*1000));
+function startAuth(){
+  const client=google.accounts.oauth2.initTokenClient({
+    client_id:CLIENT_ID,scope:SCOPES,
+    callback:async resp=>{
+      if(resp.error){toast('Error al autenticar');return;}
+      S.accessToken=resp.access_token;
+      localStorage.setItem('tn_token',resp.access_token);
+      localStorage.setItem('tn_token_exp',Date.now()+(resp.expires_in*1000));
       $('auth-screen').classList.remove('show');
       await loadApp();
     }
   });
   client.requestAccessToken();
 }
-
-function signOut() {
-  localStorage.removeItem('tn_token'); localStorage.removeItem('tn_token_exp');
-  S.accessToken=null; S.db=null;
-  closeDriveModal();
-  $('app').style.display='none';
-  $('auth-screen').classList.add('show');
+function signOut(){
+  localStorage.removeItem('tn_token');localStorage.removeItem('tn_token_exp');
+  S.accessToken=null;S.db=null;closeDriveModal();
+  $('app').style.display='none';$('auth-screen').classList.add('show');
 }
-
-function checkStoredToken() {
+function checkStoredToken(){
   const token=localStorage.getItem('tn_token');
   const exp=parseInt(localStorage.getItem('tn_token_exp')||'0');
-  if (token && Date.now() < exp-60000) { S.accessToken=token; return true; }
+  if(token&&Date.now()<exp-60000){S.accessToken=token;return true;}
   return false;
 }
 
-// ══════════════════════════════════════════════════
-// GOOGLE DRIVE
-// ══════════════════════════════════════════════════
-async function driveReq(url, opts={}) {
-  const r = await fetch(url, {
-    ...opts, headers:{'Authorization':`Bearer ${S.accessToken}`,...(opts.headers||{})}
-  });
-  if (r.status===401) { signOut(); throw new Error('Token expirado'); }
+// DRIVE
+async function driveReq(url,opts={}){
+  const r=await fetch(url,{...opts,headers:{'Authorization':`Bearer ${S.accessToken}`,...(opts.headers||{})}});
+  if(r.status===401){signOut();throw new Error('Token expirado');}
   return r;
 }
-
-async function getOrCreateFolder() {
-  if (S.folderId) return S.folderId;
-  const q = encodeURIComponent(`name='${FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
-  const r = await driveReq(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id)`);
-  const d = await r.json();
-  if (d.files && d.files.length) { S.folderId=d.files[0].id; return S.folderId; }
-  const cr = await driveReq('https://www.googleapis.com/drive/v3/files', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({name:FOLDER_NAME, mimeType:'application/vnd.google-apps.folder'})
+async function getOrCreateFolder(){
+  if(S.folderId)return S.folderId;
+  const q=encodeURIComponent(`name='${FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
+  const r=await driveReq(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id)`);
+  const d=await r.json();
+  if(d.files&&d.files.length){S.folderId=d.files[0].id;return S.folderId;}
+  const cr=await driveReq('https://www.googleapis.com/drive/v3/files',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:FOLDER_NAME,mimeType:'application/vnd.google-apps.folder'})
   });
-  const cd = await cr.json(); S.folderId=cd.id; return S.folderId;
+  const cd=await cr.json();S.folderId=cd.id;return S.folderId;
 }
-
-function dbFileName() { return `teranet_${S.año}.db`; }
-
-async function findDbFile(name) {
-  const fid = await getOrCreateFolder();
-  const q = encodeURIComponent(`name='${name}' and '${fid}' in parents and trashed=false`);
-  const r = await driveReq(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,modifiedTime)`);
-  const d = await r.json();
-  return d.files && d.files.length ? d.files[0] : null;
+function dbFileName(){return `teranet_${S.año}.db`;}
+async function findDbFile(name){
+  const fid=await getOrCreateFolder();
+  const q=encodeURIComponent(`name='${name}' and '${fid}' in parents and trashed=false`);
+  const r=await driveReq(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,modifiedTime)`);
+  const d=await r.json();return d.files&&d.files.length?d.files[0]:null;
 }
-
-async function downloadDb(fileId) {
-  const r = await driveReq(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`);
+async function downloadDb(fileId){
+  const r=await driveReq(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`);
   return new Uint8Array(await r.arrayBuffer());
 }
-
-async function uploadDb(data) {
-  const name = dbFileName();
-  const fid  = await getOrCreateFolder();
-  const ex   = await findDbFile(name);
-  const blob = new Blob([data], {type:'application/octet-stream'});
-  const form = new FormData();
-  if (ex) {
-    form.append('file', blob, name);
-    await driveReq(`https://www.googleapis.com/upload/drive/v3/files/${ex.id}?uploadType=multipart`,
-      {method:'PATCH', body:form});
-  } else {
-    form.append('metadata', new Blob([JSON.stringify({name, parents:[fid]})], {type:'application/json'}));
-    form.append('file', blob, name);
-    await driveReq('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
-      {method:'POST', body:form});
+async function uploadDb(data){
+  const name=dbFileName(),fid=await getOrCreateFolder(),ex=await findDbFile(name);
+  const blob=new Blob([data],{type:'application/octet-stream'});
+  const form=new FormData();
+  if(ex){
+    form.append('file',blob,name);
+    await driveReq(`https://www.googleapis.com/upload/drive/v3/files/${ex.id}?uploadType=multipart`,{method:'PATCH',body:form});
+  }else{
+    form.append('metadata',new Blob([JSON.stringify({name,parents:[fid]})],{type:'application/json'}));
+    form.append('file',blob,name);
+    await driveReq('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',body:form});
   }
 }
-
-async function drivePush() {
+async function drivePush(){
   setSyncDot('syncing');
-  try {
-    await uploadDb(S.db.export());
-    S.dirty=false; S.lastSync=new Date(); setSyncDot('ok');
+  try{await uploadDb(S.db.export());S.dirty=false;S.lastSync=new Date();setSyncDot('ok');
     $('d-lastsync').textContent=`Última sync: ${S.lastSync.toLocaleTimeString('es-CO')}`;
-    toast('✓ Subido a Drive');
-  } catch(e) { setSyncDot('err'); toast('Error al subir: '+e.message); }
+    toast('✓ Subido a Drive');}
+  catch(e){setSyncDot('err');toast('Error: '+e.message);}
 }
-
-async function drivePull() {
-  if (S.dirty && !confirm('¿Bajar de Drive y perder cambios locales?')) return;
+async function drivePull(){
+  if(S.dirty&&!confirm('¿Bajar de Drive y perder cambios locales?'))return;
   setSyncDot('syncing');
-  try {
-    const file = await findDbFile(dbFileName());
-    if (!file) { toast('No existe en Drive aún'); setSyncDot('ok'); return; }
-    const data = await downloadDb(file.id);
-    S.db = new S.SQL.Database(data);
-    S.dirty=false; S.lastSync=new Date(); setSyncDot('ok');
-    refreshView(); toast('✓ Bajado de Drive');
-  } catch(e) { setSyncDot('err'); toast('Error al bajar: '+e.message); }
+  try{
+    const file=await findDbFile(dbFileName());
+    if(!file){toast('No existe en Drive aún');setSyncDot('ok');return;}
+    const data=await downloadDb(file.id);
+    S.db=new S.SQL.Database(data);S.dirty=false;S.lastSync=new Date();setSyncDot('ok');
+    refreshView();toast('✓ Bajado de Drive');}
+  catch(e){setSyncDot('err');toast('Error: '+e.message);}
 }
+setInterval(()=>{if(S.dirty&&S.accessToken&&S.db)drivePush();},15*60*1000);
 
-setInterval(()=>{ if(S.dirty && S.accessToken && S.db) drivePush(); }, 15*60*1000);
-
-// ══════════════════════════════════════════════════
-// SQL.JS — SQLite en el navegador
-// ══════════════════════════════════════════════════
-async function initSQL() {
-  S.SQL = await initSqlJs({
-    locateFile: f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`
-  });
+// SQL
+async function initSQL(){
+  S.SQL=await initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`});
 }
-
-function initSchema() {
+function initSchema(){
   S.db.run(`
-    CREATE TABLE IF NOT EXISTS entradas (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      año INTEGER NOT NULL, mes INTEGER NOT NULL, dia INTEGER NOT NULL,
-      categoria TEXT NOT NULL, descripcion TEXT DEFAULT '', valor REAL DEFAULT 0, orden INTEGER DEFAULT 0
-    );
-    CREATE TABLE IF NOT EXISTS gastos_fijos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion TEXT NOT NULL, valor REAL NOT NULL, activo INTEGER DEFAULT 1
-    );
-    CREATE TABLE IF NOT EXISTS pagos_fijos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      gasto_id INTEGER NOT NULL, año INTEGER NOT NULL, mes INTEGER NOT NULL,
-      pagado INTEGER DEFAULT 0, valor_real REAL,
-      UNIQUE(gasto_id, año, mes)
-    );
-    CREATE TABLE IF NOT EXISTS cartera_fx (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      fecha TEXT NOT NULL, año INTEGER NOT NULL, mes INTEGER NOT NULL,
-      tipo TEXT NOT NULL, cop REAL NOT NULL, tasa_dia REAL NOT NULL, usd REAL NOT NULL,
-      tasa_prom_compra REAL, gp_realizada REAL, plataforma TEXT DEFAULT '', notas TEXT DEFAULT ''
-    );
-    CREATE TABLE IF NOT EXISTS config (clave TEXT PRIMARY KEY, valor TEXT);
-    CREATE TABLE IF NOT EXISTS balance_personal (clave TEXT PRIMARY KEY, valor REAL DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS entradas(id INTEGER PRIMARY KEY AUTOINCREMENT,
+      año INTEGER NOT NULL,mes INTEGER NOT NULL,dia INTEGER NOT NULL,
+      categoria TEXT NOT NULL,descripcion TEXT DEFAULT '',valor REAL DEFAULT 0,orden INTEGER DEFAULT 0);
+    CREATE TABLE IF NOT EXISTS gastos_fijos(id INTEGER PRIMARY KEY AUTOINCREMENT,
+      descripcion TEXT NOT NULL,valor REAL NOT NULL,activo INTEGER DEFAULT 1);
+    CREATE TABLE IF NOT EXISTS pagos_fijos(id INTEGER PRIMARY KEY AUTOINCREMENT,
+      gasto_id INTEGER NOT NULL,año INTEGER NOT NULL,mes INTEGER NOT NULL,
+      pagado INTEGER DEFAULT 0,valor_real REAL,UNIQUE(gasto_id,año,mes));
+    CREATE TABLE IF NOT EXISTS cartera_fx(id INTEGER PRIMARY KEY AUTOINCREMENT,
+      fecha TEXT NOT NULL,año INTEGER NOT NULL,mes INTEGER NOT NULL,tipo TEXT NOT NULL,
+      cop REAL NOT NULL,tasa_dia REAL NOT NULL,usd REAL NOT NULL,
+      tasa_prom_compra REAL,gp_realizada REAL,plataforma TEXT DEFAULT '',notas TEXT DEFAULT '');
+    CREATE TABLE IF NOT EXISTS config(clave TEXT PRIMARY KEY,valor TEXT);
+    CREATE TABLE IF NOT EXISTS balance_personal(clave TEXT PRIMARY KEY,valor REAL DEFAULT 0);
   `);
-  const cnt = S.db.exec("SELECT COUNT(*) FROM gastos_fijos")[0].values[0][0];
-  if (!cnt) {
+  const cnt=S.db.exec("SELECT COUNT(*) FROM gastos_fijos")[0].values[0][0];
+  if(!cnt){
     [['Movistar',133000],['Celular',45000],['Arriendo',500000],['Energía',140000],
      ['Gas',20000],['Gym',75000],['Funeraria',17000],['Agua',70000],
      ['Tarjeta NU',300000],['Sansita',100000],['Seguro moto',120000]
     ].forEach(([d,v])=>S.db.run("INSERT INTO gastos_fijos(descripcion,valor)VALUES(?,?)",[d,v]));
   }
   ['cuenta_bc','efectivo','arriendo_reserva'].forEach(k=>
-    S.db.run("INSERT OR IGNORE INTO balance_personal VALUES(?,0)",[k])
-  );
+    S.db.run("INSERT OR IGNORE INTO balance_personal VALUES(?,0)",[k]));
+}
+function dbq(sql,p=[]){
+  try{
+    const r=S.db.exec(sql,p);if(!r.length)return[];
+    return r[0].values.map(row=>{const o={};r[0].columns.forEach((c,i)=>o[c]=row[i]);return o;});
+  }catch{return[];}
+}
+async function loadDbFromDrive(){
+  const file=await findDbFile(dbFileName());
+  if(file){const data=await downloadDb(file.id);S.db=new S.SQL.Database(data);initSchema();}
+  else{S.db=new S.SQL.Database();initSchema();}
 }
 
-function dbq(sql, p=[]) {
-  try {
-    const r = S.db.exec(sql, p);
-    if (!r.length) return [];
-    return r[0].values.map(row=>{
-      const o={}; r[0].columns.forEach((c,i)=>o[c]=row[i]); return o;
-    });
-  } catch { return []; }
-}
-
-async function loadDbFromDrive() {
-  const file = await findDbFile(dbFileName());
-  if (file) {
-    const data = await downloadDb(file.id);
-    S.db = new S.SQL.Database(data);
-    // Asegurar que el schema esté completo (si vino del PC)
-    initSchema();
-  } else {
-    S.db = new S.SQL.Database();
-    initSchema();
-    toast('Nueva DB creada para '+S.año);
-  }
-}
-
-// ══════════════════════════════════════════════════
-// VISTAS
-// ══════════════════════════════════════════════════
-function go(v) {
+// NAVIGATION
+function go(v){
   S.activeView=v;
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(e=>e.classList.remove('active'));
   $('v-'+v).classList.add('active');
   document.querySelector(`[data-v="${v}"]`).classList.add('active');
-  $('fab').style.display = v==='inicio'?'flex':'none';
+  $('fab').style.display=v==='inicio'?'flex':'none';
   refreshView();
 }
-
-function refreshView() {
-  const v = S.activeView;
-  if (v==='inicio')  renderInicio();
-  if (v==='control') renderControl();
-  if (v==='fijos')   renderFijos();
-  if (v==='balance') renderBalance();
-  if (v==='fx')      renderFX();
+function refreshView(){
+  const v=S.activeView;
+  if(v==='inicio')renderInicio();
+  if(v==='control')renderControl();
+  if(v==='fijos')renderFijos();
+  if(v==='balance')renderBalance();
+  if(v==='fx')renderFX();
 }
 
-// ── INICIO ──
-function renderInicio() {
-  const rows = dbq(`SELECT dia,
+// RENDER INICIO
+function renderInicio(){
+  const today=new Date();
+  const dia=today.getDate();
+  const diasSemana=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  $('hoy-fecha').textContent=`Hoy · ${diasSemana[today.getDay()]} ${dia}`;
+
+  const entries=dbq(`SELECT id,categoria,descripcion,valor,orden FROM entradas
+    WHERE año=? AND mes=? AND dia=? ORDER BY categoria,orden`,[S.año,S.mes,dia]);
+  const totIng=entries.filter(e=>e.categoria!=='Egresos').reduce((a,e)=>a+e.valor,0);
+  const totEgr=entries.filter(e=>e.categoria==='Egresos').reduce((a,e)=>a+e.valor,0);
+  const tot=totIng-totEgr;
+  $('hoy-sub').textContent=entries.length?`${entries.length} registro${entries.length>1?'s':''}  ·  tap para editar · desliza para eliminar`:'Sin registros hoy';
+  $('hoy-total').textContent=cop(tot,true);
+  $('hoy-total').style.color=tot>=0?'var(--green)':'var(--red)';
+
+  renderEntries($('hoy-entries'), entries, S.año, S.mes, dia, ()=>renderInicio());
+
+  // Resumen mes
+  const res=dbq(`SELECT
     COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ing,
     COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egr
-    FROM entradas WHERE año=? AND mes=? GROUP BY dia ORDER BY dia DESC`,
-    [S.año, S.mes]);
-  const totIng = rows.reduce((a,r)=>a+r.ing,0);
-  const totEgr = rows.reduce((a,r)=>a+r.egr,0);
-  const bal = totIng-totEgr;
-  $('h-ing').textContent=cop(totIng,true);
-  $('h-egr').textContent=cop(totEgr,true);
-  $('h-balance').textContent=cop(bal,true);
-  $('h-balance').style.color = bal>=0?'var(--blue)':'var(--red)';
-  const list=$('dias-list'); list.innerHTML='';
-  if (!rows.length) {
-    list.innerHTML='<div style="font-size:12px;color:var(--text3);text-align:center;padding:16px">Sin registros este mes</div>';
+    FROM entradas WHERE año=? AND mes=?`,[S.año,S.mes])[0]||{ing:0,egr:0};
+  const bal=res.ing-res.egr;
+  $('m-ing').textContent=cop(res.ing,true);
+  $('m-egr').textContent=cop(res.egr,true);
+  $('m-bal').textContent=cop(bal,true);
+  $('m-bal').style.color=bal>=0?'var(--blue)':'var(--red)';
+
+  renderCalendar();
+}
+
+// RENDER ENTRIES — con swipe y edición inline
+function renderEntries(container, entries, año, mes, dia, onRefresh){
+  container.innerHTML='';
+  if(!entries.length){
+    container.innerHTML='<div style="padding:12px;text-align:center;font-size:11px;color:var(--text3)">Sin registros</div>';
     return;
   }
-  rows.forEach(r=>{
-    const b=r.ing-r.egr;
-    const cats = dbq(`SELECT DISTINCT categoria FROM entradas WHERE año=? AND mes=? AND dia=?`,[S.año,S.mes,r.dia]);
-    const el=document.createElement('div');
-    el.className='day-row';
-    el.innerHTML=`
-      <div class="day-num">${r.dia}</div>
-      <div class="day-info">
-        <div style="font-size:12px;color:var(--text2)">${cats.map(c=>c.categoria).join(' · ')}</div>
-        <div class="day-cats">${cats.length} categorías</div>
+  entries.forEach(e=>{
+    const clr=CAT_COLOR[e.categoria]||'#999';
+    const isEgr=e.categoria==='Egresos';
+    const item=document.createElement('div');
+    item.className='reg-item';
+    item.dataset.id=e.id;
+
+    // Contenido normal
+    const normal=document.createElement('div');
+    normal.style.cssText='display:flex;align-items:center;gap:8px;width:100%';
+    normal.innerHTML=`
+      <div class="reg-dot" style="background:${clr}"></div>
+      <div class="reg-info">
+        <div class="reg-desc">${e.descripcion||'—'}</div>
+        <div class="reg-cat">${e.categoria}</div>
       </div>
-      <div class="day-amt" style="color:${b>=0?'var(--green)':'var(--red)'}">${cop(b,true)}</div>`;
-    list.appendChild(el);
+      <div class="reg-val" style="color:${clr}">${isEgr?'-':''}${cop(e.valor,true)}</div>`;
+
+    // Botón eliminar (swipe)
+    const delBtn=document.createElement('div');
+    delBtn.className='reg-del';
+    delBtn.textContent='✕';
+    delBtn.onclick=(ev)=>{
+      ev.stopPropagation();
+      if(!confirm('¿Eliminar este registro?'))return;
+      S.db.run('DELETE FROM entradas WHERE id=?',[e.id]);
+      S.dirty=true;
+      onRefresh();
+    };
+
+    item.appendChild(normal);
+    item.appendChild(delBtn);
+
+    // Tap para editar
+    let tapTimer,tapCount=0;
+    normal.addEventListener('click',()=>{
+      tapCount++;
+      if(tapCount===1){
+        tapTimer=setTimeout(()=>{
+          // Swipe toggle
+          item.classList.toggle('swiped');
+          tapCount=0;
+        },250);
+      }else{
+        clearTimeout(tapTimer);tapCount=0;
+        // Doble tap = editar
+        startEdit(item,normal,e,año,mes,dia,clr,isEgr,onRefresh);
+      }
+    });
+
+    container.appendChild(item);
   });
 }
 
-// ── CONTROL ──
-function renderControl() {
-  const rows = dbq(`SELECT dia,
+function startEdit(item,normal,e,año,mes,dia,clr,isEgr,onRefresh){
+  item.classList.add('reg-editing');
+  normal.innerHTML=`
+    <div class="reg-dot" style="background:${clr}"></div>
+    <div class="reg-info" style="flex:1">
+      <input class="reg-edit-inp" id="edit-desc-${e.id}" value="${e.descripcion||''}" placeholder="Descripción">
+      <div class="reg-cat">${e.categoria}</div>
+    </div>
+    <input class="reg-edit-val" id="edit-val-${e.id}" style="color:${clr}"
+      value="${e.valor?Math.round(e.valor).toLocaleString('es-CO'):''}" inputmode="numeric" placeholder="0">
+    <button onclick="saveEdit(${e.id},${año},${mes},${dia})" style="margin-left:6px;font-size:16px;color:var(--green)">✓</button>`;
+  setTimeout(()=>{const inp=document.getElementById(`edit-desc-${e.id}`);if(inp)inp.focus();},50);
+  // Guardar con Enter
+  setTimeout(()=>{
+    const vi=document.getElementById(`edit-val-${e.id}`);
+    if(vi)vi.addEventListener('keydown',ev=>{if(ev.key==='Enter'){saveEdit(e.id,año,mes,dia);onRefresh();}});
+  },60);
+  S.editingEntry={id:e.id,onRefresh};
+}
+
+function saveEdit(id,año,mes,dia){
+  const dInp=document.getElementById(`edit-desc-${id}`);
+  const vInp=document.getElementById(`edit-val-${id}`);
+  if(!dInp||!vInp)return;
+  const desc=dInp.value.trim();
+  const val=parseNum(vInp.value);
+  S.db.run('UPDATE entradas SET descripcion=?,valor=? WHERE id=?',[desc,val,id]);
+  S.dirty=true;
+  if(S.editingEntry&&S.editingEntry.onRefresh)S.editingEntry.onRefresh();
+  S.editingEntry=null;
+}
+
+// MINI CALENDARIO
+function renderCalendar(){
+  const title=$('cal-title');
+  title.textContent=`${MESES[S.mes]} ${S.año}`;
+
+  // Días con data
+  const diasData=dbq(`SELECT dia,
     COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ing,
     COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egr
-    FROM entradas WHERE año=? AND mes=? GROUP BY dia`,[S.año, S.mes]);
-  const map={}; rows.forEach(r=>map[r.dia]=r);
-  const tIng=rows.reduce((a,r)=>a+r.ing,0);
-  const tEgr=rows.reduce((a,r)=>a+r.egr,0);
-  const tBal=tIng-tEgr;
-  $('c-ing').textContent=cop(tIng,true);
-  $('c-egr').textContent=cop(tEgr,true);
-  $('c-bal').textContent=cop(tBal,true);
-  $('c-bal').style.color=tBal>=0?'var(--blue)':'var(--red)';
-  const tb=$('ctrl-tbody'); tb.innerHTML='';
+    FROM entradas WHERE año=? AND mes=? GROUP BY dia`,[S.año,S.mes]);
+  const dataMap={};diasData.forEach(r=>dataMap[r.dia]=r);
+
+  const grid=$('cal-grid');grid.innerHTML='';
+  const today=new Date();
+  const isCurrentMonth=S.año===today.getFullYear()&&S.mes===today.getMonth()+1;
+  const todayDay=today.getDate();
   const daysInMonth=new Date(S.año,S.mes,0).getDate();
+  const firstDow=new Date(S.año,S.mes-1,1).getDay(); // 0=dom
+
+  // Headers
+  ['D','L','M','M','J','V','S'].forEach(d=>{
+    const h=document.createElement('div');h.className='cal-dow';h.textContent=d;grid.appendChild(h);
+  });
+  // Empty cells
+  for(let i=0;i<firstDow;i++){
+    const e=document.createElement('div');e.className='cal-day empty';grid.appendChild(e);
+  }
+  // Days
   for(let d=1;d<=daysInMonth;d++){
+    const cell=document.createElement('div');
+    cell.className='cal-day';
+    cell.textContent=d;
+    const hasData=dataMap[d];
+    if(hasData)cell.classList.add('has');
+    if(hasData&&hasData.egr>hasData.ing)cell.classList.add('egr');
+    if(isCurrentMonth&&d===todayDay)cell.classList.add('today');
+    if(S.calSelectedDay===d)cell.classList.add('selected');
+    cell.onclick=()=>selectCalDay(d,dataMap);
+    grid.appendChild(cell);
+  }
+
+  // Si hay día seleccionado, mostrar sus registros
+  if(S.calSelectedDay){
+    renderCalDayEntries(S.calSelectedDay);
+  }else{
+    $('cal-sel-entries').style.display='none';
+    $('cal-sel-lbl').textContent='';
+  }
+}
+
+function selectCalDay(d,dataMap){
+  if(S.calSelectedDay===d){S.calSelectedDay=null;}
+  else{S.calSelectedDay=d;}
+  renderCalendar();
+}
+
+function renderCalDayEntries(dia){
+  const wrap=$('cal-sel-entries');
+  const entries=dbq(`SELECT id,categoria,descripcion,valor,orden FROM entradas
+    WHERE año=? AND mes=? AND dia=? ORDER BY categoria,orden`,[S.año,S.mes,dia]);
+  const diasSemana=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const dow=new Date(S.año,S.mes-1,dia).getDay();
+  $('cal-sel-lbl').textContent=`${diasSemana[dow]} ${dia}`;
+  wrap.style.display='block';
+  const totIng=entries.filter(e=>e.categoria!=='Egresos').reduce((a,e)=>a+e.valor,0);
+  const totEgr=entries.filter(e=>e.categoria==='Egresos').reduce((a,e)=>a+e.valor,0);
+  const tot=totIng-totEgr;
+  wrap.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border)">
+      <span style="font-size:10px;color:var(--text3)">${entries.length} registro${entries.length!==1?'s':''}</span>
+      <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:${tot>=0?'var(--green)':'var(--red)'}">${cop(tot,true)}</span>
+    </div>`;
+  const list=document.createElement('div');
+  renderEntries(list,entries,S.año,S.mes,dia,()=>{renderCalendar();});
+  wrap.appendChild(list);
+
+  // Botón agregar a ese día
+  const addBtn=document.createElement('div');
+  addBtn.className='add-hoy';
+  addBtn.style.fontSize='11px';
+  addBtn.textContent=`+ agregar registro del día ${dia}`;
+  addBtn.onclick=()=>openSheet(false,dia);
+  wrap.appendChild(addBtn);
+}
+
+// RENDER CONTROL
+function renderControl(){
+  const rows=dbq(`SELECT dia,
+    COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ing,
+    COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egr
+    FROM entradas WHERE año=? AND mes=? GROUP BY dia`,[S.año,S.mes]);
+  const map={};rows.forEach(r=>map[r.dia]=r);
+  const tI=rows.reduce((a,r)=>a+r.ing,0),tE=rows.reduce((a,r)=>a+r.egr,0),tB=tI-tE;
+  $('c-ing').textContent=cop(tI,true);$('c-egr').textContent=cop(tE,true);
+  $('c-bal').textContent=cop(tB,true);$('c-bal').style.color=tB>=0?'var(--blue)':'var(--red)';
+  const tb=$('ctrl-tbody');tb.innerHTML='';
+  const dim=new Date(S.año,S.mes,0).getDate();
+  for(let d=1;d<=dim;d++){
     const t=map[d]||null;
     const ing=t?t.ing:0,egr=t?t.egr:0,bal=ing-egr;
-    const fmt=v=>v?cop(v):'—';
     const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td class="${t?'has-d':''}">${d}</td>
-      <td class="${t&&ing?'ing':''}">${fmt(ing)}</td>
-      <td class="${t&&egr?'egr':''}">${fmt(egr)}</td>
-      <td class="${t?(bal>=0?'pos':'neg'):''}">${t?fmt(bal):'—'}</td>`;
+    tr.innerHTML=`<td class="${t?'has-d':''}">${d}</td>
+      <td class="${t&&ing?'ing':''}">${t&&ing?cop(ing):'—'}</td>
+      <td class="${t&&egr?'egr':''}">${t&&egr?cop(egr):'—'}</td>
+      <td class="${t?(bal>=0?'pos':'neg'):''}">${t?cop(bal):'—'}</td>`;
     tb.appendChild(tr);
   }
-  const tot=document.createElement('tr');
-  tot.className='tot-row';
-  tot.innerHTML=`<td>Total</td><td class="ing">${cop(tIng,true)}</td><td class="egr">${cop(tEgr,true)}</td><td class="${tBal>=0?'pos':'neg'}">${cop(tBal,true)}</td>`;
+  const tot=document.createElement('tr');tot.className='tot-row';
+  tot.innerHTML=`<td>Total</td><td class="ing">${cop(tI,true)}</td><td class="egr">${cop(tE,true)}</td><td class="${tB>=0?'pos':'neg'}">${cop(tB,true)}</td>`;
   tb.appendChild(tot);
 }
 
-// ── FIJOS ──
-function renderFijos() {
-  const pagos = dbq(`
-    SELECT gf.id, gf.descripcion, gf.valor, COALESCE(pf.pagado,0) as pagado
-    FROM gastos_fijos gf
-    LEFT JOIN pagos_fijos pf ON gf.id=pf.gasto_id AND pf.año=? AND pf.mes=?
-    WHERE gf.activo=1 ORDER BY gf.id`,[S.año, S.mes]);
+// RENDER FIJOS
+function renderFijos(){
+  const pagos=dbq(`SELECT gf.id,gf.descripcion,gf.valor,COALESCE(pf.pagado,0) as pagado
+    FROM gastos_fijos gf LEFT JOIN pagos_fijos pf ON gf.id=pf.gasto_id AND pf.año=? AND pf.mes=?
+    WHERE gf.activo=1 ORDER BY gf.id`,[S.año,S.mes]);
   const total=pagos.reduce((a,p)=>a+p.valor,0);
   const paid=pagos.filter(p=>p.pagado).reduce((a,p)=>a+p.valor,0);
-  $('f-pagado').textContent=cop(paid,true);
-  $('f-pend').textContent=cop(total-paid,true);
-  const list=$('fijo-list'); list.innerHTML='';
+  $('f-pagado').textContent=cop(paid,true);$('f-pend').textContent=cop(total-paid,true);
+  const list=$('fijo-list');list.innerHTML='';
   pagos.forEach(p=>{
-    const row=document.createElement('div');
-    row.className='fijo-row';
-    row.innerHTML=`
-      <div class="fijo-chk${p.pagado?' paid':''}">✓</div>
+    const row=document.createElement('div');row.className='fijo-row';
+    row.innerHTML=`<div class="fijo-chk${p.pagado?' paid':''}">✓</div>
       <div class="fijo-name${p.pagado?' paid':''}">${p.descripcion}</div>
       <div class="fijo-val${p.pagado?' paid':''}">${cop(p.valor,true)}</div>`;
     row.onclick=()=>{
       S.db.run(`INSERT INTO pagos_fijos(gasto_id,año,mes,pagado)VALUES(?,?,?,?)
         ON CONFLICT(gasto_id,año,mes)DO UPDATE SET pagado=excluded.pagado`,
-        [p.id, S.año, S.mes, p.pagado?0:1]);
-      S.dirty=true;
-      renderFijos();
+        [p.id,S.año,S.mes,p.pagado?0:1]);
+      S.dirty=true;renderFijos();
     };
     list.appendChild(row);
   });
 }
 
-// ── BALANCE ──
-function renderBalance() {
+// RENDER BALANCE
+function renderBalance(){
   const bal=dbq("SELECT clave,valor FROM balance_personal");
-  const bmap={}; bal.forEach(r=>bmap[r.clave]=r.valor);
+  const bm={};bal.forEach(r=>bm[r.clave]=r.valor);
   const fx=dbq("SELECT tipo,cop,usd FROM cartera_fx ORDER BY fecha,id");
   let tu=0,tc=0;
-  fx.forEach(r=>{
-    if(r.tipo==='COMPRA'){tu+=r.usd;tc+=r.cop;}
-    else{const avg=tu?tc/tu:0;tu-=r.usd;tc-=r.usd*avg;}
-  });
+  fx.forEach(r=>{if(r.tipo==='COMPRA'){tu+=r.usd;tc+=r.cop;}else{const avg=tu?tc/tu:0;tu-=r.usd;tc-=r.usd*avg;}});
   const tasa=parseFloat((dbq("SELECT valor FROM config WHERE clave='tasa_usd'")[0]||{valor:4100}).valor);
-  const usdReal=bmap.usd_reales_binance!=null?bmap.usd_reales_binance:tu;
+  const usdReal=bm.usd_reales_binance!=null?bm.usd_reales_binance:tu;
   const usdCop=usdReal*tasa;
   const pagos=dbq(`SELECT gf.valor,COALESCE(pf.pagado,0) as pagado FROM gastos_fijos gf
     LEFT JOIN pagos_fijos pf ON gf.id=pf.gasto_id AND pf.año=? AND pf.mes=?
     WHERE gf.activo=1`,[S.año,S.mes]);
-  const pendiente=pagos.filter(p=>!p.pagado).reduce((a,p)=>a+p.valor,0);
-  const deuda=bmap.deuda||0;
-  const activos=(bmap.cuenta_bc||0)+usdCop+(bmap.arriendo_reserva||0)+(bmap.efectivo||0);
-  const total=activos-pendiente-deuda;
+  const pend=pagos.filter(p=>!p.pagado).reduce((a,p)=>a+p.valor,0);
+  const deuda=bm.deuda||0;
+  const activos=(bm.cuenta_bc||0)+usdCop+(bm.arriendo_reserva||0)+(bm.efectivo||0);
+  const total=activos-pend-deuda;
   $('bal-total').textContent=cop(total,true);
   $('bal-total').style.color=total>=0?'var(--blue)':'var(--red)';
-  $('bal-pend').textContent=cop(pendiente,true);
+  $('bal-pend').textContent=cop(pend,true);
   $('bal-deuda').textContent=cop(deuda,true);
-  const cuentas=$('bal-cuentas'); cuentas.innerHTML=`
-    <div class="card"><div class="lbl" style="color:#4B9EFF88">Cuenta BC</div><div class="val" style="color:var(--blue)">${cop(bmap.cuenta_bc||0,true)}</div></div>
+  $('bal-cuentas').innerHTML=`
+    <div class="card"><div class="lbl" style="color:#4B9EFF88">Cuenta BC</div><div class="val" style="color:var(--blue)">${cop(bm.cuenta_bc||0,true)}</div></div>
     <div class="card"><div class="lbl" style="color:#14B8A688">USD Binance</div><div class="val" style="color:var(--teal)">${cop(usdCop,true)}<div style="font-size:10px;color:var(--text3)">${usdReal.toFixed(1)} USD</div></div></div>
-    <div class="card"><div class="lbl" style="color:#F9731688">Arriendo res.</div><div class="val" style="color:var(--orange)">${cop(bmap.arriendo_reserva||0,true)}</div></div>
-    <div class="card"><div class="lbl" style="color:#4CAF7588">Efectivo</div><div class="val" style="color:var(--green)">${cop(bmap.efectivo||0,true)}</div></div>`;
+    <div class="card"><div class="lbl" style="color:#F9731688">Arriendo res.</div><div class="val" style="color:var(--orange)">${cop(bm.arriendo_reserva||0,true)}</div></div>
+    <div class="card"><div class="lbl" style="color:#4CAF7588">Efectivo</div><div class="val" style="color:var(--green)">${cop(bm.efectivo||0,true)}</div></div>`;
 }
 
-// ── INVERSIONES ──
-function renderFX() {
+// RENDER FX
+function renderFX(){
   const rows=dbq("SELECT tipo,cop,usd FROM cartera_fx ORDER BY fecha,id");
   let tu=0,tc=0,gpReal=0;
   rows.forEach(r=>{
@@ -798,9 +923,7 @@ function renderFX() {
   const tasa=parseFloat((dbq("SELECT valor FROM config WHERE clave='tasa_usd'")[0]||{valor:4100}).valor);
   const balReal=dbq("SELECT valor FROM balance_personal WHERE clave='usd_reales_binance'");
   const usdReal=balReal.length?balReal[0].valor:tu;
-  const valorPos=usdReal*tasa;
-  const gpNR=valorPos-tc;
-  const tasaProm=tu?tc/tu:0;
+  const valorPos=usdReal*tasa,gpNR=valorPos-tc,tasaProm=tu?tc/tu:0;
   $('fx-usd').textContent=`${usdReal.toFixed(2)} USD`;
   $('fx-cop-eq').textContent=`= ${cop(valorPos,true)} COP · tasa $${Math.round(tasa).toLocaleString('es-CO')}`;
   $('fx-stats').innerHTML=`
@@ -809,16 +932,11 @@ function renderFX() {
     <div class="card"><div class="lbl">G/P realizada</div><div class="val" style="color:${gpReal>=0?'var(--green)':'var(--red)'};font-size:14px">${cop(gpReal,true)||'$0'}</div></div>
     <div class="card"><div class="lbl">G/P no real.</div><div class="val" style="color:${gpNR>=0?'var(--green)':'var(--red)'};font-size:14px">${cop(gpNR,true)||'$0'}</div></div>`;
   const hist=dbq("SELECT fecha,tipo,cop,usd FROM cartera_fx ORDER BY fecha DESC,id DESC LIMIT 20");
-  const hl=$('fx-hist-list'); hl.innerHTML='';
-  if (!hist.length) {
-    hl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:10px;text-align:center">Sin operaciones registradas</div>';
-    return;
-  }
+  const hl=$('fx-hist-list');hl.innerHTML='';
+  if(!hist.length){hl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:10px;text-align:center">Sin operaciones</div>';return;}
   hist.forEach(r=>{
-    const el=document.createElement('div');
-    el.className='fx-row';
-    el.innerHTML=`
-      <span style="width:52px;color:var(--text3)">${r.fecha.slice(5)}</span>
+    const el=document.createElement('div');el.className='fx-row';
+    el.innerHTML=`<span style="width:52px;color:var(--text3)">${r.fecha.slice(5)}</span>
       <span style="width:48px;color:${r.tipo==='COMPRA'?'var(--green)':'var(--red)'}">${r.tipo.toLowerCase()}</span>
       <span style="flex:1;text-align:right;color:var(--text2)">${cop(r.cop,true)}</span>
       <span style="width:54px;text-align:right;color:var(--teal)">${r.usd.toFixed(1)}</span>`;
@@ -826,108 +944,84 @@ function renderFX() {
   });
 }
 
-// ══════════════════════════════════════════════════
-// REGISTRO RÁPIDO
-// ══════════════════════════════════════════════════
-function openSheet() {
-  // Construir pills de categorías
-  const pills=$('cat-pills'); pills.innerHTML='';
+// SHEET — registro rápido
+let _sheetDia=null;
+function openSheet(forceToday=false,dia=null){
+  _sheetDia=forceToday?new Date().getDate():(dia||new Date().getDate());
+  const today=new Date().getDate();
+  $('sheet-title').textContent=_sheetDia===today?'Registro rápido · hoy':`Registro del día ${_sheetDia}`;
+  const pills=$('cat-pills');pills.innerHTML='';
   CATS.forEach(cat=>{
+    const isEgr=cat==='Egresos',isActive=cat===S.activeCat;
     const p=document.createElement('div');
-    const isEgr=cat==='Egresos';
-    const isActive=cat===S.activeCat;
     p.className='cat-pill'+(isActive?(isEgr?' active-egr':' active'):'');
     p.style.color=isActive?CAT_COLOR[cat]:'';
     p.textContent=cat;
     p.onclick=()=>{
       S.activeCat=cat;
-      pills.querySelectorAll('.cat-pill').forEach(pp=>{
-        pp.className='cat-pill';
-        pp.style.color='';
-      });
-      const isE=cat==='Egresos';
-      p.className='cat-pill'+(isE?' active-egr':' active');
+      pills.querySelectorAll('.cat-pill').forEach(pp=>{pp.className='cat-pill';pp.style.color='';});
+      p.className='cat-pill'+(cat==='Egresos'?' active-egr':' active');
       p.style.color=CAT_COLOR[cat];
       $('s-val').style.color=CAT_COLOR[cat];
     };
     pills.appendChild(p);
   });
-  $('s-desc').value='';
-  $('s-val').value='';
+  $('s-desc').value='';$('s-val').value='';
   $('s-val').style.color=CAT_COLOR[S.activeCat];
   $('sheet').classList.remove('hidden');
   setTimeout(()=>$('s-desc').focus(),100);
 }
-
-function closeSheet() { $('sheet').classList.add('hidden'); }
-
-function guardarEntrada() {
-  const desc=$('s-desc').value.trim();
-  const val=parseNum($('s-val').value);
-  if (!desc && !val) { toast('Agrega descripción o valor'); return; }
-  const dia=new Date().getDate();
-  // Encontrar siguiente orden disponible
+function closeSheet(){$('sheet').classList.add('hidden');}
+function guardarEntrada(){
+  const desc=$('s-desc').value.trim(),val=parseNum($('s-val').value);
+  if(!desc&&!val){toast('Agrega descripción o valor');return;}
+  const dia=_sheetDia||new Date().getDate();
   const maxOrd=dbq(`SELECT MAX(orden) as m FROM entradas WHERE año=? AND mes=? AND dia=? AND categoria=?`,
     [S.año,S.mes,dia,S.activeCat]);
   const orden=(maxOrd[0]?.m??-1)+1;
-  if (orden>=15) { toast('Máximo 15 registros por categoría por día'); return; }
+  if(orden>=15){toast('Máximo 15 por categoría/día');return;}
   S.db.run(`INSERT INTO entradas(año,mes,dia,categoria,descripcion,valor,orden)VALUES(?,?,?,?,?,?,?)`,
     [S.año,S.mes,dia,S.activeCat,desc,val,orden]);
-  S.dirty=true;
-  closeSheet();
+  S.dirty=true;closeSheet();
   toast(`✓ Registrado en ${S.activeCat}`);
-  if(S.activeView==='inicio') renderInicio();
-  if(S.activeView==='control') renderControl();
+  refreshView();
 }
 
-// ══════════════════════════════════════════════════
 // DRIVE MODAL
-// ══════════════════════════════════════════════════
-function openDriveModal() {
+function openDriveModal(){
   $('drive-modal').classList.remove('hidden');
-  $('d-lastsync').textContent=S.lastSync
-    ?`Última sync: ${S.lastSync.toLocaleTimeString('es-CO')}`
-    :'Sin sync en esta sesión';
+  $('d-lastsync').textContent=S.lastSync?`Última sync: ${S.lastSync.toLocaleTimeString('es-CO')}`:'Sin sync aún';
 }
-function closeDriveModal(){ $('drive-modal').classList.add('hidden'); }
+function closeDriveModal(){$('drive-modal').classList.add('hidden');}
 
-// ══════════════════════════════════════════════════
-// INICIALIZACIÓN
-// ══════════════════════════════════════════════════
-async function loadApp() {
+// INIT
+async function loadApp(){
   $('app').style.display='flex';
   buildPeriodSelectors();
   setSyncDot('syncing');
-  try {
+  try{
     await loadDbFromDrive();
-    S.dirty=false; setSyncDot('ok');
-    S.lastSync=new Date();
-  } catch(e) {
-    setSyncDot('err'); toast('Error cargando DB: '+e.message);
-  }
+    S.dirty=false;S.lastSync=new Date();setSyncDot('ok');
+  }catch(e){setSyncDot('err');toast('Error cargando DB');}
   go('inicio');
-  const ld=$('loader');
-  ld.classList.add('out');
+  const ld=$('loader');ld.classList.add('out');
   setTimeout(()=>ld.style.display='none',500);
 }
 
-async function init() {
-  if('serviceWorker' in navigator)
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
+async function init(){
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
   await initSQL();
   await new Promise(resolve=>{
     const s=document.createElement('script');
     s.src='https://accounts.google.com/gsi/client';
-    s.onload=resolve; document.head.appendChild(s);
+    s.onload=resolve;document.head.appendChild(s);
   });
-  if (checkStoredToken()) {
-    await loadApp();
-  } else {
+  if(checkStoredToken()){await loadApp();}
+  else{
     $('loader').classList.add('out');
-    setTimeout(()=>{ $('loader').style.display='none'; $('auth-screen').classList.add('show'); },500);
+    setTimeout(()=>{$('loader').style.display='none';$('auth-screen').classList.add('show');},500);
   }
 }
-
 init();
 </script>
 </body>
