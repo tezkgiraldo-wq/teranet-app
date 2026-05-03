@@ -635,7 +635,7 @@ function renderInicio(){
   const totIng=entries.filter(e=>e.categoria!=='Egresos').reduce((a,e)=>a+e.valor,0);
   const totEgr=entries.filter(e=>e.categoria==='Egresos').reduce((a,e)=>a+e.valor,0);
   const tot=totIng-totEgr;
-  $('hoy-sub').textContent=entries.length?`${entries.length} registro${entries.length>1?'s':''}  ·  tap para editar · desliza para eliminar`:'Sin registros hoy';
+  $('hoy-sub').textContent=entries.length?`${entries.length} registro${entries.length>1?'s':''}  ·  mantén para editar · desliza para eliminar`:'Sin registros hoy';
   $('hoy-total').textContent=cop(tot,true);
   $('hoy-total').style.color=tot>=0?'var(--green)':'var(--red)';
 
@@ -655,32 +655,31 @@ function renderInicio(){
   renderCalendar();
 }
 
-// RENDER ENTRIES — con swipe y edición inline
+// RENDER ENTRIES — swipe real izquierda para eliminar, tap largo para editar
 function renderEntries(container, entries, año, mes, dia, onRefresh){
   container.innerHTML='';
   if(!entries.length){
-    container.innerHTML='<div style="padding:12px;text-align:center;font-size:11px;color:var(--text3)">Sin registros</div>';
+    container.innerHTML='<div style="padding:12px;text-align:center;font-size:11px;color:var(--text3)">Sin registros · toca + para agregar</div>';
     return;
   }
   entries.forEach(e=>{
     const clr=CAT_COLOR[e.categoria]||'#999';
     const isEgr=e.categoria==='Egresos';
+    const valColor=isEgr?'var(--red)':clr;
     const item=document.createElement('div');
     item.className='reg-item';
     item.dataset.id=e.id;
 
-    // Contenido normal
     const normal=document.createElement('div');
-    normal.style.cssText='display:flex;align-items:center;gap:8px;width:100%';
+    normal.style.cssText='display:flex;align-items:center;gap:8px;width:100%;user-select:none';
     normal.innerHTML=`
       <div class="reg-dot" style="background:${clr}"></div>
       <div class="reg-info">
         <div class="reg-desc">${e.descripcion||'—'}</div>
         <div class="reg-cat">${e.categoria}</div>
       </div>
-      <div class="reg-val" style="color:${clr}">${isEgr?'-':''}${cop(e.valor,true)}</div>`;
+      <div class="reg-val" style="color:${valColor}">${isEgr?'-':''}${cop(e.valor,true)}</div>`;
 
-    // Botón eliminar (swipe)
     const delBtn=document.createElement('div');
     delBtn.className='reg-del';
     delBtn.textContent='✕';
@@ -688,29 +687,61 @@ function renderEntries(container, entries, año, mes, dia, onRefresh){
       ev.stopPropagation();
       if(!confirm('¿Eliminar este registro?'))return;
       S.db.run('DELETE FROM entradas WHERE id=?',[e.id]);
-      S.dirty=true;
-      onRefresh();
+      S.dirty=true; onRefresh();
     };
 
     item.appendChild(normal);
     item.appendChild(delBtn);
 
-    // Tap para editar
-    let tapTimer,tapCount=0;
-    normal.addEventListener('click',()=>{
-      tapCount++;
-      if(tapCount===1){
-        tapTimer=setTimeout(()=>{
-          // Swipe toggle
-          item.classList.toggle('swiped');
-          tapCount=0;
-        },250);
-      }else{
-        clearTimeout(tapTimer);tapCount=0;
-        // Doble tap = editar
-        startEdit(item,normal,e,año,mes,dia,clr,isEgr,onRefresh);
+    // ── SWIPE REAL (arrastrar izquierda) ──
+    let touchStartX=0, touchStartY=0, swiping=false;
+
+    item.addEventListener('touchstart', ev=>{
+      touchStartX=ev.touches[0].clientX;
+      touchStartY=ev.touches[0].clientY;
+      swiping=false;
+    },{passive:true});
+
+    item.addEventListener('touchmove', ev=>{
+      const dx=ev.touches[0].clientX - touchStartX;
+      const dy=Math.abs(ev.touches[0].clientY - touchStartY);
+      if(dy>10) return; // movimiento vertical → no es swipe
+      if(dx < -20){ swiping=true; } // arrastrando izquierda
+    },{passive:true});
+
+    item.addEventListener('touchend', ()=>{
+      if(swiping){
+        // Cerrar todos los demás
+        container.querySelectorAll('.reg-item.swiped').forEach(el=>{
+          if(el!==item) el.classList.remove('swiped');
+        });
+        item.classList.add('swiped');
+      } else {
+        // Si estaba abierto y toco sin swipe, cerrar
+        if(item.classList.contains('swiped')){
+          item.classList.remove('swiped');
+        }
       }
+      swiping=false;
     });
+
+    // ── TAP LARGO (500ms) para editar ──
+    let pressTimer=null;
+
+    normal.addEventListener('touchstart', ev=>{
+      if(item.classList.contains('swiped'))return; // si está en swipe no editar
+      pressTimer=setTimeout(()=>{
+        pressTimer=null;
+        startEdit(item,normal,e,año,mes,dia,clr,isEgr,onRefresh);
+      },500);
+    },{passive:true});
+
+    normal.addEventListener('touchend', ()=>{
+      if(pressTimer){clearTimeout(pressTimer);pressTimer=null;}
+    });
+    normal.addEventListener('touchmove', ()=>{
+      if(pressTimer){clearTimeout(pressTimer);pressTimer=null;}
+    },{passive:true});
 
     container.appendChild(item);
   });
