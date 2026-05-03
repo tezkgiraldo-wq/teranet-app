@@ -139,7 +139,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .add-hoy{display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;border-top:1px solid var(--border);color:var(--blue);font-size:11px;cursor:pointer}
 
 /* ── MINI CALENDARIO ── */
-.cal-wrap{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.cal-wrap{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:visible}
 .cal-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border)}
 .cal-title{font-family:var(--mono);font-size:11px;color:var(--text2)}
 .cal-sel-lbl{font-size:10px;color:var(--text3)}
@@ -163,7 +163,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .cal-day.today{color:var(--blue);font-weight:500}
 .cal-day.today.selected{color:#fff}
 .cal-day.empty{pointer-events:none}
-.cal-sel-entries{border-top:1px solid var(--border)}
+.cal-sel-entries{border-top:1px solid var(--border);max-height:240px;overflow-y:auto}
 
 /* ── CONTROL ── */
 .ctrl-kpis-bar{padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
