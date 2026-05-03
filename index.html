@@ -28,16 +28,21 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 button{cursor:pointer;border:none;font-family:inherit;font-size:inherit;color:inherit;background:none}
 input,select{font-family:inherit;font-size:inherit;color:inherit}
 
-/* LOADER */
-#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:999;transition:opacity .4s}
+/* ── LOADER mejorado ── */
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:999;transition:opacity .5s ease}
 #loader.out{opacity:0;pointer-events:none}
-.ld-logo{font-family:var(--mono);font-size:48px;font-weight:700;letter-spacing:0.08em;line-height:1}
+.ld-logo{font-family:var(--mono);font-size:48px;font-weight:700;letter-spacing:0.08em;line-height:1;
+  animation:fadeUp .6s ease both}
 .ld-logo span{color:var(--blue)}
-.ld-company{font-size:11px;color:var(--text3);letter-spacing:0.28em;text-transform:uppercase;margin-top:-4px}
-.ld-contab{font-size:10px;color:var(--text3);letter-spacing:0.22em;text-transform:uppercase;opacity:.6}
-.ld-bar{width:140px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
+.ld-company{font-size:11px;color:var(--text3);letter-spacing:0.28em;text-transform:uppercase;margin-top:-4px;
+  animation:fadeUp .6s ease .15s both}
+.ld-contab{font-size:10px;color:var(--text3);letter-spacing:0.22em;text-transform:uppercase;opacity:.6;
+  animation:fadeUp .6s ease .25s both}
+.ld-bar{width:140px;height:2px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px;
+  animation:fadeUp .6s ease .35s both}
 .ld-fill{height:100%;background:var(--blue);border-radius:2px;animation:lda 1.4s ease-in-out infinite}
 @keyframes lda{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
 /* AUTH */
 #auth-screen{display:none;position:fixed;inset:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:50;padding:24px}
@@ -207,10 +212,11 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .fab{position:fixed;bottom:66px;right:16px;width:48px;height:48px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;z-index:10}
 
 /* ── NAV ── */
-#nav{display:flex;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0;height:56px}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:7px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);border-top:2px solid transparent}
+#nav{display:flex;background:var(--bg1);border-top:1px solid var(--border);flex-shrink:0;height:60px}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:7px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);border-top:2px solid transparent;transition:color .15s,border-color .15s}
+.nav-btn svg{transition:stroke .15s}
 .nav-btn.active{color:var(--blue);border-top-color:var(--blue)}
-.nav-ic{font-size:16px}
+.nav-btn.active svg{stroke:var(--blue)}
 
 /* ── SHEET ── */
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:flex;align-items:flex-end;z-index:20}
@@ -388,11 +394,37 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
   <button class="fab" id="fab" onclick="openSheet(false)">+</button>
 
   <div id="nav">
-    <button class="nav-btn active" data-v="inicio"   onclick="go('inicio')"><div class="nav-ic">⊡</div><div>inicio</div></button>
-    <button class="nav-btn"        data-v="control"  onclick="go('control')"><div class="nav-ic">⊞</div><div>control</div></button>
-    <button class="nav-btn"        data-v="fijos"    onclick="go('fijos')"><div class="nav-ic">◻</div><div>fijos</div></button>
-    <button class="nav-btn"        data-v="balance"  onclick="go('balance')"><div class="nav-ic">◎</div><div>balance</div></button>
-    <button class="nav-btn"        data-v="fx"       onclick="go('fx')"><div class="nav-ic">◈</div><div>inversiones</div></button>
+    <button class="nav-btn active" data-v="inicio" onclick="go('inicio')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <div>inicio</div>
+    </button>
+    <button class="nav-btn" data-v="control" onclick="go('control')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      <div>control</div>
+    </button>
+    <button class="nav-btn" data-v="fijos" onclick="go('fijos')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </svg>
+      <div>fijos</div>
+    </button>
+    <button class="nav-btn" data-v="balance" onclick="go('balance')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+      </svg>
+      <div>balance</div>
+    </button>
+    <button class="nav-btn" data-v="fx" onclick="go('fx')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+      </svg>
+      <div>inversiones</div>
+    </button>
   </div>
 </div>
 
