@@ -565,11 +565,42 @@ function checkStoredToken(){
 }
 
 // DRIVE
+async function refreshTokenIfNeeded(){
+  const exp=parseInt(localStorage.getItem('tn_token_exp')||'0');
+  // Si expira en menos de 5 minutos, renovar silenciosamente
+  if(Date.now() > exp - 5*60*1000){
+    return new Promise(resolve=>{
+      const client=google.accounts.oauth2.initTokenClient({
+        client_id:CLIENT_ID, scope:SCOPES,
+        prompt:'', // sin popup si ya tiene sesión
+        callback:resp=>{
+          if(!resp.error){
+            S.accessToken=resp.access_token;
+            localStorage.setItem('tn_token',resp.access_token);
+            localStorage.setItem('tn_token_exp',Date.now()+(resp.expires_in*1000));
+          }
+          resolve();
+        }
+      });
+      client.requestAccessToken({prompt:''});
+    });
+  }
+}
+
 async function driveReq(url,opts={}){
+  await refreshTokenIfNeeded();
   const r=await fetch(url,{...opts,headers:{'Authorization':`Bearer ${S.accessToken}`,...(opts.headers||{})}});
-  if(r.status===401){signOut();throw new Error('Token expirado');}
+  if(r.status===401){
+    // Intentar renovar token una vez más
+    localStorage.removeItem('tn_token_exp'); // forzar renovación
+    await refreshTokenIfNeeded();
+    const r2=await fetch(url,{...opts,headers:{'Authorization':`Bearer ${S.accessToken}`,...(opts.headers||{})}});
+    if(r2.status===401){signOut();throw new Error('Sesión expirada — inicia sesión de nuevo');}
+    return r2;
+  }
   return r;
 }
+
 async function getOrCreateFolder(){
   if(S.folderId)return S.folderId;
   const q=encodeURIComponent(`name='${FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
@@ -582,28 +613,55 @@ async function getOrCreateFolder(){
   });
   const cd=await cr.json();S.folderId=cd.id;return S.folderId;
 }
+
 function dbFileName(){return `teranet_${S.año}.db`;}
+
 async function findDbFile(name){
   const fid=await getOrCreateFolder();
   const q=encodeURIComponent(`name='${name}' and '${fid}' in parents and trashed=false`);
   const r=await driveReq(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,modifiedTime)`);
   const d=await r.json();return d.files&&d.files.length?d.files[0]:null;
 }
+
 async function downloadDb(fileId){
   const r=await driveReq(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`);
   return new Uint8Array(await r.arrayBuffer());
 }
+
 async function uploadDb(data){
-  const name=dbFileName(),fid=await getOrCreateFolder(),ex=await findDbFile(name);
-  const blob=new Blob([data],{type:'application/octet-stream'});
-  const form=new FormData();
-  if(ex){
-    form.append('file',blob,name);
-    await driveReq(`https://www.googleapis.com/upload/drive/v3/files/${ex.id}?uploadType=multipart`,{method:'PATCH',body:form});
-  }else{
-    form.append('metadata',new Blob([JSON.stringify({name,parents:[fid]})],{type:'application/json'}));
-    form.append('file',blob,name);
-    await driveReq('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',body:form});
+  const name=dbFileName();
+  const fid=await getOrCreateFolder();
+  const ex=await findDbFile(name);
+  const boundary='tn_boundary_'+Date.now();
+  const meta=JSON.stringify({name, parents: ex?undefined:[fid]});
+  // Construir multipart manualmente para controlar el Content-Type
+  const enc=new TextEncoder();
+  const metaPart=enc.encode(
+    `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${meta}\r\n`
+  );
+  const dataPart=enc.encode(`--${boundary}\r\nContent-Type: application/octet-stream\r\n\r\n`);
+  const endPart=enc.encode(`\r\n--${boundary}--`);
+
+  const body=new Uint8Array(metaPart.length+dataPart.length+data.length+endPart.length);
+  let offset=0;
+  body.set(metaPart,offset);offset+=metaPart.length;
+  body.set(dataPart,offset);offset+=dataPart.length;
+  body.set(data,offset);offset+=data.length;
+  body.set(endPart,offset);
+
+  const url=ex
+    ?`https://www.googleapis.com/upload/drive/v3/files/${ex.id}?uploadType=multipart`
+    :`https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`;
+  const method=ex?'PATCH':'POST';
+
+  const r=await driveReq(url,{
+    method,
+    headers:{'Content-Type':`multipart/related; boundary=${boundary}`},
+    body
+  });
+  if(!r.ok){
+    const err=await r.text();
+    throw new Error(`Drive error ${r.status}: ${err.slice(0,100)}`);
   }
 }
 async function drivePush(){await pushNow(); toast('✓ Subido a Drive');}
