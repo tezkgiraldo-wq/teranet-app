@@ -66,7 +66,17 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .tb-sync.syncing{background:var(--gold);animation:pulse 1s infinite}
 .tb-sync.err{background:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.tb-btn{width:30px;height:30px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center}
+.tb-btn{width:30px;height:30px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center;position:relative}
+.tb-btn .cloud-badge{
+  position:absolute;top:-3px;right:-3px;
+  width:9px;height:9px;border-radius:50%;
+  border:1px solid var(--bg);
+  display:none;
+}
+.tb-btn.cloud-ok .cloud-badge{background:var(--green);display:block}
+.tb-btn.cloud-dirty .cloud-badge{background:var(--gold);display:block;animation:pulse 1s infinite}
+.tb-btn.cloud-err .cloud-badge{background:var(--red);display:block}
+.tb-btn.cloud-syncing .cloud-badge{background:var(--blue);display:block;animation:pulse .6s infinite}
 
 /* CONTENT */
 #content{flex:1;overflow:hidden;display:flex;flex-direction:column}
@@ -143,13 +153,16 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 }
 .cal-day:hover{background:var(--bg3)}
 .cal-day.has{color:var(--text2)}
-.cal-day.has::after{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);position:absolute;bottom:2px}
+.cal-day.has::after{content:'';width:4px;height:4px;border-radius:50%;position:absolute;bottom:2px}
+.cal-day.has-ing::after{background:var(--green)}
+.cal-day.has-egr::after{background:var(--red)}
+.cal-day.has-mix-ing::after{background:var(--green)}
+.cal-day.has-mix-egr::after{background:var(--gold)}
 .cal-day.selected{background:var(--blue);color:#fff;font-weight:500}
 .cal-day.selected::after{background:#fff}
 .cal-day.today{color:var(--blue);font-weight:500}
 .cal-day.today.selected{color:#fff}
 .cal-day.empty{pointer-events:none}
-.cal-day.egr::after{background:var(--red)}
 .cal-sel-entries{border-top:1px solid var(--border)}
 
 /* ── CONTROL ── */
@@ -269,7 +282,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         <select id="sel-año" onchange="onPeriodChange()" style="width:50px"></select>
       </div>
       <div class="tb-sync ok" id="sync-dot"></div>
-      <button class="tb-btn" onclick="openDriveModal()">☁</button>
+      <button class="tb-btn cloud-ok" id="cloud-btn" onclick="openDriveModal()">☁<span class="cloud-badge"></span></button>
     </div>
   </div>
 
@@ -453,6 +466,26 @@ let _tt;
 function toast(msg,dur=2500){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),dur);}
 function setSyncDot(s){$('sync-dot').className='tb-sync'+(s?' '+s:'');}
 
+function setCloudState(s){
+  // s: 'ok' | 'dirty' | 'syncing' | 'err'
+  const btn=$('cloud-btn');
+  btn.className='tb-btn cloud-'+s;
+}
+
+async function pushNow(){
+  setCloudState('syncing'); setSyncDot('syncing');
+  try{
+    await uploadDb(S.db.export());
+    S.dirty=false; S.lastSync=new Date();
+    setCloudState('ok'); setSyncDot('ok');
+    const el=$('d-lastsync');
+    if(el) el.textContent=`Última sync: ${S.lastSync.toLocaleTimeString('es-CO')}`;
+  }catch(e){
+    setCloudState('err'); setSyncDot('err');
+    toast('Error al subir: '+e.message);
+  }
+}
+
 // PERIOD SELECTORS
 function buildPeriodSelectors(){
   const ms=$('sel-mes');
@@ -541,25 +574,26 @@ async function uploadDb(data){
     await driveReq('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',body:form});
   }
 }
-async function drivePush(){
-  setSyncDot('syncing');
-  try{await uploadDb(S.db.export());S.dirty=false;S.lastSync=new Date();setSyncDot('ok');
-    $('d-lastsync').textContent=`Última sync: ${S.lastSync.toLocaleTimeString('es-CO')}`;
-    toast('✓ Subido a Drive');}
-  catch(e){setSyncDot('err');toast('Error: '+e.message);}
-}
+async function drivePush(){await pushNow(); toast('✓ Subido a Drive');}
 async function drivePull(){
   if(S.dirty&&!confirm('¿Bajar de Drive y perder cambios locales?'))return;
-  setSyncDot('syncing');
+  setCloudState('syncing'); setSyncDot('syncing');
   try{
     const file=await findDbFile(dbFileName());
-    if(!file){toast('No existe en Drive aún');setSyncDot('ok');return;}
+    if(!file){toast('No existe en Drive aún');setCloudState('ok');setSyncDot('ok');return;}
     const data=await downloadDb(file.id);
-    S.db=new S.SQL.Database(data);S.dirty=false;S.lastSync=new Date();setSyncDot('ok');
-    refreshView();toast('✓ Bajado de Drive');}
-  catch(e){setSyncDot('err');toast('Error: '+e.message);}
+    S.db=new S.SQL.Database(data);S.dirty=false;S.lastSync=new Date();
+    setCloudState('ok'); setSyncDot('ok');
+    refreshView(); toast('✓ Bajado de Drive');
+  }catch(e){setCloudState('err');setSyncDot('err');toast('Error: '+e.message);}
 }
-setInterval(()=>{if(S.dirty&&S.accessToken&&S.db)drivePush();},15*60*1000);
+
+function markDirty(){
+  S.dirty=true;
+  setCloudState('dirty');
+}
+
+setInterval(()=>{if(S.dirty&&S.accessToken&&S.db)pushNow();},15*60*1000);
 
 // SQL
 async function initSQL(){
@@ -687,7 +721,8 @@ function renderEntries(container, entries, año, mes, dia, onRefresh){
       ev.stopPropagation();
       if(!confirm('¿Eliminar este registro?'))return;
       S.db.run('DELETE FROM entradas WHERE id=?',[e.id]);
-      S.dirty=true; onRefresh();
+      markDirty(); onRefresh();
+      pushNow();
     };
 
     item.appendChild(normal);
@@ -774,9 +809,10 @@ function saveEdit(id,año,mes,dia){
   const desc=dInp.value.trim();
   const val=parseNum(vInp.value);
   S.db.run('UPDATE entradas SET descripcion=?,valor=? WHERE id=?',[desc,val,id]);
-  S.dirty=true;
+  markDirty();
   if(S.editingEntry&&S.editingEntry.onRefresh)S.editingEntry.onRefresh();
   S.editingEntry=null;
+  pushNow();
 }
 
 // MINI CALENDARIO
@@ -811,9 +847,20 @@ function renderCalendar(){
     const cell=document.createElement('div');
     cell.className='cal-day';
     cell.textContent=d;
-    const hasData=dataMap[d];
-    if(hasData)cell.classList.add('has');
-    if(hasData&&hasData.egr>hasData.ing)cell.classList.add('egr');
+    const t=dataMap[d];
+    if(t){
+      cell.classList.add('has');
+      if(t.ing>0 && t.egr===0){
+        // Solo ingresos → verde
+        cell.classList.add('has-ing');
+      } else if(t.egr>0 && t.ing===0){
+        // Solo egresos → rojo
+        cell.classList.add('has-egr');
+      } else if(t.ing>0 && t.egr>0){
+        // Ambos → naranja si egresos > ingresos, verde si ingresos > egresos
+        cell.classList.add(t.egr>t.ing ? 'has-mix-egr' : 'has-mix-ing');
+      }
+    }
     if(isCurrentMonth&&d===todayDay)cell.classList.add('today');
     if(S.calSelectedDay===d)cell.classList.add('selected');
     cell.onclick=()=>selectCalDay(d,dataMap);
@@ -909,7 +956,8 @@ function renderFijos(){
       S.db.run(`INSERT INTO pagos_fijos(gasto_id,año,mes,pagado)VALUES(?,?,?,?)
         ON CONFLICT(gasto_id,año,mes)DO UPDATE SET pagado=excluded.pagado`,
         [p.id,S.año,S.mes,p.pagado?0:1]);
-      S.dirty=true;renderFijos();
+      markDirty(); renderFijos();
+      pushNow();
     };
     list.appendChild(row);
   });
@@ -1013,9 +1061,10 @@ function guardarEntrada(){
   if(orden>=15){toast('Máximo 15 por categoría/día');return;}
   S.db.run(`INSERT INTO entradas(año,mes,dia,categoria,descripcion,valor,orden)VALUES(?,?,?,?,?,?,?)`,
     [S.año,S.mes,dia,S.activeCat,desc,val,orden]);
-  S.dirty=true;closeSheet();
+  markDirty(); closeSheet();
   toast(`✓ Registrado en ${S.activeCat}`);
   refreshView();
+  pushNow();
 }
 
 // DRIVE MODAL
