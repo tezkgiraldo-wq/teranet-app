@@ -207,15 +207,16 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 
 /* ── BALANCE ── */
 .bal-hero-card{background:var(--bg1);border:1px solid var(--green)33;border-radius:12px;padding:14px 16px}
-.bal-panel{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.bal-panel{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:visible}
 .bal-panel-title{
   font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
   text-align:center;padding:9px 12px;border-bottom:1px solid var(--border);
+  border-radius:12px 12px 0 0;
 }
 .bal-panel-row{
   display:flex;align-items:center;justify-content:space-between;
   padding:7px 12px;border-bottom:1px solid #161616;
-  font-size:11px;min-height:36px;
+  font-size:11px;min-height:36px;box-sizing:border-box;
 }
 .bal-panel-row:last-child{border-bottom:none}
 .bal-panel-row-lbl{color:var(--text2);flex:1}
@@ -230,24 +231,27 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .bal-panel-footer2{
   display:flex;justify-content:space-between;align-items:center;
   padding:6px 12px;border-top:1px solid var(--border2);background:var(--bg3);
+  border-radius:0 0 12px 12px;
 }
 .bal-panel-footer2-lbl{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);font-weight:600}
 .bal-panel-footer2-val{font-family:var(--mono);font-size:14px;font-weight:700}
 /* Meses de ahorro */
-.bal-ahorro{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.bal-ahorro{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:visible}
 .bal-ahorro-title{
   font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
   color:var(--gold);text-align:center;padding:9px 12px;border-bottom:1px solid var(--border);
+  border-radius:12px 12px 0 0;
 }
-.bal-ahorro-rows{display:flex;flex-direction:column;}
+.bal-ahorro-rows{display:block}
 .bal-ahorro-row{
   display:flex;justify-content:space-between;align-items:center;
-  padding:7px 12px;border-bottom:1px solid #161616;font-size:11px;min-height:36px;
+  padding:7px 12px;border-bottom:1px solid #161616;font-size:11px;min-height:36px;box-sizing:border-box;
 }
 .bal-ahorro-row:last-child{border-bottom:none}
 .bal-ahorro-result{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:12px;border-top:2px solid var(--gold)44;background:var(--bg2);gap:2px;
+  border-radius:0 0 12px 12px;
 }
 .bal-ahorro-num{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--gold);line-height:1}
 .bal-ahorro-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3)}
