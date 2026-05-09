@@ -55,7 +55,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .auth-btn svg{width:20px;height:20px;flex-shrink:0}
 
 /* LAYOUT */
-#app{display:flex;flex-direction:column;height:100vh;height:100dvh;max-height:-webkit-fill-available}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;max-height:-webkit-fill-available;min-height:0}
 
 /* TOP BAR */
 #topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:56px;flex-shrink:0;background:var(--bg1);border-bottom:1px solid var(--border)}
@@ -84,10 +84,10 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .tb-btn.cloud-syncing .cloud-badge{background:var(--blue);display:block;animation:pulse .6s infinite}
 
 /* CONTENT */
-#content{flex:1;overflow:hidden;display:flex;flex-direction:column}
-.view{display:none;flex-direction:column;height:100%;overflow:hidden}
+#content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.view{display:none;flex-direction:column;height:100%;overflow:hidden;min-height:0}
 .view.active{display:flex}
-.scroll{overflow-y:auto;flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.scroll{overflow-y:auto;flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch;min-height:0}
 
 /* CARDS */
 .card{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
