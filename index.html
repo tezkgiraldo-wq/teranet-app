@@ -87,15 +87,21 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 #content{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
 .view{display:none;flex-direction:column;height:100%;overflow:hidden;min-height:0}
 .view.active{display:flex}
-.scroll{overflow-y:auto;flex:1;padding:10px 12px;display:flex;flex-direction:column;gap:8px;-webkit-overflow-scrolling:touch;min-height:0;align-content:flex-start}
+.scroll{
+  overflow-y:auto;
+  flex:1;
+  padding:10px 12px 20px;
+  -webkit-overflow-scrolling:touch;
+  min-height:0;
+}
 
 /* CARDS */
-.card{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:10px 12px;flex-shrink:0}
+.card{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
 .lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:3px}
 .val{font-family:var(--mono);font-size:17px;font-weight:500}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;flex-shrink:0}
-.sec-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);flex-shrink:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.sec-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3)}
 
 /* ── INICIO ── */
 /* Hoy card */
@@ -200,8 +206,8 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .fijo-val.paid{color:var(--green)}
 
 /* ── BALANCE ── */
-.bal-hero-card{background:var(--bg1);border:1px solid var(--green)33;border-radius:12px;padding:14px 16px;flex-shrink:0}
-.bal-panel{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden;flex-shrink:0}
+.bal-hero-card{background:var(--bg1);border:1px solid var(--green)33;border-radius:12px;padding:14px 16px}
+.bal-panel{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .bal-panel-title{
   font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
   text-align:center;padding:9px 12px;border-bottom:1px solid var(--border);
@@ -228,7 +234,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .bal-panel-footer2-lbl{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);font-weight:600}
 .bal-panel-footer2-val{font-family:var(--mono);font-size:14px;font-weight:700}
 /* Meses de ahorro */
-.bal-ahorro{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden;flex-shrink:0}
+.bal-ahorro{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .bal-ahorro-title{
   font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
   color:var(--gold);text-align:center;padding:9px 12px;border-bottom:1px solid var(--border);
@@ -402,18 +408,18 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
     <!-- BALANCE -->
     <div class="view" id="v-balance">
       <div class="scroll">
-        <div class="bal-hero-card">
+        <div class="bal-hero-card" style="margin-bottom:8px">
           <div class="lbl">Total parcial</div>
           <div class="val" id="bal-total" style="color:var(--blue);font-size:24px">$0</div>
         </div>
-        <div class="grid2" id="bal-cuentas"></div>
-        <div class="grid2">
+        <div class="grid2" style="margin-bottom:8px" id="bal-cuentas"></div>
+        <div class="grid2" style="margin-bottom:8px">
           <div class="card"><div class="lbl" style="color:var(--red)88">Pendientes por pagar mes</div><div class="val" id="bal-pend" style="color:var(--red);font-size:14px">$0</div></div>
           <div class="card"><div class="lbl" style="color:var(--purple)88">Próx. mes</div><div class="val" id="bal-prox" style="color:var(--purple);font-size:14px">$0</div></div>
         </div>
 
         <!-- MESES DE AHORRO -->
-        <div class="bal-ahorro">
+        <div class="bal-ahorro" style="margin-bottom:8px">
           <div class="bal-ahorro-title">MESES DE AHORRO</div>
           <div class="bal-ahorro-rows">
             <div class="bal-ahorro-row">
@@ -432,7 +438,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         </div>
 
         <!-- DEUDAS -->
-        <div class="bal-panel">
+        <div class="bal-panel" style="margin-bottom:8px">
           <div class="bal-panel-title" style="color:var(--red)">DEUDAS</div>
           <div id="bal-deudas-list"></div>
           <div class="bal-panel-footer">
@@ -446,7 +452,7 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         </div>
 
         <!-- DEUDORES -->
-        <div class="bal-panel">
+        <div class="bal-panel" style="margin-bottom:24px">
           <div class="bal-panel-title" style="color:var(--text3)">DEUDORES</div>
           <div id="bal-deudores-list"></div>
           <div class="bal-panel-footer">
@@ -454,8 +460,6 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
             <span class="bal-panel-footer-val" id="bal-deudores-total" style="color:var(--red)">$0</span>
           </div>
         </div>
-
-        <div style="height:8px"></div>
       </div>
     </div>
 
