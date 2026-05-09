@@ -201,6 +201,50 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 
 /* ── BALANCE ── */
 .bal-hero-card{background:var(--bg1);border:1px solid var(--green)33;border-radius:12px;padding:14px 16px}
+.bal-panel{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.bal-panel-title{
+  font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  text-align:center;padding:9px 12px;border-bottom:1px solid var(--border);
+}
+.bal-panel-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 12px;border-bottom:1px solid #161616;
+  font-size:11px;
+}
+.bal-panel-row:last-child{border-bottom:none}
+.bal-panel-row-lbl{color:var(--text2);flex:1}
+.bal-panel-row-val{font-family:var(--mono);font-size:11px;font-weight:500}
+.bal-panel-empty{font-size:10px;color:var(--text3);text-align:center;padding:10px 12px}
+.bal-panel-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 12px;border-top:1px solid var(--border);background:var(--bg2);
+}
+.bal-panel-footer-lbl{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)}
+.bal-panel-footer-val{font-family:var(--mono);font-size:13px;font-weight:700}
+.bal-panel-footer2{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 12px;border-top:1px solid var(--border2);background:var(--bg3);
+}
+.bal-panel-footer2-lbl{font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);font-weight:600}
+.bal-panel-footer2-val{font-family:var(--mono);font-size:14px;font-weight:700}
+/* Meses de ahorro */
+.bal-ahorro{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.bal-ahorro-title{
+  font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--gold);text-align:center;padding:9px 12px;border-bottom:1px solid var(--border);
+}
+.bal-ahorro-rows{display:flex;flex-direction:column;}
+.bal-ahorro-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 12px;border-bottom:1px solid #161616;font-size:11px;
+}
+.bal-ahorro-row:last-child{border-bottom:none}
+.bal-ahorro-result{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:12px;border-top:2px solid var(--gold)44;background:var(--bg2);gap:2px;
+}
+.bal-ahorro-num{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--gold);line-height:1}
+.bal-ahorro-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3)}
 
 /* ── INVERSIONES ── */
 .fx-accent{border-color:var(--teal)33}
@@ -364,9 +408,54 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         </div>
         <div class="grid2" id="bal-cuentas"></div>
         <div class="grid2">
-          <div class="card"><div class="lbl" style="color:var(--red)88">Pendiente pagar</div><div class="val" id="bal-pend" style="color:var(--red)">$0</div></div>
-          <div class="card"><div class="lbl">Deuda</div><div class="val" id="bal-deuda" style="color:var(--red)">$0</div></div>
+          <div class="card"><div class="lbl" style="color:var(--red)88">Pendientes por pagar mes</div><div class="val" id="bal-pend" style="color:var(--red);font-size:14px">$0</div></div>
+          <div class="card"><div class="lbl" style="color:var(--purple)88">Próx. mes</div><div class="val" id="bal-prox" style="color:var(--purple);font-size:14px">$0</div></div>
         </div>
+
+        <!-- MESES DE AHORRO -->
+        <div class="bal-ahorro">
+          <div class="bal-ahorro-title">MESES DE AHORRO</div>
+          <div class="bal-ahorro-rows">
+            <div class="bal-ahorro-row">
+              <span style="color:var(--text3)">Activos</span>
+              <span class="bal-panel-row-val" id="ahorro-activos" style="color:var(--text2)">$0</span>
+            </div>
+            <div class="bal-ahorro-row">
+              <span style="color:var(--text3)">Próx. mes (gastos fijos)</span>
+              <span class="bal-panel-row-val" id="ahorro-prox" style="color:var(--text2)">$0</span>
+            </div>
+          </div>
+          <div class="bal-ahorro-result">
+            <div class="bal-ahorro-num" id="ahorro-meses">—</div>
+            <div class="bal-ahorro-lbl">meses cubiertos</div>
+          </div>
+        </div>
+
+        <!-- DEUDAS -->
+        <div class="bal-panel">
+          <div class="bal-panel-title" style="color:var(--red)">DEUDAS</div>
+          <div id="bal-deudas-list"></div>
+          <div class="bal-panel-footer">
+            <span class="bal-panel-footer-lbl">total deudas</span>
+            <span class="bal-panel-footer-val" id="bal-deudas-total" style="color:var(--red)">$0</span>
+          </div>
+          <div class="bal-panel-footer2">
+            <span class="bal-panel-footer2-lbl">total real</span>
+            <span class="bal-panel-footer2-val" id="bal-deudas-real">$0</span>
+          </div>
+        </div>
+
+        <!-- DEUDORES -->
+        <div class="bal-panel">
+          <div class="bal-panel-title" style="color:var(--text3)">DEUDORES</div>
+          <div id="bal-deudores-list"></div>
+          <div class="bal-panel-footer">
+            <span class="bal-panel-footer-lbl">total me deben</span>
+            <span class="bal-panel-footer-val" id="bal-deudores-total" style="color:var(--red)">$0</span>
+          </div>
+        </div>
+
+        <div style="height:8px"></div>
       </div>
     </div>
 
@@ -1058,28 +1147,104 @@ function renderFijos(){
 function renderBalance(){
   const bal=dbq("SELECT clave,valor FROM balance_personal");
   const bm={};bal.forEach(r=>bm[r.clave]=r.valor);
+
+  // FX
   const fx=dbq("SELECT tipo,cop,usd FROM cartera_fx ORDER BY fecha,id");
   let tu=0,tc=0;
   fx.forEach(r=>{if(r.tipo==='COMPRA'){tu+=r.usd;tc+=r.cop;}else{const avg=tu?tc/tu:0;tu-=r.usd;tc-=r.usd*avg;}});
   const tasa=parseFloat((dbq("SELECT valor FROM config WHERE clave='tasa_usd'")[0]||{valor:4100}).valor);
   const usdReal=bm.usd_reales_binance!=null?bm.usd_reales_binance:tu;
   const usdCop=usdReal*tasa;
+
+  // Activos
+  const cuentaBc=bm.cuenta_bc||0;
+  const arriendo=bm.arriendo_reserva||0;
+  const efectivo=bm.efectivo||0;
+  const activos=cuentaBc+usdCop+arriendo+efectivo;
+
+  // Pago actual mes (gastos fijos pendientes)
   const pagos=dbq(`SELECT gf.valor,COALESCE(pf.pagado,0) as pagado FROM gastos_fijos gf
     LEFT JOIN pagos_fijos pf ON gf.id=pf.gasto_id AND pf.año=? AND pf.mes=?
     WHERE gf.activo=1`,[S.año,S.mes]);
   const pend=pagos.filter(p=>!p.pagado).reduce((a,p)=>a+p.valor,0);
-  const deuda=bm.deuda||0;
-  const activos=(bm.cuenta_bc||0)+usdCop+(bm.arriendo_reserva||0)+(bm.efectivo||0);
-  const total=activos-pend-deuda;
+
+  // Próximo mes (total gastos fijos)
+  const proxMes=pagos.reduce((a,p)=>a+p.valor,0);
+
+  // Deudas JSON
+  let deudas=[];
+  try{deudas=JSON.parse(bm.deudas_json||'[]');}catch{}
+  const totalDeudas=deudas.reduce((a,d)=>a+(Number(d.valor)||0),0);
+
+  // Deudores JSON
+  let deudores=[];
+  try{deudores=JSON.parse(bm.deudores_json||'[]');}catch{}
+  const totalDeudores=deudores.reduce((a,d)=>a+(Number(d.valor)||0),0);
+
+  // Total parcial
+  const total=activos-pend-totalDeudas;
+
+  // ── Actualizar DOM ──
   $('bal-total').textContent=cop(total,true);
   $('bal-total').style.color=total>=0?'var(--blue)':'var(--red)';
   $('bal-pend').textContent=cop(pend,true);
-  $('bal-deuda').textContent=cop(deuda,true);
+  $('bal-prox').textContent=cop(proxMes,true);
+
+  // Cuentas
   $('bal-cuentas').innerHTML=`
-    <div class="card"><div class="lbl" style="color:#4B9EFF88">Cuenta BC</div><div class="val" style="color:var(--blue)">${cop(bm.cuenta_bc||0,true)}</div></div>
-    <div class="card"><div class="lbl" style="color:#14B8A688">USD Binance</div><div class="val" style="color:var(--teal)">${cop(usdCop,true)}<div style="font-size:10px;color:var(--text3)">${usdReal.toFixed(1)} USD</div></div></div>
-    <div class="card"><div class="lbl" style="color:#F9731688">Arriendo res.</div><div class="val" style="color:var(--orange)">${cop(bm.arriendo_reserva||0,true)}</div></div>
-    <div class="card"><div class="lbl" style="color:#4CAF7588">Efectivo</div><div class="val" style="color:var(--green)">${cop(bm.efectivo||0,true)}</div></div>`;
+    <div class="card"><div class="lbl" style="color:#4B9EFF88">Cuenta BC</div><div class="val" style="color:var(--blue);font-size:14px">${cop(cuentaBc,true)}</div></div>
+    <div class="card"><div class="lbl" style="color:#14B8A688">USD Binance</div><div class="val" style="color:var(--teal);font-size:14px">${cop(usdCop,true)}<div style="font-size:10px;color:var(--text3)">${usdReal.toFixed(1)} USD</div></div></div>
+    <div class="card"><div class="lbl" style="color:#F9731688">Arriendo res.</div><div class="val" style="color:var(--orange);font-size:14px">${cop(arriendo,true)}</div></div>
+    <div class="card"><div class="lbl" style="color:#4CAF7588">Efectivo</div><div class="val" style="color:var(--green);font-size:14px">${cop(efectivo,true)}</div></div>`;
+
+  // Meses de ahorro
+  $('ahorro-activos').textContent=cop(activos,true);
+  $('ahorro-prox').textContent=cop(proxMes,true);
+  const mesesEl=$('ahorro-meses');
+  if(proxMes>0){
+    const m=activos/proxMes;
+    mesesEl.textContent=m.toFixed(1);
+    mesesEl.style.color=m>=6?'var(--green)':m>=3?'var(--gold)':'var(--red)';
+  }else{
+    mesesEl.textContent='—';
+    mesesEl.style.color='var(--text3)';
+  }
+
+  // Deudas (readonly)
+  const deudasList=$('bal-deudas-list');
+  const deudasActivas=deudas.filter(d=>d.desc||d.valor);
+  if(deudasActivas.length){
+    deudasList.innerHTML=deudasActivas.map(d=>`
+      <div class="bal-panel-row">
+        <span class="bal-panel-row-lbl">${d.desc||'—'}</span>
+        <span class="bal-panel-row-val" style="color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
+      </div>`).join('');
+  }else{
+    deudasList.innerHTML='<div class="bal-panel-empty">Sin deudas registradas</div>';
+  }
+  const totalDeudasEl=$('bal-deudas-total');
+  totalDeudasEl.textContent=cop(totalDeudas,true)||'$0';
+  totalDeudasEl.style.color=totalDeudas?'var(--red)':'var(--text3)';
+  const realEl=$('bal-deudas-real');
+  const real=total;  // total ya descuenta deudas
+  realEl.textContent=cop(real,true)||'$0';
+  realEl.style.color=real>=0?'var(--blue)':'var(--red)';
+
+  // Deudores (readonly)
+  const deudoresList=$('bal-deudores-list');
+  const deudoresActivos=deudores.filter(d=>d.nombre||d.valor);
+  if(deudoresActivos.length){
+    deudoresList.innerHTML=deudoresActivos.map(d=>`
+      <div class="bal-panel-row">
+        <span class="bal-panel-row-lbl">${d.nombre||'—'}</span>
+        <span class="bal-panel-row-val" style="color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
+      </div>`).join('');
+  }else{
+    deudoresList.innerHTML='<div class="bal-panel-empty">Sin deudores registrados</div>';
+  }
+  const totalDeudoresEl=$('bal-deudores-total');
+  totalDeudoresEl.textContent=cop(totalDeudores,true)||'$0';
+  totalDeudoresEl.style.color=totalDeudores?'var(--red)':'var(--text3)';
 }
 
 // RENDER FX
