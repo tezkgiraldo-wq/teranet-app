@@ -208,6 +208,38 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .fijo-val.paid{color:var(--green)}
 
 /* ── BALANCE ── */
+.bal-prv-bar{
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:6px 2px 2px;
+}
+.bal-prv-btn{
+  display:flex;align-items:center;gap:5px;
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text3);font-size:10px;letter-spacing:0.08em;
+  text-transform:uppercase;padding:5px 8px;border-radius:6px;
+  transition:color .15s;
+}
+.bal-prv-btn:active{color:var(--text)}
+.bal-prv-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0}
+/* Modo privacidad — oculta números con blur */
+#v-balance.bal-prv .val,
+#v-balance.bal-prv [style*="font-family:var(--mono)"],
+#v-balance.bal-prv [style*="font-family: var(--mono)"],
+#v-balance.bal-prv #ahorro-meses,
+#v-balance.bal-prv #ahorro-activos,
+#v-balance.bal-prv #ahorro-prox,
+#v-balance.bal-prv #bal-deudas-total,
+#v-balance.bal-prv #bal-deudas-real,
+#v-balance.bal-prv #bal-deudores-total{
+  filter:blur(6px);
+  user-select:none;
+  transition:filter .2s;
+}
+#v-balance.bal-prv .bal-deuda-span,
+#v-balance.bal-prv .bal-deudor-span{
+  filter:blur(6px);
+  user-select:none;
+}
 .bal-hero-card{background:var(--bg1);border:1px solid var(--green)33;border-radius:12px;padding:14px 16px}
 .bal-panel{background:var(--bg1);border:1px solid var(--border);border-radius:12px;overflow:visible}
 .bal-panel-title{
@@ -414,6 +446,13 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
     <!-- BALANCE -->
     <div class="view" id="v-balance">
       <div class="scroll">
+        <!-- Botón privacidad -->
+        <div class="bal-prv-bar">
+          <button class="bal-prv-btn" id="bal-prv-btn" onclick="toggleBalPrivacy()">
+            <svg id="bal-prv-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span id="bal-prv-lbl">privacidad</span>
+          </button>
+        </div>
         <div class="bal-hero-card" style="margin-bottom:8px">
           <div class="lbl">Total parcial</div>
           <div class="val" id="bal-total" style="color:var(--blue);font-size:24px">$0</div>
@@ -444,10 +483,10 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         <!-- DEUDAS — 4 filas fijas -->
         <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px">
           <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);text-align:center;padding:8px 12px;border-bottom:1px solid var(--border)">DEUDAS</div>
-          <div id="bal-deudas-d0" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
-          <div id="bal-deudas-d1" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
-          <div id="bal-deudas-d2" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
-          <div id="bal-deudas-d3" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border);min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudas-d0" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deuda-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudas-d1" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deuda-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudas-d2" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deuda-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudas-d3" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border);min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deuda-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
           <div style="display:flex;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-top:1px solid var(--border)">
             <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)">total deudas</span>
             <span id="bal-deudas-total" style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--red)">$0</span>
@@ -461,10 +500,10 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         <!-- DEUDORES — 4 filas fijas -->
         <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:32px">
           <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);text-align:center;padding:8px 12px;border-bottom:1px solid var(--border)">DEUDORES</div>
-          <div id="bal-deudores-d0" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
-          <div id="bal-deudores-d1" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
-          <div id="bal-deudores-d2" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
-          <div id="bal-deudores-d3" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border);min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudores-d0" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deudor-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudores-d1" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deudor-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudores-d2" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deudor-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudores-d3" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border);min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span class="bal-deudor-span" style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
           <div style="display:flex;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-top:1px solid var(--border);border-radius:0 0 12px 12px">
             <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)">total me deben</span>
             <span id="bal-deudores-total" style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--red)">$0</span>
@@ -830,6 +869,20 @@ async function loadDbFromDrive(){
   const file=await findDbFile(dbFileName());
   if(file){const data=await downloadDb(file.id);S.db=new S.SQL.Database(data);initSchema();}
   else{S.db=new S.SQL.Database();initSchema();}
+}
+
+// PRIVACIDAD BALANCE
+let balPrivacy=false;
+function toggleBalPrivacy(){
+  balPrivacy=!balPrivacy;
+  const v=document.getElementById('v-balance');
+  if(v) v.classList.toggle('bal-prv',balPrivacy);
+  const icon=document.getElementById('bal-prv-icon');
+  const lbl=document.getElementById('bal-prv-lbl');
+  if(icon) icon.innerHTML=balPrivacy
+    ?'<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    :'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  if(lbl) lbl.textContent=balPrivacy?'mostrar':'privacidad';
 }
 
 // NAVIGATION
