@@ -446,15 +446,14 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
     <!-- BALANCE -->
     <div class="view" id="v-balance">
       <div class="scroll">
-        <!-- Botón privacidad -->
-        <div class="bal-prv-bar">
-          <button class="bal-prv-btn" id="bal-prv-btn" onclick="toggleBalPrivacy()">
-            <svg id="bal-prv-icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span id="bal-prv-lbl">privacidad</span>
-          </button>
-        </div>
         <div class="bal-hero-card" style="margin-bottom:8px">
-          <div class="lbl">Total parcial</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="lbl">Total parcial</div>
+            <button id="bal-prv-btn" onclick="toggleBalPrivacy()" style="display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 10px;cursor:pointer;color:var(--text3)">
+              <svg id="bal-prv-icon" viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span id="bal-prv-lbl" style="font-size:9px;letter-spacing:0.08em;text-transform:uppercase">ocultar</span>
+            </button>
+          </div>
           <div class="val" id="bal-total" style="color:var(--blue);font-size:24px">$0</div>
         </div>
         <div class="grid2" style="margin-bottom:8px" id="bal-cuentas"></div>
