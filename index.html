@@ -424,44 +424,48 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
           <div class="card"><div class="lbl" style="color:var(--purple)88">Próx. mes</div><div class="val" id="bal-prox" style="color:var(--purple);font-size:14px">$0</div></div>
         </div>
 
-        <!-- MESES DE AHORRO -->
-        <div class="bal-ahorro" style="margin-bottom:8px">
-          <div class="bal-ahorro-title">MESES DE AHORRO</div>
-          <div class="bal-ahorro-rows">
-            <div class="bal-ahorro-row">
-              <span style="color:var(--text3)">Activos</span>
-              <span class="bal-panel-row-val" id="ahorro-activos" style="color:var(--text2)">$0</span>
-            </div>
-            <div class="bal-ahorro-row">
-              <span style="color:var(--text3)">Próx. mes (gastos fijos)</span>
-              <span class="bal-panel-row-val" id="ahorro-prox" style="color:var(--text2)">$0</span>
-            </div>
+        <!-- MESES DE AHORRO — altura fija -->
+        <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);text-align:center;padding:8px 12px;border-bottom:1px solid var(--border)">MESES DE AHORRO</div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616">
+            <span style="font-size:11px;color:var(--text3)">Activos</span>
+            <span id="ahorro-activos" style="font-family:var(--mono);font-size:11px;color:var(--text2)">$0</span>
           </div>
-          <div class="bal-ahorro-result">
-            <div class="bal-ahorro-num" id="ahorro-meses">—</div>
-            <div class="bal-ahorro-lbl">meses cubiertos</div>
+          <div style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border)">
+            <span style="font-size:11px;color:var(--text3)">Próx. mes (gastos fijos)</span>
+            <span id="ahorro-prox" style="font-family:var(--mono);font-size:11px;color:var(--text2)">$0</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;padding:10px;background:var(--bg2);border-radius:0 0 12px 12px">
+            <div id="ahorro-meses" style="font-family:var(--mono);font-size:32px;font-weight:700;color:var(--gold);line-height:1">—</div>
+            <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-top:2px">meses cubiertos</div>
           </div>
         </div>
 
-        <!-- DEUDAS -->
+        <!-- DEUDAS — 4 filas fijas -->
         <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px">
-          <div style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);text-align:center;padding:9px 12px;border-bottom:1px solid var(--border)">DEUDAS</div>
-          <div id="bal-deudas-list" style="width:100%"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-top:1px solid var(--border);background:var(--bg2)">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);text-align:center;padding:8px 12px;border-bottom:1px solid var(--border)">DEUDAS</div>
+          <div id="bal-deudas-d0" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudas-d1" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudas-d2" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudas-d3" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border);min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-top:1px solid var(--border)">
             <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)">total deudas</span>
             <span id="bal-deudas-total" style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--red)">$0</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-top:1px solid var(--border2);background:var(--bg3);border-radius:0 0 12px 12px">
+          <div style="display:flex;justify-content:space-between;padding:6px 12px;background:var(--bg3);border-top:1px solid var(--border2);border-radius:0 0 12px 12px">
             <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);font-weight:600">total real</span>
-            <span id="bal-deudas-real" style="font-family:var(--mono);font-size:14px;font-weight:700">$0</span>
+            <span id="bal-deudas-real" style="font-family:var(--mono);font-size:13px;font-weight:700">$0</span>
           </div>
         </div>
 
-        <!-- DEUDORES -->
+        <!-- DEUDORES — 4 filas fijas -->
         <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:32px">
-          <div style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);text-align:center;padding:9px 12px;border-bottom:1px solid var(--border)">DEUDORES</div>
-          <div id="bal-deudores-list" style="width:100%"></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-top:1px solid var(--border);background:var(--bg2);border-radius:0 0 12px 12px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);text-align:center;padding:8px 12px;border-bottom:1px solid var(--border)">DEUDORES</div>
+          <div id="bal-deudores-d0" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudores-d1" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudores-d2" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #161616;min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div id="bal-deudores-d3" style="display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid var(--border);min-height:34px;align-items:center"><span style="font-size:11px;color:var(--text3)">—</span><span style="font-family:var(--mono);font-size:11px;color:var(--red)"></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-top:1px solid var(--border);border-radius:0 0 12px 12px">
             <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)">total me deben</span>
             <span id="bal-deudores-total" style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--red)">$0</span>
           </div>
@@ -1220,37 +1224,46 @@ function renderBalance(){
     mesesEl.style.color='var(--text3)';
   }
 
-  // Deudas (readonly)
-  const deudasList=$('bal-deudas-list');
-  const deudasActivas=deudas.filter(d=>d.desc||d.valor);
-  if(deudasActivas.length){
-    deudasList.innerHTML=deudasActivas.map(d=>`
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid #161616;min-height:36px;box-sizing:border-box">
-        <span style="color:var(--text2);font-size:11px;flex:1">${d.desc||'—'}</span>
-        <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
-      </div>`).join('');
-  }else{
-    deudasList.innerHTML='<div style="font-size:10px;color:var(--text3);text-align:center;padding:10px 12px">Sin deudas registradas</div>';
+  // Deudas — 4 filas fijas
+  const deudasActivas=deudas.filter(d=>d.desc||d.valor).slice(0,4);
+  for(let i=0;i<4;i++){
+    const row=$('bal-deudas-d'+i);
+    if(!row)continue;
+    const d=deudasActivas[i];
+    const spans=row.querySelectorAll('span');
+    if(d){
+      spans[0].textContent=d.desc||'—';
+      spans[0].style.color='var(--text2)';
+      spans[1].textContent=cop(Number(d.valor)||0,true);
+    }else{
+      spans[0].textContent='—';
+      spans[0].style.color='var(--text3)';
+      spans[1].textContent='';
+    }
   }
   const totalDeudasEl=$('bal-deudas-total');
   totalDeudasEl.textContent=cop(totalDeudas,true)||'$0';
   totalDeudasEl.style.color=totalDeudas?'var(--red)':'var(--text3)';
   const realEl=$('bal-deudas-real');
-  const real=total;
-  realEl.textContent=cop(real,true)||'$0';
-  realEl.style.color=real>=0?'var(--blue)':'var(--red)';
+  realEl.textContent=cop(total,true)||'$0';
+  realEl.style.color=total>=0?'var(--blue)':'var(--red)';
 
-  // Deudores (readonly)
-  const deudoresList=$('bal-deudores-list');
-  const deudoresActivos=deudores.filter(d=>d.nombre||d.valor);
-  if(deudoresActivos.length){
-    deudoresList.innerHTML=deudoresActivos.map(d=>`
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid #161616;min-height:36px;box-sizing:border-box">
-        <span style="color:var(--text2);font-size:11px;flex:1">${d.nombre||'—'}</span>
-        <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
-      </div>`).join('');
-  }else{
-    deudoresList.innerHTML='<div style="font-size:10px;color:var(--text3);text-align:center;padding:10px 12px">Sin deudores registrados</div>';
+  // Deudores — 4 filas fijas
+  const deudoresActivos=deudores.filter(d=>d.nombre||d.valor).slice(0,4);
+  for(let i=0;i<4;i++){
+    const row=$('bal-deudores-d'+i);
+    if(!row)continue;
+    const d=deudoresActivos[i];
+    const spans=row.querySelectorAll('span');
+    if(d){
+      spans[0].textContent=d.nombre||'—';
+      spans[0].style.color='var(--text2)';
+      spans[1].textContent=cop(Number(d.valor)||0,true);
+    }else{
+      spans[0].textContent='—';
+      spans[0].style.color='var(--text3)';
+      spans[1].textContent='';
+    }
   }
   const totalDeudoresEl=$('bal-deudores-total');
   totalDeudoresEl.textContent=cop(totalDeudores,true)||'$0';
