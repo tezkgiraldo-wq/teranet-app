@@ -84,16 +84,12 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .tb-btn.cloud-syncing .cloud-badge{background:var(--blue);display:block;animation:pulse .6s infinite}
 
 /* CONTENT */
-#content{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.view{display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden}
-.view.active{display:flex}
-.scroll{
-  flex:1;
-  overflow-y:scroll;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-y:contain;
-  padding:10px 12px 32px;
-}
+#content{flex:1;min-height:0;overflow:hidden;position:relative}
+.view{display:none;position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
+.view.active{display:block}
+#v-fijos.active{display:flex;flex-direction:column;overflow:hidden}
+#v-fijos.active .fijo-list{overflow-y:auto;flex:1}
+.scroll{padding:10px 12px 40px}
 
 /* CARDS */
 .card{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
