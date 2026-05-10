@@ -442,26 +442,26 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         </div>
 
         <!-- DEUDAS -->
-        <div class="bal-panel" style="margin-bottom:8px">
-          <div class="bal-panel-title" style="color:var(--red)">DEUDAS</div>
-          <div id="bal-deudas-list"></div>
-          <div class="bal-panel-footer">
-            <span class="bal-panel-footer-lbl">total deudas</span>
-            <span class="bal-panel-footer-val" id="bal-deudas-total" style="color:var(--red)">$0</span>
+        <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);text-align:center;padding:9px 12px;border-bottom:1px solid var(--border)">DEUDAS</div>
+          <div id="bal-deudas-list" style="width:100%"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-top:1px solid var(--border);background:var(--bg2)">
+            <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)">total deudas</span>
+            <span id="bal-deudas-total" style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--red)">$0</span>
           </div>
-          <div class="bal-panel-footer2">
-            <span class="bal-panel-footer2-lbl">total real</span>
-            <span class="bal-panel-footer2-val" id="bal-deudas-real">$0</span>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 12px;border-top:1px solid var(--border2);background:var(--bg3);border-radius:0 0 12px 12px">
+            <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text2);font-weight:600">total real</span>
+            <span id="bal-deudas-real" style="font-family:var(--mono);font-size:14px;font-weight:700">$0</span>
           </div>
         </div>
 
         <!-- DEUDORES -->
-        <div class="bal-panel" style="margin-bottom:24px">
-          <div class="bal-panel-title" style="color:var(--text3)">DEUDORES</div>
-          <div id="bal-deudores-list"></div>
-          <div class="bal-panel-footer">
-            <span class="bal-panel-footer-lbl">total me deben</span>
-            <span class="bal-panel-footer-val" id="bal-deudores-total" style="color:var(--red)">$0</span>
+        <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:32px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);text-align:center;padding:9px 12px;border-bottom:1px solid var(--border)">DEUDORES</div>
+          <div id="bal-deudores-list" style="width:100%"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-top:1px solid var(--border);background:var(--bg2);border-radius:0 0 12px 12px">
+            <span style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3)">total me deben</span>
+            <span id="bal-deudores-total" style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--red)">$0</span>
           </div>
         </div>
       </div>
@@ -1223,18 +1223,18 @@ function renderBalance(){
   const deudasActivas=deudas.filter(d=>d.desc||d.valor);
   if(deudasActivas.length){
     deudasList.innerHTML=deudasActivas.map(d=>`
-      <div class="bal-panel-row">
-        <span class="bal-panel-row-lbl">${d.desc||'—'}</span>
-        <span class="bal-panel-row-val" style="color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid #161616;min-height:36px;box-sizing:border-box">
+        <span style="color:var(--text2);font-size:11px;flex:1">${d.desc||'—'}</span>
+        <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
       </div>`).join('');
   }else{
-    deudasList.innerHTML='<div class="bal-panel-empty">Sin deudas registradas</div>';
+    deudasList.innerHTML='<div style="font-size:10px;color:var(--text3);text-align:center;padding:10px 12px">Sin deudas registradas</div>';
   }
   const totalDeudasEl=$('bal-deudas-total');
   totalDeudasEl.textContent=cop(totalDeudas,true)||'$0';
   totalDeudasEl.style.color=totalDeudas?'var(--red)':'var(--text3)';
   const realEl=$('bal-deudas-real');
-  const real=total;  // total ya descuenta deudas
+  const real=total;
   realEl.textContent=cop(real,true)||'$0';
   realEl.style.color=real>=0?'var(--blue)':'var(--red)';
 
@@ -1243,12 +1243,12 @@ function renderBalance(){
   const deudoresActivos=deudores.filter(d=>d.nombre||d.valor);
   if(deudoresActivos.length){
     deudoresList.innerHTML=deudoresActivos.map(d=>`
-      <div class="bal-panel-row">
-        <span class="bal-panel-row-lbl">${d.nombre||'—'}</span>
-        <span class="bal-panel-row-val" style="color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid #161616;min-height:36px;box-sizing:border-box">
+        <span style="color:var(--text2);font-size:11px;flex:1">${d.nombre||'—'}</span>
+        <span style="font-family:var(--mono);font-size:11px;font-weight:500;color:var(--red)">${cop(Number(d.valor)||0,true)}</span>
       </div>`).join('');
   }else{
-    deudoresList.innerHTML='<div class="bal-panel-empty">Sin deudores registrados</div>';
+    deudoresList.innerHTML='<div style="font-size:10px;color:var(--text3);text-align:center;padding:10px 12px">Sin deudores registrados</div>';
   }
   const totalDeudoresEl=$('bal-deudores-total');
   totalDeudoresEl.textContent=cop(totalDeudores,true)||'$0';
