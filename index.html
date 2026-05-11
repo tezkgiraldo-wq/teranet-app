@@ -365,7 +365,55 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .cat-pill.active-egr{background:#2D1E1E;border-color:var(--red);color:var(--red)}
 .s-btn{background:var(--blue);border:none;border-radius:8px;padding:11px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;width:100%}
 
-/* ── GASTOS FIJOS EDITABLE ── */
+/* ── CONTROL MENSUAL ── */
+.ctrl-mode-bar{display:flex;gap:5px;padding:7px 10px;background:var(--bg1);border-bottom:1px solid var(--border);flex-shrink:0}
+.ctrl-mode-btn{flex:1;padding:5px 4px;border-radius:6px;font-size:9px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text3);transition:all .15s;font-family:inherit}
+.ctrl-mode-btn.active{background:var(--blue)22;border-color:var(--blue)55;color:var(--blue)}
+.ctrl-kpis-bar{padding:7px 10px;border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.ctrl-kpi{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 8px;text-align:center}
+.ctrl-kpi .lbl{font-size:8px;margin-bottom:2px}
+.ctrl-kpi .val{font-size:13px}
+/* Resumen */
+.ctrl-table-wrap{flex:1;overflow-y:auto}
+.ctrl-table{width:100%;border-collapse:collapse}
+.ctrl-table th{font-size:8px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:5px 8px;text-align:right;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:1;font-weight:400}
+.ctrl-table th:first-child{text-align:center;width:32px}
+.ctrl-table td{font-family:var(--mono);padding:5px 8px;text-align:right;border-bottom:1px solid #161616;color:var(--text3);font-size:11px}
+.ctrl-table td:first-child{text-align:center}
+.ctrl-table tr:hover td{background:var(--bg1)}
+.ctrl-table .ing{color:var(--green)}.ctrl-table .egr{color:var(--red)}
+.ctrl-table .pos{color:var(--blue)}.ctrl-table .neg{color:var(--red)}
+.ctrl-table .has-d{color:var(--green);cursor:pointer;font-weight:600}
+.ctrl-table tr.tot-row td{color:var(--text);border-top:1px solid var(--border2);background:var(--bg1)}
+/* Por día */
+.ctrl-dia-wrap{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.ctrl-dia-nav{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0}
+.ctrl-dia-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 14px;cursor:pointer;color:var(--text3);font-size:14px;font-family:inherit}
+.ctrl-dia-btn:active{background:var(--bg2)}
+.ctrl-dia-titulo{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text)}
+.ctrl-dia-cats{flex:1;overflow-y:auto}
+.ctrl-dia-section{border-bottom:1px solid var(--border)}
+.ctrl-dia-hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg1)}
+.ctrl-dia-lbl{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase}
+.ctrl-dia-total{font-family:var(--mono);font-size:12px;font-weight:500}
+.ctrl-dia-entry{display:flex;align-items:center;justify-content:space-between;padding:6px 12px 6px 20px;border-top:1px solid #161616}
+.ctrl-dia-desc{font-size:11px;color:var(--text2);flex:1}
+.ctrl-dia-val{font-family:var(--mono);font-size:11px;font-weight:500}
+/* Categorías scroll H */
+.ctrl-cats-wrap{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.ctrl-cats-hint{font-size:9px;color:var(--text3);text-align:center;padding:4px;flex-shrink:0;letter-spacing:0.06em;background:var(--bg1);border-bottom:1px solid var(--border)}
+.ctrl-cats-scroll{overflow-x:auto;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
+.ctrl-cats-table{border-collapse:collapse;min-width:560px;width:100%}
+.ctrl-cats-table th{font-size:8px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);padding:5px 6px;text-align:right;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:1;font-weight:400;white-space:nowrap}
+.ctrl-cats-table th:first-child{text-align:center;width:28px;position:sticky;left:0;z-index:2;background:var(--bg)}
+.ctrl-cats-table td{font-family:var(--mono);padding:4px 6px;text-align:right;border-bottom:1px solid #161616;font-size:10px;color:var(--text3);white-space:nowrap}
+.ctrl-cats-table td:first-child{text-align:center;position:sticky;left:0;background:var(--bg);z-index:1;color:var(--text2)}
+.ctrl-cats-table tr:hover td{background:var(--bg1)}
+.ctrl-cats-table tr:hover td:first-child{background:var(--bg1)}
+.ctrl-cats-table .v-ing{color:var(--green)}.ctrl-cats-table .v-egr{color:var(--red)}
+.ctrl-cats-table .v-pos{color:var(--blue)}.ctrl-cats-table .v-neg{color:var(--red)}
+.ctrl-cats-table tr.tot-row td{color:var(--text);border-top:1px solid var(--border2);background:var(--bg1)}
+.ctrl-cats-table tr.tot-row td:first-child{background:var(--bg1)}
 .fijo-row{display:grid;grid-template-columns:32px 1fr auto 32px;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg1);border-radius:0;transition:background .1s}
 .fijo-row:last-child{border-bottom:none}
 .fijo-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;cursor:pointer;flex-shrink:0;transition:all .15s}
@@ -562,12 +610,21 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 
     <!-- CONTROL -->
     <div class="view" id="v-control">
+      <!-- Modo toggle -->
+      <div class="ctrl-mode-bar">
+        <button class="ctrl-mode-btn active" id="cm-resumen" onclick="setCtrlMode('resumen')">Resumen</button>
+        <button class="ctrl-mode-btn" id="cm-dia" onclick="setCtrlMode('dia')">Por día</button>
+        <button class="ctrl-mode-btn" id="cm-cats" onclick="setCtrlMode('cats')">Categorías →</button>
+      </div>
+      <!-- KPIs -->
       <div class="ctrl-kpis-bar">
         <div class="ctrl-kpi"><div class="lbl">Ingresos</div><div class="val" id="c-ing" style="color:var(--green)">$0</div></div>
         <div class="ctrl-kpi"><div class="lbl">Egresos</div><div class="val" id="c-egr" style="color:var(--red)">$0</div></div>
         <div class="ctrl-kpi"><div class="lbl">Balance</div><div class="val" id="c-bal">$0</div></div>
       </div>
-      <div class="ctrl-table-wrap">
+
+      <!-- MODO RESUMEN -->
+      <div class="ctrl-table-wrap" id="ctrl-v-resumen">
         <table class="ctrl-table">
           <thead><tr>
             <th>día</th><th style="color:var(--green)88">ing.</th>
@@ -575,6 +632,36 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
           </tr></thead>
           <tbody id="ctrl-tbody"></tbody>
         </table>
+      </div>
+
+      <!-- MODO POR DÍA -->
+      <div class="ctrl-dia-wrap" id="ctrl-v-dia" style="display:none">
+        <div class="ctrl-dia-nav">
+          <button class="ctrl-dia-btn" onclick="navCtrlDia(-1)">‹</button>
+          <div class="ctrl-dia-titulo" id="ctrl-dia-titulo">Día —</div>
+          <button class="ctrl-dia-btn" onclick="navCtrlDia(1)">›</button>
+        </div>
+        <div class="ctrl-dia-cats" id="ctrl-dia-cats"></div>
+      </div>
+
+      <!-- MODO CATEGORÍAS -->
+      <div class="ctrl-cats-wrap" id="ctrl-v-cats" style="display:none">
+        <div class="ctrl-cats-hint">← desliza horizontalmente →</div>
+        <div class="ctrl-cats-scroll">
+          <table class="ctrl-cats-table">
+            <thead><tr>
+              <th>día</th>
+              <th style="color:#4B9EFF">Form.</th>
+              <th style="color:#A855F7">Mant.</th>
+              <th style="color:#14B8A6">Partes</th>
+              <th style="color:#F97316">Prog.</th>
+              <th style="color:#4CAF75">Otros</th>
+              <th style="color:#E05555">Egr.</th>
+              <th style="color:var(--text2)">Total</th>
+            </tr></thead>
+            <tbody id="ctrl-cats-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -1590,30 +1677,136 @@ function renderCalDayEntries(dia){
 }
 
 // RENDER CONTROL
+// ── CONTROL MENSUAL — 3 MODOS ────────────────────────────
+let _ctrlMode='resumen', _ctrlDia=new Date().getDate();
+
+function setCtrlMode(mode){
+  _ctrlMode=mode;
+  ['resumen','dia','cats'].forEach(m=>{
+    document.getElementById('cm-'+m).classList.toggle('active',m===mode);
+    const el=document.getElementById('ctrl-v-'+m);
+    if(el) el.style.display=m===mode?(m==='resumen'?'block':m==='cats'?'flex':'flex'):'none';
+  });
+  if(mode==='dia') renderCtrlDia(_ctrlDia);
+  if(mode==='cats') renderCtrlCats();
+}
+
 function renderControl(){
-  const rows=dbq(`SELECT dia,
-    COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ing,
-    COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egr
-    FROM entradas WHERE año=? AND mes=? GROUP BY dia`,[S.año,S.mes]);
-  const map={};rows.forEach(r=>map[r.dia]=r);
-  const tI=rows.reduce((a,r)=>a+r.ing,0),tE=rows.reduce((a,r)=>a+r.egr,0),tB=tI-tE;
-  $('c-ing').textContent=cop(tI,true);$('c-egr').textContent=cop(tE,true);
-  $('c-bal').textContent=cop(tB,true);$('c-bal').style.color=tB>=0?'var(--blue)':'var(--red)';
+  // Calcular totales del mes
+  const rows=dbq(`SELECT dia,categoria,
+    COALESCE(SUM(valor),0) as total
+    FROM entradas WHERE año=? AND mes=? GROUP BY dia,categoria`,
+    [S.año,S.mes]);
+  const map={};
+  rows.forEach(r=>{
+    if(!map[r.dia])map[r.dia]={};
+    map[r.dia][r.categoria]=r.total;
+  });
+  const tI=rows.filter(r=>r.categoria!=='Egresos').reduce((a,r)=>a+r.total,0);
+  const tE=rows.filter(r=>r.categoria==='Egresos').reduce((a,r)=>a+r.total,0);
+  const tB=tI-tE;
+  $('c-ing').textContent=cop(tI,true)||'$0';
+  $('c-egr').textContent=cop(tE,true)||'$0';
+  $('c-bal').textContent=cop(tB,true)||'$0';
+  $('c-bal').style.color=tB>=0?'var(--blue)':'var(--red)';
+
+  // Resumen
   const tb=$('ctrl-tbody');tb.innerHTML='';
   const dim=new Date(S.año,S.mes,0).getDate();
   for(let d=1;d<=dim;d++){
-    const t=map[d]||null;
-    const ing=t?t.ing:0,egr=t?t.egr:0,bal=ing-egr;
+    const cats=map[d]||null;
+    let ing=0,egr=0;
+    if(cats){Object.entries(cats).forEach(([cat,v])=>{if(cat==='Egresos')egr+=v;else ing+=v;});}
+    const bal=ing-egr;
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td class="${t?'has-d':''}">${d}</td>
-      <td class="${t&&ing?'ing':''}">${t&&ing?cop(ing):'—'}</td>
-      <td class="${t&&egr?'egr':''}">${t&&egr?cop(egr):'—'}</td>
-      <td class="${t?(bal>=0?'pos':'neg'):''}">${t?cop(bal):'—'}</td>`;
+    if(cats) tr.onclick=()=>{_ctrlDia=d;setCtrlMode('dia');};
+    tr.innerHTML=`<td class="${cats?'has-d':''}" style="${cats?'cursor:pointer':''}">${d}</td>
+      <td class="${cats&&ing?'ing':''}">${cats&&ing?cop(ing):'—'}</td>
+      <td class="${cats&&egr?'egr':''}">${cats&&egr?cop(egr):'—'}</td>
+      <td class="${cats?(bal>=0?'pos':'neg'):''}">${cats?cop(bal):'—'}</td>`;
     tb.appendChild(tr);
   }
   const tot=document.createElement('tr');tot.className='tot-row';
-  tot.innerHTML=`<td>Total</td><td class="ing">${cop(tI,true)}</td><td class="egr">${cop(tE,true)}</td><td class="${tB>=0?'pos':'neg'}">${cop(tB,true)}</td>`;
+  tot.innerHTML=`<td>Tot</td><td class="ing">${cop(tI,true)}</td><td class="egr">${cop(tE,true)}</td><td class="${tB>=0?'pos':'neg'}">${cop(tB,true)}</td>`;
   tb.appendChild(tot);
+
+  // Refresh modo activo
+  if(_ctrlMode==='dia') renderCtrlDia(_ctrlDia);
+  if(_ctrlMode==='cats') renderCtrlCats();
+}
+
+function renderCtrlDia(dia){
+  _ctrlDia=dia;
+  const MNOMBRES=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  $('ctrl-dia-titulo').textContent=`Día ${dia} — ${MNOMBRES[S.mes]}`;
+  const container=$('ctrl-dia-cats');
+  container.innerHTML='';
+  const rows=dbq(`SELECT categoria,descripcion,valor FROM entradas
+    WHERE año=? AND mes=? AND dia=? ORDER BY categoria,orden`,
+    [S.año,S.mes,dia]);
+  if(!rows.length){
+    container.innerHTML='<div style="text-align:center;color:var(--text3);font-size:11px;padding:28px">Sin registros este día</div>';
+    return;
+  }
+  const byCat={};
+  rows.forEach(r=>{if(!byCat[r.categoria])byCat[r.categoria]=[];byCat[r.categoria].push(r);});
+  CATS.forEach(cat=>{
+    if(!byCat[cat])return;
+    const color=CAT_COLOR[cat];
+    const isEgr=cat==='Egresos';
+    const total=byCat[cat].reduce((a,r)=>a+r.valor,0);
+    const section=document.createElement('div');
+    section.className='ctrl-dia-section';
+    section.innerHTML=`
+      <div class="ctrl-dia-hdr">
+        <div class="ctrl-dia-lbl" style="color:${color}">${cat}</div>
+        <div class="ctrl-dia-total" style="color:${isEgr?'var(--red)':'var(--green)'}">${cop(total,true)}</div>
+      </div>
+      ${byCat[cat].map(e=>`
+        <div class="ctrl-dia-entry">
+          <div class="ctrl-dia-desc">${e.descripcion||'—'}</div>
+          <div class="ctrl-dia-val" style="color:${isEgr?'var(--red)':'var(--text2)'}">${cop(e.valor)}</div>
+        </div>`).join('')}`;
+    container.appendChild(section);
+  });
+}
+
+function navCtrlDia(dir){
+  const dim=new Date(S.año,S.mes,0).getDate();
+  _ctrlDia+=dir;
+  if(_ctrlDia<1)_ctrlDia=dim;
+  if(_ctrlDia>dim)_ctrlDia=1;
+  renderCtrlDia(_ctrlDia);
+}
+
+function renderCtrlCats(){
+  const rows=dbq(`SELECT dia,categoria,COALESCE(SUM(valor),0) as total
+    FROM entradas WHERE año=? AND mes=? GROUP BY dia,categoria`,
+    [S.año,S.mes]);
+  const map={};
+  rows.forEach(r=>{if(!map[r.dia])map[r.dia]={};map[r.dia][r.categoria]=r.total;});
+  const dim=new Date(S.año,S.mes,0).getDate();
+  const tb=$('ctrl-cats-tbody');tb.innerHTML='';
+  const totCat={};CATS.forEach(c=>totCat[c]=0);
+  for(let d=1;d<=dim;d++){
+    const cats=map[d];if(!cats)continue;
+    let rowBal=0;
+    const cells=CATS.map(cat=>{
+      const v=cats[cat]||0;
+      totCat[cat]+=v;
+      rowBal+=cat==='Egresos'?-v:v;
+      return v?`<td class="${cat==='Egresos'?'v-egr':'v-ing'}">${cop(v)}</td>`:`<td>—</td>`;
+    }).join('');
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="cursor:pointer" onclick="_ctrlDia=${d};setCtrlMode('dia')">${d}</td>${cells}<td class="${rowBal>=0?'v-pos':'v-neg'}">${cop(rowBal,true)}</td>`;
+    tb.appendChild(tr);
+  }
+  const totI=CATS.filter(c=>c!=='Egresos').reduce((a,c)=>a+totCat[c],0);
+  const totE=totCat['Egresos'];
+  const totRow=document.createElement('tr');totRow.className='tot-row';
+  const totCells=CATS.map(c=>`<td class="${c==='Egresos'?'v-egr':'v-ing'}">${cop(totCat[c],true)||'—'}</td>`).join('');
+  totRow.innerHTML=`<td>Tot</td>${totCells}<td class="${(totI-totE)>=0?'v-pos':'v-neg'}">${cop(totI-totE,true)}</td>`;
+  tb.appendChild(totRow);
 }
 
 // RENDER FIJOS
