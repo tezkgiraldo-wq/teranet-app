@@ -180,22 +180,6 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .cal-sel-entries{border-top:1px solid var(--border);max-height:240px;overflow-y:auto}
 
 /* ── CONTROL ── */
-.ctrl-kpis-bar{padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.ctrl-kpi{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 8px;text-align:center}
-.ctrl-kpi .lbl{font-size:8px;margin-bottom:2px}
-.ctrl-kpi .val{font-size:13px}
-.ctrl-table-wrap{flex:1;overflow-y:auto}
-.ctrl-table{width:100%;border-collapse:collapse}
-.ctrl-table th{font-size:8px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:5px 8px;text-align:right;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:1;font-weight:400}
-.ctrl-table th:first-child{text-align:center;width:32px}
-.ctrl-table td{font-family:var(--mono);padding:5px 8px;text-align:right;border-bottom:1px solid #161616;color:var(--text3);font-size:11px}
-.ctrl-table td:first-child{text-align:center}
-.ctrl-table tr:hover td{background:var(--bg1)}
-.ctrl-table .ing{color:var(--green)}.ctrl-table .egr{color:var(--red)}
-.ctrl-table .pos{color:var(--blue)}.ctrl-table .neg{color:var(--red)}
-.ctrl-table .has-d{color:var(--green);cursor:pointer}
-.ctrl-table tr.tot-row td{color:var(--text);border-top:1px solid var(--border2);background:var(--bg1)}
-
 /* ── FIJOS ── */
 .fijos-stats{padding:8px 12px;flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .fijo-list{overflow-y:auto;flex:1;padding:6px 12px;display:flex;flex-direction:column;gap:5px}
@@ -1998,38 +1982,6 @@ function renderBalance(){
   const totalDeudoresEl=$('bal-deudores-total');
   totalDeudoresEl.textContent=cop(totalDeudores,true)||'$0';
   totalDeudoresEl.style.color=totalDeudores?'var(--red)':'var(--text3)';
-}
-
-// RENDER FX
-function renderFX(){
-  const rows=dbq("SELECT tipo,cop,usd FROM cartera_fx ORDER BY fecha,id");
-  let tu=0,tc=0,gpReal=0;
-  rows.forEach(r=>{
-    if(r.tipo==='COMPRA'){tu+=r.usd;tc+=r.cop;}
-    else{const avg=tu?tc/tu:0;gpReal+=r.cop-r.usd*avg;tu-=r.usd;tc-=r.usd*avg;}
-  });
-  const tasa=parseFloat((dbq("SELECT valor FROM config WHERE clave='tasa_usd'")[0]||{valor:4100}).valor);
-  const balReal=dbq("SELECT valor FROM balance_personal WHERE clave='usd_reales_binance'");
-  const usdReal=balReal.length?balReal[0].valor:tu;
-  const valorPos=usdReal*tasa,gpNR=valorPos-tc,tasaProm=tu?tc/tu:0;
-  $('fx-usd').textContent=`${usdReal.toFixed(2)} USD`;
-  $('fx-cop-eq').textContent=`= ${cop(valorPos,true)} COP · tasa $${Math.round(tasa).toLocaleString('es-CO')}`;
-  $('fx-stats').innerHTML=`
-    <div class="card"><div class="lbl">COP invertido</div><div class="val" style="font-size:14px">${cop(tc,true)||'$0'}</div></div>
-    <div class="card"><div class="lbl">Tasa prom.</div><div class="val" style="font-size:14px">$${Math.round(tasaProm).toLocaleString('es-CO')||'—'}</div></div>
-    <div class="card"><div class="lbl">G/P realizada</div><div class="val" style="color:${gpReal>=0?'var(--green)':'var(--red)'};font-size:14px">${cop(gpReal,true)||'$0'}</div></div>
-    <div class="card"><div class="lbl">G/P no real.</div><div class="val" style="color:${gpNR>=0?'var(--green)':'var(--red)'};font-size:14px">${cop(gpNR,true)||'$0'}</div></div>`;
-  const hist=dbq("SELECT fecha,tipo,cop,usd FROM cartera_fx ORDER BY fecha DESC,id DESC LIMIT 20");
-  const hl=$('fx-hist-list');hl.innerHTML='';
-  if(!hist.length){hl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:10px;text-align:center">Sin operaciones</div>';return;}
-  hist.forEach(r=>{
-    const el=document.createElement('div');el.className='fx-row';
-    el.innerHTML=`<span style="width:52px;color:var(--text3)">${r.fecha.slice(5)}</span>
-      <span style="width:48px;color:${r.tipo==='COMPRA'?'var(--green)':'var(--red)'}">${r.tipo.toLowerCase()}</span>
-      <span style="flex:1;text-align:right;color:var(--text2)">${cop(r.cop,true)}</span>
-      <span style="width:54px;text-align:right;color:var(--teal)">${r.usd.toFixed(1)}</span>`;
-    hl.appendChild(el);
-  });
 }
 
 // SHEET — registro rápido
