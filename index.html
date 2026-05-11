@@ -363,7 +363,71 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 .cat-pill.active-egr{background:#2D1E1E;border-color:var(--red);color:var(--red)}
 .s-btn{background:var(--blue);border:none;border-radius:8px;padding:11px;color:#fff;font-size:13px;font-weight:500;cursor:pointer;width:100%}
 
-/* ── DRIVE MODAL ── */
+/* ── GASTOS FIJOS EDITABLE ── */
+.fijo-row{display:grid;grid-template-columns:32px 1fr auto 32px;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg1);border-radius:0;transition:background .1s}
+.fijo-row:last-child{border-bottom:none}
+.fijo-chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;cursor:pointer;flex-shrink:0;transition:all .15s}
+.fijo-chk.paid{background:var(--green);border-color:var(--green);color:#fff}
+.fijo-name-inp{background:transparent;border:none;outline:none;font-size:12px;color:var(--text);width:100%;font-family:inherit}
+.fijo-name-inp.paid{color:var(--text3);text-decoration:line-through}
+.fijo-val-inp{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:12px;color:var(--text2);text-align:right;width:90px}
+.fijo-val-inp.paid{color:var(--text3)}
+.fijo-del{background:transparent;border:none;color:var(--text3);font-size:14px;cursor:pointer;padding:2px 4px;border-radius:4px;flex-shrink:0}
+.fijo-del:active{color:var(--red)}
+.fijo-add-btn{width:100%;padding:10px;background:transparent;border:1px dashed var(--border2);border-radius:8px;color:var(--text3);font-size:11px;cursor:pointer;margin:8px 12px;width:calc(100% - 24px)}
+.fijo-add-btn:active{background:var(--bg2)}
+
+/* ── INVERSIONES EDITABLE ── */
+.fx-add-btn{background:var(--teal)22;border:1px solid var(--teal)44;border-radius:8px;padding:10px;color:var(--teal);font-size:12px;font-weight:500;cursor:pointer;width:100%;text-align:center;margin-top:4px}
+.fx-add-btn:active{background:var(--teal)33}
+.fx-sheet{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;justify-content:flex-end;background:rgba(0,0,0,.6)}
+.fx-sheet.hidden{display:none}
+.fx-sheet-inner{background:var(--bg1);border-radius:16px 16px 0 0;padding:18px 16px 32px;display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--border2)}
+.fx-type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fx-type-btn{padding:9px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:var(--text3);transition:all .15s}
+.fx-type-btn.compra.sel{background:#1A2D1A;border-color:var(--green);color:var(--green)}
+.fx-type-btn.venta.sel{background:#2D1A1A;border-color:var(--red);color:var(--red)}
+.fx-del-btn{background:var(--red)11;border:1px solid var(--red)33;border-radius:6px;color:var(--red);font-size:11px;padding:4px 10px;cursor:pointer}
+
+/* ── VISTA AÑO ── */
+.año-view{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.año-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 12px;flex-shrink:0;background:var(--bg1);border-bottom:1px solid var(--border)}
+.año-kpi{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 8px;text-align:center}
+.año-kpi .lbl{font-size:8px;margin-bottom:2px}
+.año-kpi .val{font-family:var(--mono);font-size:12px;font-weight:500}
+.año-chart-wrap{padding:12px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.año-table-wrap{flex:1;overflow-y:auto}
+.año-table{width:100%;border-collapse:collapse}
+.año-table th{font-size:8px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);padding:5px 8px;text-align:right;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:1;font-weight:400}
+.año-table th:first-child{text-align:left}
+.año-table td{font-family:var(--mono);padding:5px 8px;text-align:right;border-bottom:1px solid #161616;color:var(--text3);font-size:11px}
+.año-table td:first-child{text-align:left;color:var(--text2)}
+.año-table .v-ing{color:var(--green)}.año-table .v-egr{color:var(--red)}
+.año-table .v-pos{color:var(--blue)}.año-table .v-neg{color:var(--red)}
+.año-table tr.tot-row td{color:var(--text);border-top:1px solid var(--border2);background:var(--bg1)}
+
+/* ── BALANCE EDITABLE ── */
+.bal-edit-inp{background:transparent;border:none;outline:none;font-family:var(--mono);font-size:14px;font-weight:500;color:var(--blue);text-align:right;width:100%}
+.bal-edit-inp:focus{background:var(--bg2);border-radius:4px;padding:2px 4px}
+
+/* ── BÚSQUEDA ── */
+.search-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);display:flex;flex-direction:column;padding:16px 12px}
+.search-overlay.hidden{display:none}
+.search-box{background:var(--bg1);border:1px solid var(--border2);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;max-height:85vh}
+.search-inp-wrap{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.search-inp{flex:1;background:transparent;border:none;outline:none;font-family:var(--mono);font-size:14px;color:var(--text)}
+.search-inp::placeholder{color:var(--text3)}
+.search-close{color:var(--text3);font-size:16px;cursor:pointer;padding:2px 6px}
+.search-results{overflow-y:auto;flex:1}
+.search-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid #161616}
+.search-item:last-child{border-bottom:none}
+.search-item-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.search-item-body{flex:1;min-width:0}
+.search-item-desc{font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-item-meta{font-size:9px;color:var(--text3);margin-top:1px}
+.search-item-val{font-family:var(--mono);font-size:12px;font-weight:500;white-space:nowrap}
+.search-empty{text-align:center;color:var(--text3);font-size:11px;padding:24px 16px}
+.search-count{font-size:9px;color:var(--text3);padding:6px 14px;border-top:1px solid var(--border);flex-shrink:0;font-family:var(--mono)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;z-index:30}
 .modal-overlay.hidden{display:none}
 .modal{width:100%;background:var(--bg1);border-radius:16px 16px 0 0;padding:18px 16px;border-top:1px solid var(--border2);display:flex;flex-direction:column;gap:10px}
@@ -451,6 +515,9 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
       <div class="psel-wrap">
         <select id="sel-año" onchange="onPeriodChange()" style="width:50px"></select>
       </div>
+      <button onclick="openSearch()" style="background:transparent;border:none;padding:4px 6px;cursor:pointer;color:var(--text3)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
       <div class="tb-sync ok" id="sync-dot"></div>
       <button class="tb-btn cloud-ok" id="cloud-btn" onclick="openDriveModal()">☁<span class="cloud-badge"></span></button>
     </div>
@@ -516,6 +583,30 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
         <div class="card"><div class="lbl">Pendiente</div><div class="val" id="f-pend" style="color:var(--red)">$0</div></div>
       </div>
       <div class="fijo-list" id="fijo-list"></div>
+      <button class="fijo-add-btn" onclick="addFijo()">+ agregar gasto fijo</button>
+    </div>
+
+    <!-- AÑO -->
+    <div class="view" id="v-año">
+      <div class="año-kpis">
+        <div class="año-kpi"><div class="lbl">Ingresos</div><div class="val" id="a-ing" style="color:var(--green)">$0</div></div>
+        <div class="año-kpi"><div class="lbl">Egresos</div><div class="val" id="a-egr" style="color:var(--red)">$0</div></div>
+        <div class="año-kpi"><div class="lbl">Balance</div><div class="val" id="a-bal">$0</div></div>
+      </div>
+      <div class="año-chart-wrap">
+        <svg id="año-chart" width="100%" height="130" style="display:block;overflow:visible"></svg>
+      </div>
+      <div class="año-table-wrap">
+        <table class="año-table">
+          <thead><tr>
+            <th style="text-align:left">Mes</th>
+            <th style="color:var(--green)88">Ingresos</th>
+            <th style="color:var(--red)88">Egresos</th>
+            <th style="color:var(--blue)88">Balance</th>
+          </tr></thead>
+          <tbody id="año-tbody"></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- BALANCE -->
@@ -531,7 +622,28 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
           </div>
           <div class="val" id="bal-total" style="color:var(--blue);font-size:24px">$0</div>
         </div>
-        <div class="grid2" style="margin-bottom:8px" id="bal-cuentas"></div>
+
+        <!-- Cuentas editables -->
+        <div class="grid2" style="margin-bottom:8px">
+          <div class="card">
+            <div class="lbl" style="color:#4B9EFF88">Cuenta BC</div>
+            <input class="bal-edit-inp" id="bal-cuenta-bc" inputmode="numeric" placeholder="0" onblur="saveBalCuenta('cuenta_bc',this.value)" style="color:var(--blue)">
+          </div>
+          <div class="card">
+            <div class="lbl" style="color:#14B8A688">USD Binance</div>
+            <div class="val" id="bal-usd-val" style="color:var(--teal);font-size:14px">$0</div>
+            <div style="font-size:10px;color:var(--text3)" id="bal-usd-sub">— USD</div>
+          </div>
+          <div class="card">
+            <div class="lbl" style="color:#F9731688">Arriendo res.</div>
+            <input class="bal-edit-inp" id="bal-arriendo" inputmode="numeric" placeholder="0" onblur="saveBalCuenta('arriendo_reserva',this.value)" style="color:var(--orange)">
+          </div>
+          <div class="card">
+            <div class="lbl" style="color:#4CAF7588">Efectivo</div>
+            <input class="bal-edit-inp" id="bal-efectivo" inputmode="numeric" placeholder="0" onblur="saveBalCuenta('efectivo',this.value)" style="color:var(--green)">
+          </div>
+        </div>
+
         <div class="grid2" style="margin-bottom:8px">
           <div class="card"><div class="lbl" style="color:var(--red)88">Pendientes por pagar mes</div><div class="val" id="bal-pend" style="color:var(--red);font-size:14px">$0</div></div>
           <div class="card"><div class="lbl" style="color:var(--purple)88">Próx. mes</div><div class="val" id="bal-prox" style="color:var(--purple);font-size:14px">$0</div></div>
@@ -590,25 +702,80 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
     <div class="view" id="v-fx">
       <div class="scroll">
         <div class="card fx-accent">
-          <div class="lbl" style="color:var(--teal)88">USD en Binance</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+            <div class="lbl" style="color:var(--teal)88">USD en Binance</div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:9px;color:var(--text3)">tasa</span>
+              <input id="fx-tasa-inp" style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:var(--mono);font-size:10px;color:var(--gold);width:72px;outline:none;text-align:right" onblur="saveTasa(this.value)">
+            </div>
+          </div>
           <div class="val" id="fx-usd" style="color:var(--teal);font-size:22px">— USD</div>
           <div id="fx-cop-eq" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px">—</div>
         </div>
         <div class="grid2" id="fx-stats"></div>
+        <button class="fx-add-btn" onclick="openFxSheet()">+ registrar operación</button>
         <div class="sec-lbl">historial</div>
         <div class="fx-hist-wrap">
           <div class="fx-row fx-hdr">
             <span style="width:52px">fecha</span><span style="width:48px">tipo</span>
             <span style="flex:1;text-align:right">COP</span><span style="width:54px;text-align:right">USD</span>
+            <span style="width:24px"></span>
           </div>
           <div id="fx-hist-list"></div>
         </div>
-        <div style="font-size:10px;color:var(--text3);text-align:center;padding:4px 0;opacity:.7">solo lectura · gestiona desde el escritorio</div>
+      </div>
+    </div>
+
+    <!-- FX SHEET -->
+    <div class="fx-sheet hidden" id="fx-sheet">
+      <div class="fx-sheet-inner">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:14px;font-weight:500" id="fx-sheet-title">Nueva operación</div>
+          <button onclick="closeFxSheet()" style="background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer">✕</button>
+        </div>
+        <div class="fx-type-toggle">
+          <button class="fx-type-btn compra sel" id="fx-btn-compra" onclick="setFxTipo('COMPRA')">↑ Compra</button>
+          <button class="fx-type-btn venta" id="fx-btn-venta" onclick="setFxTipo('VENTA')">↓ Venta</button>
+        </div>
+        <div>
+          <div class="s-lbl">Fecha</div>
+          <input type="date" id="fx-fecha" class="s-inp">
+        </div>
+        <div class="grid2">
+          <div>
+            <div class="s-lbl">COP</div>
+            <input id="fx-cop" class="s-inp" inputmode="numeric" placeholder="0">
+          </div>
+          <div>
+            <div class="s-lbl">USD</div>
+            <input id="fx-usd-inp" class="s-inp" inputmode="decimal" placeholder="0.00">
+          </div>
+        </div>
+        <div>
+          <div class="s-lbl">Plataforma / Notas</div>
+          <input id="fx-notas" class="s-inp" placeholder="Binance, notas...">
+        </div>
+        <button class="s-btn" onclick="guardarFx()">Guardar</button>
       </div>
     </div>
   </div>
 
   <button class="fab" id="fab" onclick="openSheet(false)">+</button>
+
+  <!-- BÚSQUEDA OVERLAY -->
+  <div class="search-overlay hidden" id="search-overlay" onclick="closeSearchOnBg(event)">
+    <div class="search-box">
+      <div class="search-inp-wrap">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text3);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-inp" id="search-inp" placeholder="Buscar entradas..." oninput="onSearchInput()" onkeydown="if(event.key==='Escape')closeSearch()">
+        <span class="search-close" onclick="closeSearch()">✕</span>
+      </div>
+      <div class="search-results" id="search-results">
+        <div class="search-empty">Escribe para buscar en todas las entradas</div>
+      </div>
+      <div class="search-count hidden" id="search-count"></div>
+    </div>
+  </div>
 
   <div id="nav">
     <button class="nav-btn active" data-v="inicio" onclick="go('inicio')">
@@ -636,11 +803,18 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
       </svg>
       <div>balance</div>
     </button>
-    <button class="nav-btn" data-v="fx" onclick="go('fx')">
+    <button class="nav-btn" data-v="año" onclick="go('año')">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
       </svg>
-      <div>inversiones</div>
+      <div>año</div>
+    </button>
+    <button class="nav-btn" data-v="fx" onclick="go('fx')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+      </svg>
+      <div>fx</div>
     </button>
   </div>
 </div>
@@ -1125,9 +1299,12 @@ function go(v){
   S.activeView=v;
   document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(e=>e.classList.remove('active'));
-  $('v-'+v).classList.add('active');
-  document.querySelector(`[data-v="${v}"]`).classList.add('active');
-  $('fab').style.display=v==='inicio'?'flex':'none';
+  const vEl=document.getElementById('v-'+v);
+  if(vEl) vEl.classList.add('active');
+  const btn=document.querySelector(`[data-v="${v}"]`);
+  if(btn) btn.classList.add('active');
+  // FAB solo en inicio y control
+  $('fab').style.display=(v==='inicio'||v==='control')?'flex':'none';
   refreshView();
 }
 function refreshView(){
@@ -1136,6 +1313,7 @@ function refreshView(){
   if(v==='control')renderControl();
   if(v==='fijos')renderFijos();
   if(v==='balance')renderBalance();
+  if(v==='año')renderAño();
   if(v==='fx')renderFX();
 }
 
@@ -1424,27 +1602,74 @@ function renderControl(){
 
 // RENDER FIJOS
 function renderFijos(){
-  const pagos=dbq(`SELECT gf.id,gf.descripcion,gf.valor,COALESCE(pf.pagado,0) as pagado
+  const pagos=dbq(`SELECT gf.id,gf.descripcion,gf.valor,gf.activo,COALESCE(pf.pagado,0) as pagado
     FROM gastos_fijos gf LEFT JOIN pagos_fijos pf ON gf.id=pf.gasto_id AND pf.año=? AND pf.mes=?
     WHERE gf.activo=1 ORDER BY gf.id`,[S.año,S.mes]);
   const total=pagos.reduce((a,p)=>a+p.valor,0);
   const paid=pagos.filter(p=>p.pagado).reduce((a,p)=>a+p.valor,0);
-  $('f-pagado').textContent=cop(paid,true);$('f-pend').textContent=cop(total-paid,true);
+  $('f-pagado').textContent=cop(paid,true);
+  $('f-pend').textContent=cop(total-paid,true);
   const list=$('fijo-list');list.innerHTML='';
   pagos.forEach(p=>{
     const row=document.createElement('div');row.className='fijo-row';
-    row.innerHTML=`<div class="fijo-chk${p.pagado?' paid':''}">✓</div>
-      <div class="fijo-name${p.pagado?' paid':''}">${p.descripcion}</div>
-      <div class="fijo-val${p.pagado?' paid':''}">${cop(p.valor,true)}</div>`;
-    row.onclick=()=>{
+
+    // Checkbox pago
+    const chk=document.createElement('div');
+    chk.className='fijo-chk'+(p.pagado?' paid':'');
+    chk.textContent='✓';
+    chk.onclick=()=>{
       S.db.run(`INSERT INTO pagos_fijos(gasto_id,año,mes,pagado)VALUES(?,?,?,?)
         ON CONFLICT(gasto_id,año,mes)DO UPDATE SET pagado=excluded.pagado`,
         [p.id,S.año,S.mes,p.pagado?0:1]);
-      markDirty(); renderFijos();
-      pushNow();
+      markDirty();renderFijos();pushNow();
     };
+
+    // Nombre editable
+    const nameInp=document.createElement('input');
+    nameInp.className='fijo-name-inp'+(p.pagado?' paid':'');
+    nameInp.value=p.descripcion;
+    nameInp.onblur=()=>{
+      if(nameInp.value.trim()===p.descripcion)return;
+      S.db.run('UPDATE gastos_fijos SET descripcion=? WHERE id=?',[nameInp.value.trim()||p.descripcion,p.id]);
+      markDirty();pushNow();
+    };
+    nameInp.onkeydown=e=>{if(e.key==='Enter')nameInp.blur();};
+
+    // Valor editable
+    const valInp=document.createElement('input');
+    valInp.className='fijo-val-inp'+(p.pagado?' paid':'');
+    valInp.value=Math.round(p.valor).toLocaleString('es-CO');
+    valInp.inputMode='numeric';
+    valInp.onblur=()=>{
+      const v=parseNum(valInp.value);
+      if(v===p.valor)return;
+      S.db.run('UPDATE gastos_fijos SET valor=? WHERE id=?',[v,p.id]);
+      markDirty();renderFijos();pushNow();
+    };
+    valInp.onkeydown=e=>{if(e.key==='Enter')valInp.blur();};
+
+    // Eliminar
+    const del=document.createElement('button');
+    del.className='fijo-del';del.textContent='✕';
+    del.onclick=()=>{
+      if(!confirm(`¿Eliminar "${p.descripcion}"?`))return;
+      S.db.run('UPDATE gastos_fijos SET activo=0 WHERE id=?',[p.id]);
+      markDirty();renderFijos();pushNow();
+    };
+
+    row.appendChild(chk);row.appendChild(nameInp);row.appendChild(valInp);row.appendChild(del);
     list.appendChild(row);
   });
+}
+
+function addFijo(){
+  S.db.run("INSERT INTO gastos_fijos(descripcion,valor,activo)VALUES('Nuevo gasto',0,1)");
+  markDirty();renderFijos();pushNow();
+  // Focus en el último nombre
+  setTimeout(()=>{
+    const inputs=document.querySelectorAll('.fijo-name-inp');
+    if(inputs.length) inputs[inputs.length-1].focus();
+  },50);
 }
 
 // RENDER BALANCE
@@ -1494,12 +1719,18 @@ function renderBalance(){
   $('bal-pend').textContent=cop(pend,true);
   $('bal-prox').textContent=cop(proxMes,true);
 
-  // Cuentas
-  $('bal-cuentas').innerHTML=`
-    <div class="card"><div class="lbl" style="color:#4B9EFF88">Cuenta BC</div><div class="val" style="color:var(--blue);font-size:14px">${cop(cuentaBc,true)}</div></div>
-    <div class="card"><div class="lbl" style="color:#14B8A688">USD Binance</div><div class="val" style="color:var(--teal);font-size:14px">${cop(usdCop,true)}<div style="font-size:10px;color:var(--text3)">${usdReal.toFixed(1)} USD</div></div></div>
-    <div class="card"><div class="lbl" style="color:#F9731688">Arriendo res.</div><div class="val" style="color:var(--orange);font-size:14px">${cop(arriendo,true)}</div></div>
-    <div class="card"><div class="lbl" style="color:#4CAF7588">Efectivo</div><div class="val" style="color:var(--green);font-size:14px">${cop(efectivo,true)}</div></div>`;
+  // Cuentas editables
+  const bcEl=$('bal-cuenta-bc');
+  if(bcEl&&document.activeElement!==bcEl) bcEl.value=cuentaBc?Math.round(cuentaBc).toLocaleString('es-CO'):'';
+  const arrEl=$('bal-arriendo');
+  if(arrEl&&document.activeElement!==arrEl) arrEl.value=arriendo?Math.round(arriendo).toLocaleString('es-CO'):'';
+  const efEl=$('bal-efectivo');
+  if(efEl&&document.activeElement!==efEl) efEl.value=efectivo?Math.round(efectivo).toLocaleString('es-CO'):'';
+  // USD (readonly — viene de FX)
+  const usdValEl=$('bal-usd-val');
+  if(usdValEl) usdValEl.textContent=cop(usdCop,true);
+  const usdSubEl=$('bal-usd-sub');
+  if(usdSubEl) usdSubEl.textContent=`${usdReal.toFixed(2)} USD · $${Math.round(tasa).toLocaleString('es-CO')} tasa`;
 
   // Meses de ahorro
   $('ahorro-activos').textContent=cop(activos,true);
@@ -1634,6 +1865,213 @@ function guardarEntrada(){
   toast(`✓ Registrado en ${S.activeCat}`);
   refreshView();
   pushNow();
+}
+
+// ── BALANCE EDITABLE ──────────────────────────────────────
+function saveBalCuenta(clave, rawVal){
+  const v=parseNum(rawVal)||0;
+  S.db.run('INSERT OR REPLACE INTO balance_personal VALUES(?,?)',[clave,v]);
+  markDirty(); renderBalance(); pushNow();
+}
+
+// ── FX EDITABLE ───────────────────────────────────────────
+let _fxTipo='COMPRA', _fxEditId=null;
+
+function openFxSheet(row=null){
+  _fxEditId=row?row.id:null;
+  _fxTipo=row?row.tipo:'COMPRA';
+  setFxTipo(_fxTipo);
+  const today=new Date().toISOString().slice(0,10);
+  $('fx-fecha').value=row?row.fecha:today;
+  $('fx-cop').value=row?Math.round(row.cop).toLocaleString('es-CO'):'';
+  $('fx-usd-inp').value=row?row.usd.toFixed(2):'';
+  $('fx-notas').value=row?row.notas||'':'';
+  $('fx-sheet-title').textContent=row?'Editar operación':'Nueva operación';
+  $('fx-sheet').classList.remove('hidden');
+}
+function closeFxSheet(){$('fx-sheet').classList.add('hidden');}
+function setFxTipo(t){
+  _fxTipo=t;
+  $('fx-btn-compra').className='fx-type-btn compra'+(t==='COMPRA'?' sel':'');
+  $('fx-btn-venta').className='fx-type-btn venta'+(t==='VENTA'?' sel':'');
+}
+function saveTasa(val){
+  const t=parseNum(val);
+  if(!t)return;
+  S.db.run("INSERT OR REPLACE INTO config VALUES('tasa_usd',?)",[String(t)]);
+  markDirty();renderFX();pushNow();
+}
+function guardarFx(){
+  const fecha=$('fx-fecha').value;
+  const cop_v=parseNum($('fx-cop').value);
+  const usd_v=parseFloat($('fx-usd-inp').value.replace(/\./g,'').replace(/,/g,'.'))||0;
+  const notas=$('fx-notas').value.trim();
+  if(!fecha||!cop_v||!usd_v){toast('Completa fecha, COP y USD');return;}
+  if(_fxEditId){
+    S.db.run('UPDATE cartera_fx SET fecha=?,tipo=?,cop=?,usd=?,notas=? WHERE id=?',
+      [fecha,_fxTipo,cop_v,usd_v,notas,_fxEditId]);
+  } else {
+    S.db.run('INSERT INTO cartera_fx(fecha,tipo,cop,tasa_dia,usd,plataforma,notas)VALUES(?,?,?,?,?,?,?)',
+      [fecha,_fxTipo,cop_v,usd_v?Math.round(cop_v/usd_v):0,usd_v,notas,notas]);
+  }
+  markDirty();closeFxSheet();renderFX();pushNow();
+  toast(_fxEditId?'✓ Operación actualizada':'✓ Operación registrada');
+  _fxEditId=null;
+}
+
+// ── RENDER FX actualizado con editar/eliminar ─────────────
+function renderFX(){
+  const rows=dbq("SELECT tipo,cop,usd FROM cartera_fx ORDER BY fecha,id");
+  let tu=0,tc=0,gpReal=0;
+  rows.forEach(r=>{
+    if(r.tipo==='COMPRA'){tu+=r.usd;tc+=r.cop;}
+    else{const avg=tu?tc/tu:0;gpReal+=r.cop-r.usd*avg;tu-=r.usd;tc-=r.usd*avg;}
+  });
+  const tasa=parseFloat((dbq("SELECT valor FROM config WHERE clave='tasa_usd'")[0]||{valor:4100}).valor);
+  const balReal=dbq("SELECT valor FROM balance_personal WHERE clave='usd_reales_binance'");
+  const usdReal=balReal.length?balReal[0].valor:tu;
+  const valorPos=usdReal*tasa,gpNR=valorPos-tc,tasaProm=tu?tc/tu:0;
+  $('fx-usd').textContent=`${usdReal.toFixed(2)} USD`;
+  $('fx-cop-eq').textContent=`= ${cop(valorPos,true)} COP`;
+  const tasaInp=$('fx-tasa-inp');
+  if(tasaInp&&document.activeElement!==tasaInp)
+    tasaInp.value=Math.round(tasa).toLocaleString('es-CO');
+  $('fx-stats').innerHTML=`
+    <div class="card"><div class="lbl">COP invertido</div><div class="val" style="font-size:14px">${cop(tc,true)||'$0'}</div></div>
+    <div class="card"><div class="lbl">Tasa prom.</div><div class="val" style="font-size:14px">$${Math.round(tasaProm).toLocaleString('es-CO')||'—'}</div></div>
+    <div class="card"><div class="lbl">G/P realizada</div><div class="val" style="color:${gpReal>=0?'var(--green)':'var(--red)'};font-size:14px">${cop(gpReal,true)||'$0'}</div></div>
+    <div class="card"><div class="lbl">G/P no real.</div><div class="val" style="color:${gpNR>=0?'var(--green)':'var(--red)'};font-size:14px">${cop(gpNR,true)||'$0'}</div></div>`;
+  const hist=dbq("SELECT id,fecha,tipo,cop,usd,notas FROM cartera_fx ORDER BY fecha DESC,id DESC LIMIT 50");
+  const hl=$('fx-hist-list');hl.innerHTML='';
+  if(!hist.length){hl.innerHTML='<div style="font-size:11px;color:var(--text3);padding:10px;text-align:center">Sin operaciones</div>';return;}
+  hist.forEach(r=>{
+    const el=document.createElement('div');el.className='fx-row';
+    el.style.cssText='align-items:center';
+    el.innerHTML=`
+      <span style="width:52px;color:var(--text3)">${r.fecha.slice(5)}</span>
+      <span style="width:48px;color:${r.tipo==='COMPRA'?'var(--green)':'var(--red)'}">${r.tipo.toLowerCase()}</span>
+      <span style="flex:1;text-align:right;color:var(--text2)">${cop(r.cop,true)}</span>
+      <span style="width:54px;text-align:right;color:var(--teal)">${r.usd.toFixed(1)}</span>
+      <span style="width:24px;text-align:right">
+        <button onclick="openFxSheet(${JSON.stringify(r).replace(/"/g,"'")})" style="background:transparent;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:2px">✏</button>
+      </span>`;
+    // Swipe para eliminar
+    let startX=0;
+    el.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;},{passive:true});
+    el.addEventListener('touchend',e=>{
+      if(e.changedTouches[0].clientX-startX < -60){
+        if(confirm(`¿Eliminar operación ${r.tipo} ${r.fecha}?`)){
+          S.db.run('DELETE FROM cartera_fx WHERE id=?',[r.id]);
+          markDirty();renderFX();pushNow();
+        }
+      }
+    });
+    hl.appendChild(el);
+  });
+}
+
+// ── RENDER AÑO ────────────────────────────────────────────
+function renderAño(){
+  const rows=dbq(`SELECT mes,
+    COALESCE(SUM(CASE WHEN categoria!='Egresos' THEN valor ELSE 0 END),0) as ing,
+    COALESCE(SUM(CASE WHEN categoria='Egresos' THEN valor ELSE 0 END),0) as egr
+    FROM entradas WHERE año=? GROUP BY mes`,[S.año]);
+  const map={};rows.forEach(r=>map[r.mes]=r);
+  const tI=rows.reduce((a,r)=>a+r.ing,0);
+  const tE=rows.reduce((a,r)=>a+r.egr,0);
+  const tB=tI-tE;
+  $('a-ing').textContent=cop(tI,true)||'$0';
+  $('a-egr').textContent=cop(tE,true)||'$0';
+  $('a-bal').textContent=cop(tB,true)||'$0';
+  $('a-bal').style.color=tB>=0?'var(--blue)':'var(--red)';
+
+  // Gráfica XY SVG
+  const svg=$('año-chart');
+  const W=svg.parentElement.clientWidth||340;
+  const H=120,PL=42,PR=8,PT=10,PB=24,cW=W-PL-PR,cH=H-PT-PB;
+  const maxVal=Math.max(...Array.from({length:12},(_,i)=>{const d=map[i+1];return d?Math.max(d.ing,d.egr):0;}),1);
+  const px=m=>PL+(m-1)/(11)*cW;
+  const py=v=>PT+cH-(v/maxVal)*cH;
+  const mesesData=Array.from({length:12},(_,i)=>i+1).filter(m=>map[m]);
+  const ptsI=mesesData.map(m=>`${px(m)},${py(map[m].ing)}`).join(' ');
+  const ptsE=mesesData.map(m=>`${px(m)},${py(map[m].egr)}`).join(' ');
+  const gridY=[0,0.25,0.5,0.75,1].map(t=>{
+    const y=PT+cH-t*cH;
+    return `<line x1="${PL}" y1="${y}" x2="${W-PR}" y2="${y}" stroke="#1E1E1E" stroke-width="1"/>
+            <text x="${PL-4}" y="${y+3}" text-anchor="end" font-size="8" fill="#555" font-family="monospace">${t===0?'0':cop(maxVal*t)}</text>`;
+  }).join('');
+  const xLbls=Array.from({length:12},(_,i)=>{
+    const m=i+1,lbl=['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][m];
+    return `<text x="${px(m)}" y="${PT+cH+14}" text-anchor="middle" font-size="8" fill="${map[m]?'#888':'#333'}" font-family="monospace">${lbl}</text>`;
+  }).join('');
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.innerHTML=`${gridY}${xLbls}
+    ${ptsI?`<polyline points="${ptsI}" fill="none" stroke="#4CAF75" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`:''}
+    ${ptsE?`<polyline points="${ptsE}" fill="none" stroke="#E05555" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`:''}
+    ${mesesData.map(m=>`<circle cx="${px(m)}" cy="${py(map[m].ing)}" r="3" fill="#4CAF75"/><circle cx="${px(m)}" cy="${py(map[m].egr)}" r="3" fill="#E05555"/>`).join('')}`;
+
+  // Tabla
+  const MNOMBRES=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const tb=$('año-tbody');tb.innerHTML='';
+  for(let m=1;m<=12;m++){
+    const d=map[m];const bal=d?d.ing-d.egr:0;
+    const tr=document.createElement('tr');
+    if(d) tr.innerHTML=`<td>${MNOMBRES[m].slice(0,3)}</td><td class="v-ing">${cop(d.ing,true)}</td><td class="v-egr">${cop(d.egr,true)}</td><td class="${bal>=0?'v-pos':'v-neg'}">${cop(bal,true)}</td>`;
+    else  tr.innerHTML=`<td style="color:var(--text3)">${MNOMBRES[m].slice(0,3)}</td><td>—</td><td>—</td><td>—</td>`;
+    tb.appendChild(tr);
+  }
+  const tot=document.createElement('tr');tot.className='tot-row';
+  tot.innerHTML=`<td>Total</td><td class="v-ing">${cop(tI,true)}</td><td class="v-egr">${cop(tE,true)}</td><td class="${tB>=0?'v-pos':'v-neg'}">${cop(tB,true)}</td>`;
+  tb.appendChild(tot);
+}
+
+// ── BÚSQUEDA ──────────────────────────────────────────────
+let _searchTimer=null;
+function openSearch(){
+  $('search-overlay').classList.remove('hidden');
+  setTimeout(()=>$('search-inp').focus(),50);
+}
+function closeSearch(){
+  $('search-overlay').classList.add('hidden');
+  $('search-inp').value='';
+  $('search-results').innerHTML='<div class="search-empty">Escribe para buscar en todas las entradas</div>';
+  $('search-count').classList.add('hidden');
+}
+function closeSearchOnBg(e){if(e.target===$('search-overlay'))closeSearch();}
+function onSearchInput(){
+  clearTimeout(_searchTimer);
+  _searchTimer=setTimeout(doSearch,250);
+}
+function doSearch(){
+  const q=$('search-inp').value.trim();
+  const res=$('search-results');
+  const cnt=$('search-count');
+  if(q.length<2){
+    res.innerHTML='<div class="search-empty">Escribe al menos 2 caracteres</div>';
+    cnt.classList.add('hidden');return;
+  }
+  const rows=dbq(`SELECT mes,dia,categoria,descripcion,valor FROM entradas
+    WHERE año=? AND descripcion LIKE ? ORDER BY mes DESC,dia DESC,id DESC LIMIT 100`,
+    [S.año,'%'+q+'%']);
+  if(!rows.length){
+    res.innerHTML=`<div class="search-empty">Sin resultados para "${q}"</div>`;
+    cnt.classList.add('hidden');return;
+  }
+  const MNOMBRES=['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  res.innerHTML=rows.map(r=>{
+    const color=CAT_COLOR[r.categoria]||'var(--text3)';
+    const isEgr=r.categoria==='Egresos';
+    return `<div class="search-item">
+      <div class="search-item-dot" style="background:${color}"></div>
+      <div class="search-item-body">
+        <div class="search-item-desc">${r.descripcion||'—'}</div>
+        <div class="search-item-meta">${MNOMBRES[r.mes]} ${r.dia} · ${r.categoria}</div>
+      </div>
+      <div class="search-item-val" style="color:${isEgr?'var(--red)':'var(--green)'}">${cop(r.valor,true)}</div>
+    </div>`;
+  }).join('');
+  cnt.textContent=`${rows.length} resultado${rows.length!==1?'s':''}`;
+  cnt.classList.remove('hidden');
 }
 
 // DRIVE MODAL
