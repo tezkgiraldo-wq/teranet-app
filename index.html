@@ -704,15 +704,29 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
     <div class="view" id="v-fx">
       <div class="scroll">
         <div class="card fx-accent">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
             <div class="lbl" style="color:var(--teal)88">USD en Binance</div>
-            <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-size:9px;color:var(--text3)">tasa</span>
-              <input id="fx-tasa-inp" style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:var(--mono);font-size:10px;color:var(--gold);width:72px;outline:none;text-align:right" onblur="saveTasa(this.value)">
-            </div>
+            <button onclick="fetchTasaOnline()" id="fx-online-btn" style="display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:4px 8px;cursor:pointer;color:var(--text3);font-size:9px;letter-spacing:0.06em;text-transform:uppercase">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              <span id="fx-online-lbl">tasa online</span>
+            </button>
           </div>
           <div class="val" id="fx-usd" style="color:var(--teal);font-size:22px">— USD</div>
           <div id="fx-cop-eq" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px">—</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+            <div>
+              <div class="lbl" style="margin-bottom:3px">Tasa USD manual</div>
+              <input id="fx-tasa-inp" inputmode="numeric" placeholder="$0"
+                style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--gold);width:100%;outline:none;text-align:right"
+                onblur="saveTasa(this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+            </div>
+            <div>
+              <div class="lbl" style="margin-bottom:3px">USD reales Binance</div>
+              <input id="fx-usd-real-inp" inputmode="decimal" placeholder="auto"
+                style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--teal);width:100%;outline:none;text-align:right"
+                onblur="saveUsdReal(this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+            </div>
+          </div>
         </div>
         <div class="grid2" id="fx-stats"></div>
         <button class="fx-add-btn" onclick="openFxSheet()">+ registrar operación</button>
@@ -1903,6 +1917,50 @@ function saveTasa(val){
   S.db.run("INSERT OR REPLACE INTO config VALUES('tasa_usd',?)",[String(t)]);
   markDirty();renderFX();pushNow();
 }
+
+function saveUsdReal(val){
+  const raw=val.replace(/\./g,'').replace(/,/g,'.').trim();
+  const v=parseFloat(raw);
+  if(isNaN(v)||v<0){
+    // Vacío — volver a automático
+    S.db.run("DELETE FROM balance_personal WHERE clave='usd_reales_binance'");
+  } else {
+    S.db.run("INSERT OR REPLACE INTO balance_personal VALUES('usd_reales_binance',?)",[v]);
+  }
+  markDirty();renderFX();pushNow();
+}
+
+async function fetchTasaOnline(){
+  const btn=$('fx-online-btn');
+  const lbl=$('fx-online-lbl');
+  lbl.textContent='buscando...';
+  btn.style.color='var(--blue)';
+
+  const fuentes=[
+    ()=>fetch('https://api.exchangerate-api.com/v4/latest/USD').then(r=>r.json()).then(d=>d.rates.COP),
+    ()=>fetch('https://api.frankfurter.app/latest?from=USD&to=COP').then(r=>r.json()).then(d=>d.rates.COP),
+    ()=>fetch('https://api.fxratesapi.com/latest?base=USD&currencies=COP').then(r=>r.json()).then(d=>d.rates.COP),
+  ];
+
+  for(const fn of fuentes){
+    try{
+      const tasa=await fn();
+      if(tasa&&tasa>100){
+        const t=Math.round(tasa);
+        S.db.run("INSERT OR REPLACE INTO config VALUES('tasa_usd',?)",[String(t)]);
+        markDirty();renderFX();pushNow();
+        lbl.textContent='tasa online';
+        btn.style.color='';
+        toast(`✓ Tasa actualizada: $${t.toLocaleString('es-CO')}`);
+        return;
+      }
+    }catch{}
+  }
+  lbl.textContent='tasa online';
+  btn.style.color='var(--red)';
+  setTimeout(()=>btn.style.color='',2000);
+  toast('No se pudo obtener la tasa');
+}
 function guardarFx(){
   const fecha=$('fx-fecha').value;
   const cop_v=parseNum($('fx-cop').value);
@@ -1938,6 +1996,13 @@ function renderFX(){
   const tasaInp=$('fx-tasa-inp');
   if(tasaInp&&document.activeElement!==tasaInp)
     tasaInp.value=Math.round(tasa).toLocaleString('es-CO');
+  // USD real input
+  const usdRealInp=$('fx-usd-real-inp');
+  if(usdRealInp&&document.activeElement!==usdRealInp){
+    const stored=dbq("SELECT valor FROM balance_personal WHERE clave='usd_reales_binance'");
+    usdRealInp.value=stored.length?stored[0].valor.toFixed(2):'';
+    usdRealInp.placeholder=`auto (${tu.toFixed(2)})`;
+  }
   $('fx-stats').innerHTML=`
     <div class="card"><div class="lbl">COP invertido</div><div class="val" style="font-size:14px">${cop(tc,true)||'$0'}</div></div>
     <div class="card"><div class="lbl">Tasa prom.</div><div class="val" style="font-size:14px">$${Math.round(tasaProm).toLocaleString('es-CO')||'—'}</div></div>
