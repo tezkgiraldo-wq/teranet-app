@@ -1842,11 +1842,43 @@ async function loadApp(){
 async function init(){
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
   await initSQL();
+
+  // Cargar script GSI con timeout — si no hay internet no esperar forever
   await new Promise(resolve=>{
+    if(!_isOnline){ resolve(); return; } // offline — saltar directamente
     const s=document.createElement('script');
     s.src='https://accounts.google.com/gsi/client';
-    s.onload=resolve;document.head.appendChild(s);
+    s.onload=resolve;
+    s.onerror=resolve; // error también resuelve
+    document.head.appendChild(s);
+    setTimeout(resolve, 4000); // timeout 4s
   });
+
+  if(!_isOnline){
+    // Offline — intentar cargar con datos locales sin auth
+    const hasLocal = await idbLoad('db-'+new Date().getFullYear());
+    if(hasLocal){
+      S.db = new S.SQL.Database(hasLocal); initSchema();
+      $('app').style.display='flex';
+      buildPeriodSelectors();
+      await checkPin();
+      go('inicio');
+      $('loader').classList.add('out');
+      setTimeout(()=>$('loader').style.display='none',500);
+      toast('Modo offline — datos locales');
+      setSyncDot('err');
+    } else {
+      // Sin datos locales ni internet — mostrar pantalla de login con aviso
+      $('loader').classList.add('out');
+      setTimeout(()=>{
+        $('loader').style.display='none';
+        $('auth-screen').classList.add('show');
+        toast('Sin conexión — inicia sesión al menos una vez con internet');
+      },500);
+    }
+    return;
+  }
+
   if(checkStoredToken()){await loadApp();}
   else{
     $('loader').classList.add('out');
