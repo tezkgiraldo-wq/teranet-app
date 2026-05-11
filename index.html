@@ -221,17 +221,30 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
 
 /* ── PULL TO REFRESH ── */
 .ptr-indicator{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;
-  transition:opacity .2s;pointer-events:none;z-index:50;
+  position:absolute;top:0;left:50%;transform:translateX(-50%) translateY(-60px);
+  display:flex;align-items:center;gap:7px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:20px;padding:7px 14px;
+  box-shadow:0 4px 16px rgba(0,0,0,.5);
+  pointer-events:none;z-index:50;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
   opacity:0;
+  white-space:nowrap;
 }
-.ptr-spinner{
-  width:28px;height:28px;border-radius:50%;
-  border:2px solid var(--border2);border-top-color:var(--blue);
-  margin-top:8px;
+.ptr-indicator.visible{
+  opacity:1;
+  transform:translateX(-50%) translateY(10px);
 }
-.ptr-spinner.spin{animation:ptr-spin .6s linear infinite}
+.ptr-arrow{
+  font-size:15px;
+  color:var(--text3);
+  transition:transform .3s, color .2s;
+  display:inline-block;
+}
+.ptr-arrow.ready{transform:rotate(180deg);color:var(--blue)}
+.ptr-arrow.spin{animation:ptr-spin .6s linear infinite;color:var(--blue)}
+.ptr-text{font-size:11px;color:var(--text3);letter-spacing:0.04em}
+.ptr-text.ready,.ptr-text.syncing{color:var(--blue)}
 @keyframes ptr-spin{to{transform:rotate(360deg)}}
 .bal-prv-bar{
   display:flex;align-items:center;justify-content:flex-end;
@@ -1227,33 +1240,38 @@ function toggleBalPrivacy(){
   let startY=0, pulling=false, triggered=false;
   const THRESHOLD=65;
 
-  // Crear indicador una sola vez
   const ind = document.createElement('div');
   ind.className='ptr-indicator';
-  ind.innerHTML='<div class="ptr-spinner" id="ptr-spin"></div>';
+  ind.innerHTML='<span class="ptr-arrow" id="ptr-arrow">↓</span><span class="ptr-text" id="ptr-text">bajar para sincronizar</span>';
   document.getElementById('content').appendChild(ind);
-  const spinner=ind.querySelector('.ptr-spinner');
+  const arrow=ind.querySelector('#ptr-arrow');
+  const txt=ind.querySelector('#ptr-text');
+
+  function setState(s){
+    ind.className='ptr-indicator'+(s!=='hidden'?' visible':'');
+    arrow.className='ptr-arrow'+(s==='ready'||s==='syncing'?' '+(s==='syncing'?'spin':'ready'):'');
+    txt.className='ptr-text'+(s==='ready'||s==='syncing'?' '+s:'');
+    if(s==='pulling')  txt.textContent='bajar para sincronizar';
+    if(s==='ready')    txt.textContent='soltar para sincronizar';
+    if(s==='syncing')  txt.textContent='sincronizando...';
+    if(s==='hidden')   txt.textContent='bajar para sincronizar';
+  }
 
   document.addEventListener('touchstart', e=>{
-    // Solo si el scroll del view está en top=0
     const view=document.querySelector('.view.active');
     const sc=view&&view.querySelector('.scroll');
     if(!sc||sc.scrollTop>0) return;
     startY=e.touches[0].clientY;
-    pulling=true;
-    triggered=false;
+    pulling=true; triggered=false;
   },{passive:true});
 
   document.addEventListener('touchmove', e=>{
     if(!pulling) return;
     const dy=e.touches[0].clientY - startY;
-    if(dy<=0){pulling=false;return;}
-    const progress=Math.min(dy/THRESHOLD,1);
-    ind.style.opacity=progress;
-    ind.style.top=(dy*0.4)+'px';
-    if(progress>=1&&!triggered){
+    if(dy<=0){pulling=false;setState('hidden');return;}
+    setState(dy>=THRESHOLD?'ready':'pulling');
+    if(dy>=THRESHOLD&&!triggered){
       triggered=true;
-      spinner.classList.add('spin');
       if(navigator.vibrate) navigator.vibrate(20);
     }
   },{passive:true});
@@ -1262,13 +1280,11 @@ function toggleBalPrivacy(){
     if(!pulling) return;
     pulling=false;
     if(triggered){
-      // Sync Drive + refresh vista
+      setState('syncing');
       try{await syncDrive();}catch{}
       refreshView();
     }
-    ind.style.opacity=0;
-    ind.style.top=0;
-    spinner.classList.remove('spin');
+    setTimeout(()=>setState('hidden'), triggered?800:200);
     triggered=false;
   });
 })();
@@ -2022,6 +2038,8 @@ function guardarEntrada(){
   if(orden>=15){toast('Máximo 15 por categoría/día');return;}
   S.db.run(`INSERT INTO entradas(año,mes,dia,categoria,descripcion,valor,orden)VALUES(?,?,?,?,?,?,?)`,
     [S.año,S.mes,dia,S.activeCat,desc,val,orden]);
+  // Haptic de confirmación — patrón corto-corto
+  if(navigator.vibrate) navigator.vibrate([30,30,30]);
   markDirty(); closeSheet();
   toast(`✓ Registrado en ${S.activeCat}`);
   refreshView();
