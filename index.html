@@ -722,17 +722,153 @@ function setCloudState(s){
 }
 
 async function pushNow(){
+  if(!_isOnline || !S.accessToken){
+    // Offline — solo persistir local
+    await persistLocal();
+    setSyncDot('err');
+    return;
+  }
   setCloudState('syncing'); setSyncDot('syncing');
   try{
     await uploadDb(S.db.export());
+    await persistLocal(); // sincronizar IndexedDB con lo subido
     S.dirty=false; S.lastSync=new Date();
     setCloudState('ok'); setSyncDot('ok');
     const el=$('d-lastsync');
     if(el) el.textContent=`Última sync: ${S.lastSync.toLocaleTimeString('es-CO')}`;
   }catch(e){
+    await persistLocal(); // guardar local aunque falle Drive
     setCloudState('err'); setSyncDot('err');
-    toast('Error al subir: '+e.message);
+    toast('Sin conexión — guardado local');
   }
+}
+
+// ══════════════════════════════════════════════════════════════
+// OFFLINE — IndexedDB + cola de sync
+// ══════════════════════════════════════════════════════════════
+const IDB_NAME    = 'teranet-offline';
+const IDB_VERSION = 1;
+const IDB_STORE   = 'db-cache';
+
+function idbOpen(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(IDB_NAME,IDB_VERSION);
+    req.onupgradeneeded=e=>{
+      e.target.result.createObjectStore(IDB_STORE);
+    };
+    req.onsuccess=e=>resolve(e.target.result);
+    req.onerror=e=>reject(e.target.error);
+  });
+}
+
+async function idbSave(key,data){
+  try{
+    const db=await idbOpen();
+    return new Promise((resolve,reject)=>{
+      const tx=db.transaction(IDB_STORE,'readwrite');
+      tx.objectStore(IDB_STORE).put(data,key);
+      tx.oncomplete=resolve;
+      tx.onerror=e=>reject(e.target.error);
+    });
+  }catch(e){console.warn('idbSave error:',e);}
+}
+
+async function idbLoad(key){
+  try{
+    const db=await idbOpen();
+    return new Promise((resolve,reject)=>{
+      const tx=db.transaction(IDB_STORE,'readonly');
+      const req=tx.objectStore(IDB_STORE).get(key);
+      req.onsuccess=e=>resolve(e.target.result||null);
+      req.onerror=e=>reject(e.target.error);
+    });
+  }catch(e){return null;}
+}
+
+// Clave de la DB en IndexedDB
+function idbKey(){ return `db-${S.año}`; }
+
+// Guardar DB local tras cada cambio
+async function persistLocal(){
+  if(!S.db) return;
+  try{
+    const data=S.db.export();
+    await idbSave(idbKey(), data);
+    await idbSave(idbKey()+'-ts', Date.now());
+  }catch(e){console.warn('persistLocal:',e);}
+}
+
+// Cargar DB desde IndexedDB (offline)
+async function loadDbFromLocal(){
+  const data=await idbLoad(idbKey());
+  if(data){
+    S.db=new S.SQL.Database(data);
+    initSchema();
+    return true;
+  }
+  return false;
+}
+
+// ── Estado de conexión ─────────────────────────────────────
+let _isOnline = navigator.onLine;
+
+function updateOnlineStatus(){
+  const wasOffline = !_isOnline;
+  _isOnline = navigator.onLine;
+  if(_isOnline){
+    setSyncDot(_isOnline?'ok':'err');
+    // Al reconectar — sync si hay cambios pendientes
+    if(wasOffline && S.db){
+      toast('Conexión restaurada — sincronizando...');
+      syncOnReconnect();
+    }
+  } else {
+    setSyncDot('err');
+    toast('Sin conexión — trabajando offline');
+  }
+}
+
+window.addEventListener('online',  updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+
+async function syncOnReconnect(){
+  if(!S.accessToken||!S.db) return;
+  // Refrescar token si hace falta
+  try{ await refreshTokenIfNeeded(); }catch{ return; }
+  try{
+    // Comparar timestamp local vs Drive
+    const localTs  = await idbLoad(idbKey()+'-ts') || 0;
+    const file      = await findDbFile(dbFileName());
+    if(file){
+      const driveTs = new Date(file.modifiedTime).getTime();
+      if(driveTs > localTs && S.dirty){
+        // Conflicto — Drive más nuevo y tenemos cambios locales
+        // Subir local (preferencia local sobre Drive en conflicto)
+        await pushNow();
+      } else if(driveTs > localTs){
+        // Drive más nuevo, sin cambios locales — bajar
+        const data=await downloadDb(file.id);
+        S.db=new S.SQL.Database(data);
+        initSchema();
+        await persistLocal();
+        S.dirty=false; S.lastSync=new Date();
+        setSyncDot('ok'); refreshView();
+      } else if(S.dirty){
+        // Local más nuevo — subir
+        await pushNow();
+      }
+    } else if(S.dirty){
+      await pushNow();
+    }
+  }catch(e){ console.warn('syncOnReconnect:',e); }
+}
+
+// ── Sobreescribir markDirty para persistir local también ──
+function markDirty(){
+  S.dirty=true;
+  persistLocal(); // guardar en IndexedDB inmediatamente
+  if(_isOnline && S.accessToken) pushNow();
+  else setSyncDot('err'); // offline — badge naranja
 }
 
 // PERIOD SELECTORS
@@ -895,10 +1031,7 @@ async function drivePull(){
   }catch(e){setCloudState('err');setSyncDot('err');toast('Error: '+e.message);}
 }
 
-function markDirty(){
-  S.dirty=true;
-  setCloudState('dirty');
-}
+function _unused(){
 
 setInterval(()=>{if(S.dirty&&S.accessToken&&S.db)pushNow();},15*60*1000);
 
@@ -940,9 +1073,39 @@ function dbq(sql,p=[]){
   }catch{return[];}
 }
 async function loadDbFromDrive(){
-  const file=await findDbFile(dbFileName());
-  if(file){const data=await downloadDb(file.id);S.db=new S.SQL.Database(data);initSchema();}
-  else{S.db=new S.SQL.Database();initSchema();}
+  // Sin conexión o sin token — cargar desde IndexedDB
+  if(!_isOnline || !S.accessToken){
+    const loaded = await loadDbFromLocal();
+    if(!loaded){ S.db=new S.SQL.Database(); initSchema(); }
+    return;
+  }
+  try{
+    const file=await findDbFile(dbFileName());
+    if(file){
+      // Comparar con local — si local es más nuevo y hay cambios, usar local
+      const localTs = await idbLoad(idbKey()+'-ts') || 0;
+      const driveTs = new Date(file.modifiedTime).getTime();
+      if(localTs > driveTs && S.dirty){
+        // Local más nuevo — cargar local y subir
+        const loaded = await loadDbFromLocal();
+        if(!loaded){ const data=await downloadDb(file.id); S.db=new S.SQL.Database(data); initSchema(); }
+        return;
+      }
+      const data=await downloadDb(file.id);
+      S.db=new S.SQL.Database(data);
+      initSchema();
+      await persistLocal();
+    } else {
+      // No existe en Drive — intentar local
+      const loaded = await loadDbFromLocal();
+      if(!loaded){ S.db=new S.SQL.Database(); initSchema(); }
+    }
+  }catch(e){
+    // Falla Drive — cargar local
+    console.warn('Drive falló, cargando local:',e);
+    const loaded = await loadDbFromLocal();
+    if(!loaded){ S.db=new S.SQL.Database(); initSchema(); }
+  }
 }
 
 // PRIVACIDAD BALANCE
@@ -1077,7 +1240,7 @@ async function pinSubmit(){
     if(val===_pinSetup1){
       const hash=await sha256(val);
       S.db.run("INSERT OR REPLACE INTO config VALUES('pin_hash',?)",[hash]);
-      S.dirty=true;pushNow();
+      markDirty();
       document.getElementById('pin-screen').classList.add('hidden');
       if(_pinResolve)_pinResolve(true);
     } else {
@@ -1647,17 +1810,32 @@ function closeDriveModal(){$('drive-modal').classList.add('hidden');}
 async function loadApp(){
   $('app').style.display='flex';
   buildPeriodSelectors();
-  setSyncDot('syncing');
-  try{
-    await loadDbFromDrive();
-    S.dirty=false;S.lastSync=new Date();setSyncDot('ok');
-  }catch(e){setSyncDot('err');toast('Error cargando DB');}
 
-  // PIN lock — verificar antes de mostrar la app
+  if(!_isOnline){
+    // Offline — cargar desde IndexedDB directamente
+    setSyncDot('err');
+    const loaded = await loadDbFromLocal();
+    if(!loaded){ S.db=new S.SQL.Database(); initSchema(); }
+    toast('Modo offline — datos locales');
+  } else {
+    setSyncDot('syncing');
+    try{
+      await loadDbFromDrive();
+      S.dirty=false; S.lastSync=new Date(); setSyncDot('ok');
+    }catch(e){
+      // Falla Drive — usar local
+      setSyncDot('err');
+      const loaded = await loadDbFromLocal();
+      if(!loaded){ S.db=new S.SQL.Database(); initSchema(); }
+      toast('Error Drive — usando datos locales');
+    }
+  }
+
+  // PIN lock
   await checkPin();
 
   go('inicio');
-  const ld=$('loader');ld.classList.add('out');
+  const ld=$('loader'); ld.classList.add('out');
   setTimeout(()=>ld.style.display='none',500);
 }
 
