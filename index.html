@@ -1037,7 +1037,18 @@ setInterval(()=>{if(S.dirty&&S.accessToken&&S.db)pushNow();},15*60*1000);
 
 // SQL
 async function initSQL(){
-  S.SQL=await initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`});
+  try{
+    S.SQL=await initSqlJs({locateFile:f=>`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/${f}`});
+  }catch(e){
+    // SQL.js no pudo cargar — puede ser la primera vez offline
+    document.getElementById('loader').innerHTML=`
+      <div style="text-align:center;padding:20px">
+        <div style="font-family:monospace;font-size:20px;font-weight:700;color:#E8E4DC;margin-bottom:8px">TERA<span style="color:#4B9EFF">NET</span></div>
+        <div style="color:#E05555;font-size:12px;margin-bottom:6px">Sin conexión</div>
+        <div style="color:#666;font-size:11px;line-height:1.6">Abre la app al menos una vez<br>con internet para habilitar el modo offline.</div>
+      </div>`;
+    throw e;
+  }
 }
 function initSchema(){
   S.db.run(`
