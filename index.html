@@ -1905,14 +1905,16 @@ function renderBalance(){
   const efectivo=bm.efectivo||0;
   const activos=cuentaBc+usdCop+arriendo+efectivo;
 
-  // Pago actual mes (gastos fijos pendientes)
+  // Pago actual mes (gastos fijos pendientes) — con override manual
   const pagos=dbq(`SELECT gf.valor,COALESCE(pf.pagado,0) as pagado FROM gastos_fijos gf
     LEFT JOIN pagos_fijos pf ON gf.id=pf.gasto_id AND pf.año=? AND pf.mes=?
     WHERE gf.activo=1`,[S.año,S.mes]);
-  const pend=pagos.filter(p=>!p.pagado).reduce((a,p)=>a+p.valor,0);
+  const pendAuto=pagos.filter(p=>!p.pagado).reduce((a,p)=>a+p.valor,0);
+  const pend=bm.pago_actual_override!=null?Number(bm.pago_actual_override):pendAuto;
 
-  // Próximo mes (total gastos fijos)
-  const proxMes=pagos.reduce((a,p)=>a+p.valor,0);
+  // Próximo mes (total gastos fijos) — con override manual
+  const proxMesAuto=pagos.reduce((a,p)=>a+p.valor,0);
+  const proxMes=bm.prox_mes_override!=null?Number(bm.prox_mes_override):proxMesAuto;
 
   // Deudas JSON
   let deudas=[];
