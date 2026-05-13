@@ -735,6 +735,17 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
           <div class="card"><div class="lbl" style="color:var(--purple)88">Próx. mes</div><div class="val" id="bal-prox" style="color:var(--purple);font-size:14px">$0</div></div>
         </div>
 
+        <!-- TRANSFERENCIAS -->
+        <div style="background:var(--bg1);border:1px solid var(--teal)33;border-radius:12px;margin-bottom:8px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border)">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal)">TRANSFERENCIAS</div>
+            <button onclick="openTransfSheet()" style="background:var(--teal)22;border:1px solid var(--teal)44;border-radius:6px;padding:3px 10px;color:var(--teal);font-size:10px;font-weight:600;cursor:pointer">+ nueva</button>
+          </div>
+          <div id="transf-hist-pwa" style="min-height:32px">
+            <div style="font-size:10px;color:var(--text3);text-align:center;padding:10px">Sin transferencias</div>
+          </div>
+        </div>
+
         <!-- MESES DE AHORRO — altura fija -->
         <div style="background:var(--bg1);border:1px solid var(--border);border-radius:12px;margin-bottom:8px">
           <div style="font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);text-align:center;padding:8px 12px;border-bottom:1px solid var(--border)">MESES DE AHORRO</div>
@@ -828,6 +839,51 @@ input,select{font-family:inherit;font-size:inherit;color:inherit}
           </div>
           <div id="fx-hist-list"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- TRANSFERENCIA SHEET -->
+    <div class="fx-sheet hidden" id="transf-sheet" onclick="if(event.target===this)closeTransfSheet()">
+      <div class="fx-sheet-inner">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:14px;font-weight:600;color:var(--teal)">⇄ Nueva transferencia</div>
+          <button onclick="closeTransfSheet()" style="background:transparent;border:none;color:var(--text3);font-size:18px;cursor:pointer">✕</button>
+        </div>
+        <div class="fx-type-toggle">
+          <select id="ts-desde" class="s-inp" onchange="tsCheckTasa()" style="margin:0">
+            <option value="cuenta_bc">Cuenta BC</option>
+            <option value="usd_binance">USD Binance</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="arriendo_reserva">Arriendo res.</option>
+          </select>
+          <select id="ts-hacia" class="s-inp" onchange="tsCheckTasa()" style="margin:0">
+            <option value="usd_binance">USD Binance</option>
+            <option value="cuenta_bc">Cuenta BC</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="arriendo_reserva">Arriendo res.</option>
+          </select>
+        </div>
+        <div>
+          <div class="s-lbl">Monto COP</div>
+          <input id="ts-monto" class="s-inp" inputmode="numeric" placeholder="0" oninput="tsRecalc()">
+        </div>
+        <div id="ts-tasa-box" style="background:var(--teal)11;border:1px solid var(--teal)33;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:var(--teal)">Tasa USD</span>
+            <input id="ts-tasa" style="flex:1;background:transparent;border:none;color:var(--gold);font-family:var(--mono);font-size:13px;outline:none;text-align:right" inputmode="numeric" oninput="tsRecalc()">
+          </div>
+          <div id="ts-usd-calc" style="font-size:10px;color:var(--teal)88;font-family:var(--mono);text-align:right"></div>
+          <div style="font-size:9px;color:var(--teal)88">→ Se registra en Inversiones FX</div>
+        </div>
+        <div>
+          <div class="s-lbl">Fecha</div>
+          <input id="ts-fecha" type="date" class="s-inp">
+        </div>
+        <div>
+          <div class="s-lbl">Notas (opcional)</div>
+          <input id="ts-notas" class="s-inp" placeholder="ej. Compra BTC, ahorro...">
+        </div>
+        <button class="s-btn" style="background:var(--teal)" onclick="guardarTransfPwa()">✓ Registrar transferencia</button>
       </div>
     </div>
 
@@ -1199,6 +1255,16 @@ function initSchema(){
       fecha TEXT NOT NULL,año INTEGER NOT NULL,mes INTEGER NOT NULL,tipo TEXT NOT NULL,
       cop REAL NOT NULL,tasa_dia REAL NOT NULL,usd REAL NOT NULL,
       tasa_prom_compra REAL,gp_realizada REAL,plataforma TEXT DEFAULT '',notas TEXT DEFAULT '');
+    CREATE TABLE IF NOT EXISTS transferencias(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      fecha TEXT NOT NULL,
+      desde TEXT NOT NULL,
+      hacia TEXT NOT NULL,
+      monto_cop REAL NOT NULL,
+      tasa REAL,
+      usd REAL,
+      notas TEXT DEFAULT ''
+    );
     CREATE TABLE IF NOT EXISTS config(clave TEXT PRIMARY KEY,valor TEXT);
     CREATE TABLE IF NOT EXISTS balance_personal(clave TEXT PRIMARY KEY,valor REAL DEFAULT 0);
   `);
@@ -2005,6 +2071,8 @@ function renderBalance(){
   const totalDeudoresEl=$('bal-deudores-total');
   totalDeudoresEl.textContent=cop(totalDeudores,true)||'$0';
   totalDeudoresEl.style.color=totalDeudores?'var(--red)':'var(--text3)';
+
+  renderTransfHistPwa();
 }
 
 // SHEET — registro rápido
@@ -2312,6 +2380,94 @@ function doSearch(){
   }).join('');
   cnt.textContent=`${rows.length} resultado${rows.length!==1?'s':''}`;
   cnt.classList.remove('hidden');
+}
+
+// ── TRANSFERENCIAS INTERNAS ───────────────────────────────
+const TS_LABEL={cuenta_bc:'Cuenta BC',usd_binance:'USD Binance',efectivo:'Efectivo',arriendo_reserva:'Arriendo res.'};
+const TS_COLOR={cuenta_bc:'var(--blue)',usd_binance:'var(--teal)',efectivo:'var(--green)',arriendo_reserva:'var(--orange)'};
+
+function openTransfSheet(){
+  const tasa=dbq("SELECT valor FROM config WHERE clave='tasa_usd'");
+  $('ts-tasa').value=tasa.length?Math.round(tasa[0].valor).toLocaleString('es-CO'):'4100';
+  $('ts-fecha').value=new Date().toISOString().slice(0,10);
+  $('ts-monto').value='';$('ts-notas').value='';
+  tsCheckTasa();
+  $('transf-sheet').classList.remove('hidden');
+}
+function closeTransfSheet(){$('transf-sheet').classList.add('hidden');}
+
+function tsCheckTasa(){
+  const d=$('ts-desde').value,h=$('ts-hacia').value;
+  $('ts-tasa-box').style.display=(d==='usd_binance'||h==='usd_binance')?'flex':'none';
+  tsRecalc();
+}
+
+function tsRecalc(){
+  const monto=parseNum($('ts-monto').value)||0;
+  const tasa=parseNum($('ts-tasa').value)||0;
+  const el=$('ts-usd-calc');
+  if(el) el.textContent=(monto&&tasa)?`≈ ${(monto/tasa).toFixed(2)} USD`:'';
+}
+
+function guardarTransfPwa(){
+  const desde=$('ts-desde').value,hacia=$('ts-hacia').value;
+  const monto=parseNum($('ts-monto').value);
+  const tasa=parseNum($('ts-tasa').value)||null;
+  const fecha=$('ts-fecha').value;
+  const notas=$('ts-notas').value.trim();
+  if(desde===hacia){toast('Las cuentas deben ser distintas');return;}
+  if(!monto){toast('Ingresa el monto');return;}
+  const usdInv=desde==='usd_binance'||hacia==='usd_binance';
+  const usd=(usdInv&&tasa)?monto/tasa:null;
+
+  // 1. Guardar transferencia
+  S.db.run(`INSERT INTO transferencias(fecha,desde,hacia,monto_cop,tasa,usd,notas)VALUES(?,?,?,?,?,?,?)`,
+    [fecha,desde,hacia,monto,tasa,usd,notas]);
+
+  // 2. Actualizar saldos balance_personal
+  const COP=['cuenta_bc','efectivo','arriendo_reserva'];
+  if(COP.includes(desde)){
+    const v=dbq("SELECT valor FROM balance_personal WHERE clave=?",[desde]);
+    const cur=v.length?Number(v[0].valor):0;
+    S.db.run("INSERT OR REPLACE INTO balance_personal VALUES(?,?)",[desde,cur-monto]);
+  }
+  if(COP.includes(hacia)){
+    const v=dbq("SELECT valor FROM balance_personal WHERE clave=?",[hacia]);
+    const cur=v.length?Number(v[0].valor):0;
+    S.db.run("INSERT OR REPLACE INTO balance_personal VALUES(?,?)",[hacia,cur+monto]);
+  }
+
+  // 3. Si involucra USD — registrar en cartera_fx
+  if(usdInv&&tasa&&usd){
+    const tipo=hacia==='usd_binance'?'COMPRA':'VENTA';
+    S.db.run(`INSERT INTO cartera_fx(fecha,tipo,cop,tasa_dia,usd,plataforma,notas)VALUES(?,?,?,?,?,?,?)`,
+      [fecha,tipo,monto,tasa,usd,'Transferencia interna',notas]);
+  }
+
+  markDirty();closeTransfSheet();
+  toast('✓ Transferencia registrada');
+  renderBalance();renderTransfHistPwa();pushNow();
+}
+
+function renderTransfHistPwa(){
+  const el=$('transf-hist-pwa');if(!el)return;
+  const rows=dbq("SELECT * FROM transferencias ORDER BY fecha DESC,id DESC LIMIT 5");
+  if(!rows.length){
+    el.innerHTML='<div style="font-size:10px;color:var(--text3);text-align:center;padding:10px">Sin transferencias</div>';
+    return;
+  }
+  el.innerHTML=rows.map(t=>{
+    const color=TS_COLOR[t.hacia]||'var(--text3)';
+    const fxTag=t.usd?`<span style="font-size:8px;background:var(--teal)22;color:var(--teal);padding:1px 4px;border-radius:3px;margin-left:3px">FX</span>`:'';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid #161616">
+      <div style="width:24px;height:24px;border-radius:50%;background:${color}22;color:${color};display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⇄</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;color:var(--text2)">${TS_LABEL[t.desde]||t.desde} → ${TS_LABEL[t.hacia]||t.hacia}${fxTag}</div>
+        <div style="font-size:9px;color:var(--text3)">${t.fecha}</div>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;font-weight:500;color:${color}">${cop(t.monto_cop,true)}</div>
+    </div>`;
+  }).join('');
 }
 
 // DRIVE MODAL

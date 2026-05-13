@@ -1,4 +1,4 @@
-const CACHE = 'teranet-v2.9';
+const CACHE = 'teranet-v3.0';
 const BASE  = 'https://tezkgiraldo-wq.github.io/teranet-app/';
 const ASSETS = [
   BASE,
