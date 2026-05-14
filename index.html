@@ -1394,9 +1394,8 @@ function pinDel(){
 }
 
 function pinGetStored(){
-  if(!S.db)return null;
-  const r=S.db.exec("SELECT valor FROM config WHERE clave='pin_hash'");
-  return r.length&&r[0].values.length?r[0].values[0][0]:null;
+  // localStorage persiste aunque la DB se recargue desde Drive
+  return localStorage.getItem('teranet_pin_hash')||null;
 }
 
 async function pinSubmit(){
@@ -1424,8 +1423,11 @@ async function pinSubmit(){
   } else if(_pinMode==='setup2'){
     if(val===_pinSetup1){
       const hash=await sha256(val);
-      S.db.run("INSERT OR REPLACE INTO config VALUES('pin_hash',?)",[hash]);
-      S.dirty=true;pushNow();
+      // localStorage — persiste entre sesiones sin depender de la DB
+      localStorage.setItem('teranet_pin_hash',hash);
+      // También en DB por compatibilidad
+      if(S.db) S.db.run("INSERT OR REPLACE INTO config VALUES('pin_hash',?)",[hash]);
+      markDirty();pushNow();
       document.getElementById('pin-screen').classList.add('hidden');
       if(_pinResolve)_pinResolve(true);
     } else {
@@ -2487,12 +2489,14 @@ async function loadApp(){
     S.dirty=false;S.lastSync=new Date();setSyncDot('ok');
   }catch(e){setSyncDot('err');toast('Error cargando DB');}
 
-  // PIN lock — verificar antes de mostrar la app
-  await checkPin();
-
+  // Primero desaparecer el loader con su animación bonita
   go('inicio');
   const ld=$('loader');ld.classList.add('out');
-  setTimeout(()=>ld.style.display='none',500);
+  await new Promise(r=>setTimeout(r,550)); // esperar fadeOut
+  ld.style.display='none';
+
+  // Luego mostrar el PIN
+  await checkPin();
 }
 
 async function init(){
